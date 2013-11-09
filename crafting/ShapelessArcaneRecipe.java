@@ -126,7 +126,7 @@ public class ShapelessArcaneRecipe implements IArcaneRecipe
     private boolean checkItemEquals(ItemStack target, ItemStack input)
     {
         return (target.itemID == input.itemID &&
-        		ItemStack.areItemStackTagsEqual(target, input) &&
+        		(!target.hasTagCompound() || ItemStack.areItemStackTagsEqual(target, input)) &&
         		(target.getItemDamage() == OreDictionary.WILDCARD_VALUE || target.getItemDamage() == input.getItemDamage()));
     }
 
