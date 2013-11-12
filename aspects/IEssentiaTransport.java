@@ -42,19 +42,19 @@ public interface IEssentiaTransport {
 //	public boolean isVisConduit();
 		
 	/**
-	 * Sets the amount of vis and taint TCB this block will apply
+	 * Sets the amount of suction this block will apply
 	 * @param suction
 	 */
 	public void setSuction(AspectList suction);
 	
 	/**
-	 * Sets the amount of vis and taint TCB this block will apply
+	 * Sets the amount of suction this block will apply
 	 * @param suction
 	 */
 	public void setSuction(Aspect aspect, int amount);
 	
 	/**
-	 * Returns the amount of vis and taint suction this block is applying. Usually should return the highest value of the two
+	 * Returns the amount of suction this block is applying. 
 	 * @param loc
 	 * 		the location from where the suction is being checked
 	 * @return
