@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
@@ -59,8 +60,6 @@ public class ThaumcraftApi {
 	
 	
 	//RESEARCH/////////////////////////////////////////
-//	public static Document researchDoc = null;
-//	public static ArrayList<String> apiResearchFiles = new ArrayList<String>(); 
 	public static ArrayList<IScanEventHandler> scanEventhandlers = new ArrayList<IScanEventHandler>();
 	public static ArrayList<EntityTags> scanEntities = new ArrayList<EntityTags>();
 	public static class EntityTags {
@@ -124,13 +123,18 @@ public class ThaumcraftApi {
 	
 	/**
 	 * Excludes specific items from producing bonus items when they are smelted in the infernal furnace, even 
-	 * if their smelt result would normally produce a bonus item.
+	 * if their smelt result would normally produce a bonus item.	 * 	 
 	 * @param in The item to be smelted that should never produce a bonus item (e.g. the various macerated dusts form IC2)
 	 * Even though they produce gold, iron, etc. ingots, they should NOT produce bonus nuggets as well.
+	 * 
+	 * Smelting exclusions can also be done via the FMLInterModComms in your @Mod.Init method using "smeltBonusExclude"
+	 * Example for vanilla iron: 
+	 * FMLInterModComms.sendMessage("Thaumcraft", "smeltBonusExclude", new ItemStack(Item.ingotIron));
 	 */
 	public static void addSmeltingBonusExclusion(ItemStack in) {
 		smeltingBonusExlusion.add(Arrays.asList(in.itemID,in.getItemDamage()));
 	}
+	
 	
 	/**
 	 * Sees if an item is allowed to produce bonus items when smelted in the infernal furnace
@@ -140,6 +144,8 @@ public class ThaumcraftApi {
 	public static boolean isSmeltingBonusExluded(ItemStack in) {
 		return smeltingBonusExlusion.contains(Arrays.asList(in.itemID,in.getItemDamage()));
 	}
+	
+	
 	
 	public static List getCraftingRecipes() {
 		return craftingRecipes;
@@ -398,6 +404,20 @@ public class ThaumcraftApi {
 	 * and metadata represents the crop when fully grown. The golem will trigger the blocks onBlockActivated method.
 	 * Example (this will technically do nothing since clicking wheat does nothing, but you get the idea): 
 	 * FMLInterModComms.sendMessage("Thaumcraft", "harvestClickableCrop", new ItemStack(Block.crops,1,7));
+	 */
+	
+	//NATIVE CLUSTERS //////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * You can define certain ores that will have a chance to produce native clusters via FMLInterModComms 
+	 * in your @Mod.Init method using the "nativeCluster" string message.
+	 * The format should be: 
+	 * "[ore item/block id],[ore item/block metadata],[cluster item/block id],[cluster item/block metadata],[chance modifier float]"
+	 * 
+	 * NOTE: The chance modifier is a multiplier applied to the default chance for that cluster to be produced (27.5% for a pickaxe of the core)
+	 * 
+	 * Example for vanilla iron ore to produce one of my own native iron clusters (assuming default id's) at double the default chance: 
+	 * FMLInterModComms.sendMessage("Thaumcraft", "nativeCluster","15,0,25016,16,2.0");
 	 */
 	
 }
