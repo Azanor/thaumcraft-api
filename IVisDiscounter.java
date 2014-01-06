@@ -2,6 +2,7 @@ package thaumcraft.api;
 
 
 
+
 /**
  * @author Azanor
  * ItemArmor with this interface will grant a discount to the vis cost of actions the wearer performs with casting wands.
@@ -10,6 +11,9 @@ package thaumcraft.api;
  */
 public interface IVisDiscounter {
 	
+	@Deprecated
 	int getVisDiscount();
+	
+//	int getVisDiscount(Aspect aspect);
 
 }

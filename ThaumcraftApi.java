@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
@@ -123,7 +122,7 @@ public class ThaumcraftApi {
 	
 	/**
 	 * Excludes specific items from producing bonus items when they are smelted in the infernal furnace, even 
-	 * if their smelt result would normally produce a bonus item.	 * 	 
+	 * if their smelt result would normally produce a bonus item.	 
 	 * @param in The item to be smelted that should never produce a bonus item (e.g. the various macerated dusts form IC2)
 	 * Even though they produce gold, iron, etc. ingots, they should NOT produce bonus nuggets as well.
 	 * 

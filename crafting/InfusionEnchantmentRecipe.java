@@ -42,7 +42,7 @@ public class InfusionEnchantmentRecipe
     		return false;
     	}
 		
-		if (!enchantment.canApply(central)) {
+		if (!enchantment.canApply(central) || !central.getItem().isItemTool(central)) {
 			return false;
 		}
 				
