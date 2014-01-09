@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
@@ -96,12 +97,11 @@ public class ThaumcraftApi {
 	
 	//RECIPES/////////////////////////////////////////
 	private static ArrayList craftingRecipes = new ArrayList();	
-	private static HashMap<List,ItemStack> smeltingBonus = new HashMap<List,ItemStack>();
-	private static ArrayList<List> smeltingBonusExlusion = new ArrayList<List>();
+	private static HashMap<Object,ItemStack> smeltingBonus = new HashMap<Object,ItemStack>();
 	
 	/**
 	 * This method is used to determine what bonus items are generated when the infernal furnace smelts items
-	 * @param in The result (not input) of the smelting operation. e.g. new ItemStack(ingotGold)
+	 * @param in The input of the smelting operation. e.g. new ItemStack(Block.oreGold)
 	 * @param out The bonus item that can be produced from the smelting operation e.g. new ItemStack(nuggetGold,0,0).
 	 * Stacksize should be 0 unless you want to guarantee that at least 1 item is always produced.
 	 */
@@ -112,37 +112,44 @@ public class ThaumcraftApi {
 	}
 	
 	/**
+	 * This method is used to determine what bonus items are generated when the infernal furnace smelts items
+	 * @param in The ore dictionary input of the smelting operation. e.g. "oreGold"
+	 * @param out The bonus item that can be produced from the smelting operation e.g. new ItemStack(nuggetGold,0,0).
+	 * Stacksize should be 0 unless you want to guarantee that at least 1 item is always produced.
+	 */
+	public static void addSmeltingBonus(String in, ItemStack out) {
+		smeltingBonus.put(	in, new ItemStack(out.itemID,0,out.getItemDamage()));
+	}
+	
+	/**
 	 * Returns the bonus item produced from a smelting operation in the infernal furnace
-	 * @param in The result of the smelting operation. e.g. new ItemStack(ingotGold)
+	 * @param in The input of the smelting operation. e.g. new ItemStack(oreGold)
 	 * @return the The bonus item that can be produced
 	 */
 	public static ItemStack getSmeltingBonus(ItemStack in) {
-		return smeltingBonus.get(Arrays.asList(in.itemID,in.getItemDamage()));
+		ItemStack out = smeltingBonus.get(Arrays.asList(in.itemID,in.getItemDamage()));
+		if (out==null) {
+			String od = OreDictionary.getOreName( OreDictionary.getOreID(in));
+			out = smeltingBonus.get(od);
+		}
+		return out;
 	}
+	
+	@Deprecated
+	private static ArrayList<List> smeltingBonusExlusion = new ArrayList<List>();
 	
 	/**
-	 * Excludes specific items from producing bonus items when they are smelted in the infernal furnace, even 
-	 * if their smelt result would normally produce a bonus item.	 
-	 * @param in The item to be smelted that should never produce a bonus item (e.g. the various macerated dusts form IC2)
-	 * Even though they produce gold, iron, etc. ingots, they should NOT produce bonus nuggets as well.
-	 * 
-	 * Smelting exclusions can also be done via the FMLInterModComms in your @Mod.Init method using "smeltBonusExclude"
-	 * Example for vanilla iron: 
-	 * FMLInterModComms.sendMessage("Thaumcraft", "smeltBonusExclude", new ItemStack(Item.ingotIron));
+	 * DOES NOTHING ANYMORE - WILL REMOVE NEXT MAJOR VERSION
 	 */
-	public static void addSmeltingBonusExclusion(ItemStack in) {
-		smeltingBonusExlusion.add(Arrays.asList(in.itemID,in.getItemDamage()));
-	}
+	@Deprecated
+	public static void addSmeltingBonusExclusion(ItemStack in) {}
 	
 	
 	/**
-	 * Sees if an item is allowed to produce bonus items when smelted in the infernal furnace
-	 * @param in The item you wish to check
-	 * @return true or false
+	 * DOES NOTHING ANYMORE - WILL REMOVE NEXT MAJOR VERSION
 	 */
-	public static boolean isSmeltingBonusExluded(ItemStack in) {
-		return smeltingBonusExlusion.contains(Arrays.asList(in.itemID,in.getItemDamage()));
-	}
+	@Deprecated
+	public static boolean isSmeltingBonusExluded(ItemStack in) {return false;}
 	
 	
 	
@@ -403,6 +410,13 @@ public class ThaumcraftApi {
 	 * and metadata represents the crop when fully grown. The golem will trigger the blocks onBlockActivated method.
 	 * Example (this will technically do nothing since clicking wheat does nothing, but you get the idea): 
 	 * FMLInterModComms.sendMessage("Thaumcraft", "harvestClickableCrop", new ItemStack(Block.crops,1,7));
+	 * 
+	 * Stacked crops (like reeds) are crops that you wish the bottom block should remain after harvesting.
+	 * As for standard crops, you need to create and ItemStack that tells the golem what block id 
+	 * and metadata represents the crop when fully grown. Sending a metadata of -1 will mean the actualy md won't get 
+	 * checked. If it has the order upgrade it will only harvest if the crop is more than one block high.
+	 * Example: 
+	 * FMLInterModComms.sendMessage("Thaumcraft", "harvestStackedCrop", new ItemStack(Block.reed,1,7));
 	 */
 	
 	//NATIVE CLUSTERS //////////////////////////////////////////////////////////////////////////////////
