@@ -179,7 +179,7 @@ public class Aspect {
 		public static final Aspect TREE = new Aspect("arbor",0x876531, new Aspect[] {EARTH, PLANT});		
 				
 		public static final Aspect BEAST = new Aspect("bestia",0x9f6409, new Aspect[] {MOTION, LIFE});
-		public static final Aspect FLESH = new Aspect("corpus",0xee478d, new Aspect[] {DEATH,BEAST});
+		public static final Aspect FLESH = new Aspect("corpus",0xee478d, new Aspect[] {DEATH, BEAST});
 		public static final Aspect UNDEAD = new Aspect("exanimis",0x3a4000, new Aspect[] {MOTION, DEATH});
 		public static final Aspect MIND = new Aspect("cognitio",0xffc2b3, new Aspect[] {EARTH, SOUL});
 		public static final Aspect SENSES = new Aspect("sensus",0x0fd9ff, new Aspect[] {AIR, SOUL});
@@ -189,12 +189,12 @@ public class Aspect {
 		public static final Aspect HARVEST = new Aspect("meto",0xeead82, new Aspect[] {CROP, MAN});		
 		public static final Aspect METAL = new Aspect("metallum",0xb5b5cd, new Aspect[] {STONE, ORDER});
 		public static final Aspect MINE = new Aspect("perfodio",0xdcd2d8, new Aspect[] {MAN, STONE});
-		public static final Aspect TOOL = new Aspect("instrumentum",0x4040ee, new Aspect[] {MAN, METAL});
+		public static final Aspect TOOL = new Aspect("instrumentum",0x4040ee, new Aspect[] {MAN, ORDER});
 		public static final Aspect WEAPON = new Aspect("telum",0xc05050, new Aspect[] {TOOL, ENTROPY});
 		public static final Aspect ARMOR = new Aspect("tutamen",0x00c0c0, new Aspect[] {TOOL, EARTH});
 		public static final Aspect HUNGER = new Aspect("fames",0x9a0305, new Aspect[] {LIFE, VOID});
 		public static final Aspect GREED = new Aspect("lucrum",0xe6be44, new Aspect[] {MAN, HUNGER});
-		public static final Aspect CRAFT = new Aspect("fabrico",0x809d80, new Aspect[] {MAN,TOOL});
+		public static final Aspect CRAFT = new Aspect("fabrico",0x809d80, new Aspect[] {MAN, TOOL});
 				
 		public static final Aspect CLOTH = new Aspect("pannus",0xeaeac2, new Aspect[] {TOOL, BEAST});
 		public static final Aspect MECHANISM = new Aspect("machina",0x8080a0, new Aspect[] {MOTION, TOOL});
@@ -202,20 +202,5 @@ public class Aspect {
 		public static final Aspect EXCHANGE = new Aspect("permutatio",0x578357, new Aspect[] {MOTION, WATER});
 				
 		
-		
-		
-		
-			
-		
-		
-		
-//		public static final Aspect LAVA = new Aspect("lava",0xe85729, new Aspect[] {EARTH, FIRE});
-//		public static final Aspect STEAM = new Aspect("steam",0xFFFFFF, new Aspect[] {WATER, FIRE});
-//		public static final Aspect MUD = new Aspect("lutum",0x473423, new Aspect[] {WATER, EARTH});
-//		public static final Aspect SAND = new Aspect("sand",0xFFFFFF, new Aspect[] {AIR, EARTH});
-//		public static final Aspect ASTRAL = new Aspect("Astral",0xFFFFFF, new Aspect[] {VOID, DARKNESS});
-//		public static final Aspect HARM = new Aspect("Harm",0xFFFFFF, new Aspect[] {ENTROPY, LIFE});
-//		public static final Aspect BIRD = new Aspect("Bird",0xFFFFFF, new Aspect[] {BEAST, AIR});
-//		public static final Aspect FISH = new Aspect("Fish",0xFFFFFF, new Aspect[] {BEAST, WATER});
 		
 }

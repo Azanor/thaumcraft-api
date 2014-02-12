@@ -2,6 +2,9 @@ package thaumcraft.api.research;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.logging.Level;
+
+import cpw.mods.fml.common.FMLLog;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -59,6 +62,17 @@ public class ResearchCategories {
 	public static void addResearch(ResearchItem ri) {
 		ResearchCategoryList rl = getResearchList(ri.category);
 		if (rl!=null && !rl.research.containsKey(ri.key)) {
+			
+			if (!ri.isVirtual()) {
+				for (ResearchItem rr:rl.research.values()) {
+					if (rr.displayColumn == ri.displayColumn && rr.displayRow == ri.displayRow) {
+						FMLLog.log(Level.SEVERE, "[Thaumcraft] Research ["+ri.getName()+"] not added as it overlaps with existing research ["+rr.getName()+"]");
+						return;
+					}
+				}
+			}
+			
+			
 			rl.research.put(ri.key, ri);
 			
 			if (ri.displayColumn < rl.minDisplayColumn) 
