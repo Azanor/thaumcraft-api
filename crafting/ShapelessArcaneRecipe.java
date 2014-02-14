@@ -144,6 +144,11 @@ public class ShapelessArcaneRecipe implements IArcaneRecipe
 	public AspectList getAspects() {
 		return aspects;
 	}
+    
+    @Override		
+	public AspectList getAspects(IInventory inv) {
+		return aspects;
+	}
 	
 	@Override
 	public String getResearch() {

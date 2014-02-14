@@ -401,7 +401,7 @@ public class ThaumcraftApi {
 	 * Standard crops work like normal vanilla crops - they grow until a certain metadata 
 	 * value is reached and you harvest them by destroying the block and collecting the blocks.
 	 * You need to create and ItemStack that tells the golem what block id and metadata represents
-	 * the crop when fully grown. Sending a metadata of -1 will mean the actualy md won't get 
+	 * the crop when fully grown. Sending a metadata of -1 will mean the metadata won't get 
 	 * checked.
 	 * Example for vanilla wheat: 
 	 * FMLInterModComms.sendMessage("Thaumcraft", "harvestStandardCrop", new ItemStack(Block.crops,1,7));
@@ -409,7 +409,7 @@ public class ThaumcraftApi {
 	 * Clickable crops are crops that you right click to gather their bounty instead of destroying them.
 	 * As for standard crops, you need to create and ItemStack that tells the golem what block id 
 	 * and metadata represents the crop when fully grown. The golem will trigger the blocks onBlockActivated method. 
-	 * Sending a metadata of -1 will mean the actualy md won't get checked.
+	 * Sending a metadata of -1 will mean the metadata won't get checked.
 	 * Example (this will technically do nothing since clicking wheat does nothing, but you get the idea): 
 	 * FMLInterModComms.sendMessage("Thaumcraft", "harvestClickableCrop", new ItemStack(Block.crops,1,7));
 	 * 
@@ -435,4 +435,12 @@ public class ThaumcraftApi {
 	 * FMLInterModComms.sendMessage("Thaumcraft", "nativeCluster","15,0,25016,16,2.0");
 	 */
 	
+	//LAMP OF GROWTH BLACKLIST ///////////////////////////////////////////////////////////////////////////
+	/**
+	 * You can blacklist crops that should not be effected by the Lamp of Growth via FMLInterModComms 
+	 * in your @Mod.Init method using the "lampBlacklist" string message.
+	 * Sending a metadata of -1 will mean the metadata won't get checked.
+	 * Example for vanilla wheat: 
+	 * FMLInterModComms.sendMessage("Thaumcraft", "lampBlacklist", new ItemStack(Block.crops,1,-1));
+	 */
 }

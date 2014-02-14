@@ -146,7 +146,7 @@ public class Aspect {
 		public static final Aspect ORDER = new Aspect("ordo",0xd5d4ec,"7",1);
 		public static final Aspect ENTROPY = new Aspect("perditio",0x404040,"8",771);
 	
-	//SECONDARY  	TODO
+	//SECONDARY  	
 		public static final Aspect VOID = new Aspect("vacuos",0x888888, new Aspect[] {AIR, ENTROPY},771);
 		public static final Aspect LIGHT = new Aspect("lux",0xfff663, new Aspect[] {AIR, FIRE});
 		public static final Aspect ENERGY = new Aspect("potentia",0xc0ffff, new Aspect[] {ORDER, FIRE});
@@ -157,7 +157,7 @@ public class Aspect {
 		public static final Aspect ICE = new Aspect("gelum",0xe1ffff, new Aspect[] {WATER, ORDER});
 		public static final Aspect CRYSTAL = new Aspect("vitreus",0x80ffff, new Aspect[] {STONE, WATER});
 		
-	//TERTIARY  	TODO		
+	//TERTIARY  			
 		
 		public static final Aspect DEATH = new Aspect("mortuus",0x887788, new Aspect[] {LIFE, ENTROPY});
 		public static final Aspect FLIGHT = new Aspect("volatus",0xe7e7d7, new Aspect[] {AIR, MOTION});

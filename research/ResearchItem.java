@@ -70,7 +70,7 @@ public class ResearchItem
     /**
      * Research that can be directly purchased with RP in normal research difficulty.
      */
-    private boolean isTertiary;
+    private boolean isSecondary;
     
 	/**
      * This indicates if the research should use a circular icon border. Usually used for "passive" research 
@@ -330,12 +330,12 @@ public class ResearchItem
 		return this;
 	}
 	
-	public boolean isTertiary() {
-		return isTertiary;
+	public boolean isSecondary() {
+		return isSecondary;
 	}
 
-	public ResearchItem setTertiary() {
-		this.isTertiary = true;
+	public ResearchItem setSecondary() {
+		this.isSecondary = true;
 		return this;
 	}
 
