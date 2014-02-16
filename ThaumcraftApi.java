@@ -326,7 +326,7 @@ public class ThaumcraftApi {
 	
 	/**
 	 * Used to assign apsects to the given item/block. Here is an example of the declaration for cobblestone:<p>
-	 * <i>ThaumcraftApi.registerObjectTag(Block.cobblestone.blockID, -1, (new ObjectTags()).add(EnumTag.ROCK, 1).add(EnumTag.DESTRUCTION, 1));</i>
+	 * <i>ThaumcraftApi.registerObjectTag(Block.cobblestone.blockID, -1, (new AspectList()).add(Aspect.ENTROPY, 1).add(Aspect.STONE, 1));</i>
 	 * @param id
 	 * @param meta pass -1 if all damage values of this item/block should have the same aspects
 	 * @param aspects A ObjectTags object of the associated aspects
@@ -338,7 +338,7 @@ public class ThaumcraftApi {
 	
 	/**
 	 * Used to assign apsects to the given item/block. Here is an example of the declaration for cobblestone:<p>
-	 * <i>ThaumcraftApi.registerObjectTag(Block.cobblestone.blockID, new int[]{0,1}, (new ObjectTags()).add(EnumTag.ROCK, 1).add(EnumTag.DESTRUCTION, 1));</i>
+	 * <i>ThaumcraftApi.registerObjectTag(Block.cobblestone.blockID, new int[]{0,1}, (new AspectList()).add(Aspect.ENTROPY, 1).add(Aspect.STONE, 1));</i>
 	 * @param id
 	 * @param meta A range of meta values if you wish to lump several item meta's together as being the "same" item (i.e. stair orientations)
 	 * @param aspects A ObjectTags object of the associated aspects
@@ -369,7 +369,7 @@ public class ThaumcraftApi {
 	 * Used to assign aspects to the given item/block. 
 	 * Attempts to automatically generate aspect tags by checking registered recipes.
 	 * Here is an example of the declaration for pistons:<p>
-	 * <i>ThaumcraftApi.registerComplexObjectTag(Block.pistonBase.blockID, 0, (new ObjectTags()).add(EnumTag.MECHANISM, 2).add(EnumTag.MOTION, 4));</i>
+	 * <i>ThaumcraftApi.registerComplexObjectTag(Block.pistonBase.blockID, 0, (new AspectList()).add(Aspect.MECHANISM, 2).add(Aspect.MOTION, 4));</i>
 	 * @param id
 	 * @param meta pass -1 if all damage values of this item/block should have the same aspects
 	 * @param aspects A ObjectTags object of the associated aspects
