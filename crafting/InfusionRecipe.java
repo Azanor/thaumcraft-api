@@ -34,6 +34,8 @@ public class InfusionRecipe
      * @param player 
      */
 	public boolean matches(ArrayList<ItemStack> input, ItemStack central, World world, EntityPlayer player) {
+		if (recipeInput==null) return false;
+			
 		if (research.length()>0 && !ThaumcraftApiHelper.isResearchComplete(player.username, research)) {
     		return false;
     	}

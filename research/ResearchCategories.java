@@ -47,6 +47,7 @@ public class ResearchCategories {
 	}
 	
 	/**
+	 * This should only be done at the PostInit stage
 	 * @param key the key used for this category
 	 * @param icon the icon to be used for the research category tab
 	 * @param background the resource location of the background image to use for this category
