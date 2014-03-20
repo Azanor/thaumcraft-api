@@ -3,11 +3,12 @@ package thaumcraft.api;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -41,9 +42,9 @@ public class ThaumcraftApiHelper {
     {
 		if (s1.isItemStackDamageable() && s2.isItemStackDamageable())
 		{
-			return s1.itemID == s2.itemID;
+			return s1.getItem() == s2.getItem();
 		} else
-			return s1.itemID == s2.itemID && s1.getItemDamage() == s2.getItemDamage();
+			return s1.getItem() == s2.getItem() && s1.getItemDamage() == s2.getItemDamage();
     }
 
 	static Method isResearchComplete;
@@ -80,12 +81,12 @@ public class ThaumcraftApiHelper {
 		AspectList ot = null;
 	    try {
 	        if(getObjectTags == null) {
-	            Class fake = Class.forName("thaumcraft.common.lib.ThaumcraftCraftingManager");
+	            Class fake = Class.forName("thaumcraft.common.lib.crafting.ThaumcraftCraftingManager");
 	            getObjectTags = fake.getMethod("getObjectTags", ItemStack.class);
 	        }
 	        ot = (AspectList) getObjectTags.invoke(null, is);
 	    } catch(Exception ex) { 
-	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.lib.ThaumcraftCraftingManager method getObjectTags");
+	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.lib.crafting.ThaumcraftCraftingManager method getObjectTags");
 	    }
 		return ot;
 	}
@@ -94,12 +95,12 @@ public class ThaumcraftApiHelper {
 		
 	    try {
 	        if(getBonusTags == null) {
-	            Class fake = Class.forName("thaumcraft.common.lib.ThaumcraftCraftingManager");
+	            Class fake = Class.forName("thaumcraft.common.lib.crafting.ThaumcraftCraftingManager");
 	            getBonusTags = fake.getMethod("getBonusTags", ItemStack.class, AspectList.class);
 	        }
 	        ot = (AspectList) getBonusTags.invoke(null, is, ot);
 	    } catch(Exception ex) { 
-	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.lib.ThaumcraftCraftingManager method getBonusTags");
+	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.lib.crafting.ThaumcraftCraftingManager method getBonusTags");
 	    }
 		return ot;
 	}
@@ -107,12 +108,14 @@ public class ThaumcraftApiHelper {
 	public static AspectList generateTags(int id, int meta) {
 	    try {
 	        if(generateTags == null) {
-	            Class fake = Class.forName("thaumcraft.common.lib.ThaumcraftCraftingManager");
+	            Class fake = Class.forName("thaumcraft.common.lib.crafting.ThaumcraftCraftingManager");
 	            generateTags = fake.getMethod("generateTags", int.class, int.class);
 	        }
 	        return (AspectList) generateTags.invoke(null, id, meta);
 	    } catch(Exception ex) { 
-	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.lib.ThaumcraftCraftingManager method generateTags");
+	    	ex.printStackTrace();
+	    	System.out.println(new ItemStack(Item.getItemById(id),1,meta));
+	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.lib.crafting.ThaumcraftCraftingManager method generateTags");
 	    }
 		return null;
 	}
@@ -138,12 +141,12 @@ public class ThaumcraftApiHelper {
         {
             return false;
         }
-        return (target.itemID == input.itemID && ((target.getItemDamage() == OreDictionary.WILDCARD_VALUE && !strict) || target.getItemDamage() == input.getItemDamage()));
+        return (target.getItem() == input.getItem() && ((target.getItemDamage() == OreDictionary.WILDCARD_VALUE && !strict) || target.getItemDamage() == input.getItemDamage()));
     }
     
     
     public static TileEntity getConnectableTile(World world, int x, int y, int z, ForgeDirection face) {
-		TileEntity te = world.getBlockTileEntity(x+face.offsetX, y+face.offsetY, z+face.offsetZ);
+		TileEntity te = world.getTileEntity(x+face.offsetX, y+face.offsetY, z+face.offsetZ);
 		if (te instanceof IEssentiaTransport && ((IEssentiaTransport)te).isConnectable(face.getOpposite())) 
 			return te;
 		else
@@ -151,7 +154,7 @@ public class ThaumcraftApiHelper {
 	}
     
     public static TileEntity getConnectableTile(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		TileEntity te = world.getBlockTileEntity(x+face.offsetX, y+face.offsetY, z+face.offsetZ);
+		TileEntity te = world.getTileEntity(x+face.offsetX, y+face.offsetY, z+face.offsetZ);
 		if (te instanceof IEssentiaTransport && ((IEssentiaTransport)te).isConnectable(face.getOpposite())) 
 			return te;
 		else

@@ -36,7 +36,7 @@ public class InfusionRecipe
 	public boolean matches(ArrayList<ItemStack> input, ItemStack central, World world, EntityPlayer player) {
 		if (recipeInput==null) return false;
 			
-		if (research.length()>0 && !ThaumcraftApiHelper.isResearchComplete(player.username, research)) {
+		if (research.length()>0 && !ThaumcraftApiHelper.isResearchComplete(player.getCommandSenderName(), research)) {
     		return false;
     	}
 		
@@ -88,7 +88,7 @@ public class InfusionRecipe
 		}
 		else
 			t1=ItemStack.areItemStackTagsEqual(stack0, stack1);		
-        return stack0.itemID != stack1.itemID ? false : (stack0.getItemDamage() != stack1.getItemDamage() ? false : (stack0.stackSize > stack0.getMaxStackSize() ? false : t1));
+        return stack0.getItem() != stack1.getItem() ? false : (stack0.getItemDamage() != stack1.getItemDamage() ? false : (stack0.stackSize > stack0.getMaxStackSize() ? false : t1));
     }
 	
    

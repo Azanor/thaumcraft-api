@@ -15,12 +15,11 @@ public class AspectList implements Serializable {
 	
 	/**
 	 * this creates a new aspect list with preloaded values based off the aspects of the given item.
-	 * @param id the item/block id of an existing item
-	 * @param meta the damage value of an existing item
+	 * @param the itemstack of the given item
 	 */
-	public AspectList(int id, int meta) {
+	public AspectList(ItemStack stack) {
 		try {
-			AspectList temp = ThaumcraftApiHelper.getObjectAspects(new ItemStack(id,1,meta));
+			AspectList temp = ThaumcraftApiHelper.getObjectAspects(stack);
 			if (temp!=null)
 			for (Aspect tag:temp.getAspects()) {
 				add(tag,temp.getAmount(tag));
@@ -216,9 +215,9 @@ public class AspectList implements Serializable {
 	public void readFromNBT(NBTTagCompound nbttagcompound)
     {
         aspects.clear();
-        NBTTagList tlist = nbttagcompound.getTagList("Aspects");
+        NBTTagList tlist = nbttagcompound.getTagList("Aspects",(byte)10);
 		for (int j = 0; j < tlist.tagCount(); j++) {
-			NBTTagCompound rs = (NBTTagCompound) tlist.tagAt(j);
+			NBTTagCompound rs = (NBTTagCompound) tlist.getCompoundTagAt(j);
 			if (rs.hasKey("key")) {
 				add(	Aspect.getAspect(rs.getString("key")),
 						rs.getInteger("amount"));
