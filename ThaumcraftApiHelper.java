@@ -3,6 +3,7 @@ package thaumcraft.api;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -185,4 +186,87 @@ public class ThaumcraftApiHelper {
     	} 
     	return allCompoundAspects.get(amount);
     }
+    
+    static Method consumeVisFromWand;
+	/**
+	 * Use to subtract vis from a wand for most operations
+	 * Wands store vis differently so "real" vis costs need to be multiplied by 100 before calling this method
+	 * @param wand the wand itemstack
+	 * @param player the player using the wand
+	 * @param cost the cost of the operation. 
+	 * @param doit actually subtract the vis from the wand if true - if false just simulate the result
+	 * @param crafting is this a crafting operation or not - if 
+	 * false then things like frugal and potency will apply to the costs
+	 * @return was the vis successfully subtracted
+	 */
+	public static boolean consumeVisFromWand(ItemStack wand, EntityPlayer player, 
+			AspectList cost, boolean doit, boolean crafting) {
+		boolean ot = false;
+	    try {
+	        if(consumeVisFromWand == null) {
+	            Class fake = Class.forName("thaumcraft.common.items.wands.ItemWandCasting");
+	            consumeVisFromWand = fake.getMethod("consumeAllVis", 
+	            		ItemStack.class, EntityPlayer.class, AspectList.class, boolean.class, boolean.class);
+	        }
+	        ot = (Boolean) consumeVisFromWand.invoke(
+	        		consumeVisFromWand.getDeclaringClass().cast(wand.getItem()), wand, player, cost, doit, crafting);
+	    } catch(Exception ex) { 
+	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.items.wands.ItemWandCasting method consumeAllVis");
+	    }
+		return ot;
+	}
+	
+	static Method consumeVisFromWandCrafting;
+	/**
+	 * Subtract vis for use by a crafting mechanic. Costs are calculated slightly 
+	 * differently and things like the frugal enchant is ignored
+	 * Must NOT be multiplied by 100 - send the actual vis cost
+	 * @param wand the wand itemstack
+	 * @param player the player using the wand
+	 * @param cost the cost of the operation. 
+	 * @param doit actually subtract the vis from the wand if true - if false just simulate the result
+	 * @return was the vis successfully subtracted
+	 */
+	public static boolean consumeVisFromWandCrafting(ItemStack wand, EntityPlayer player, 
+			AspectList cost, boolean doit) {
+		boolean ot = false;
+	    try {
+	        if(consumeVisFromWandCrafting == null) {
+	            Class fake = Class.forName("thaumcraft.common.items.wands.ItemWandCasting");
+	            consumeVisFromWandCrafting = fake.getMethod("consumeAllVisCrafting", 
+	            		ItemStack.class, EntityPlayer.class, AspectList.class, boolean.class);
+	        }
+	        ot = (Boolean) consumeVisFromWandCrafting.invoke(
+	        		consumeVisFromWandCrafting.getDeclaringClass().cast(wand.getItem()), wand, player, cost, doit);
+	    } catch(Exception ex) { 
+	    	ex.printStackTrace();
+	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.items.wands.ItemWandCasting method consumeAllVisCrafting");
+	    }
+		return ot;
+	}
+	
+	static Method consumeVisFromInventory;
+	/**
+	 * Subtract vis from a wand the player is carrying. Works like consumeVisFromWand in that actual vis
+	 * costs should be multiplied by 100. The costs are handled like crafting however and things like 
+	 * frugal don't effect them
+	 * @param player the player using the wand
+	 * @param cost the cost of the operation. 
+	 * @return was the vis successfully subtracted
+	 */
+	public static boolean consumeVisFromInventory(EntityPlayer player, AspectList cost) {
+		boolean ot = false;
+	    try {
+	        if(consumeVisFromInventory == null) {
+	            Class fake = Class.forName("thaumcraft.common.items.wands.WandManager");
+	            consumeVisFromInventory = fake.getMethod("consumeVisFromInventory", 
+	            		EntityPlayer.class, AspectList.class);
+	        }
+	        ot = (Boolean) consumeVisFromInventory.invoke(null, player, cost);
+	    } catch(Exception ex) { 
+	    	ex.printStackTrace();
+	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.items.wands.WandManager method consumeVisFromInventory");
+	    }
+		return ot;
+	}
 }

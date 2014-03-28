@@ -137,6 +137,9 @@ public class ThaumcraftApi {
 	public static ItemStack getSmeltingBonus(ItemStack in) {
 		ItemStack out = smeltingBonus.get(Arrays.asList(Item.getIdFromItem(in.getItem()),in.getItemDamage()));
 		if (out==null) {
+			out = smeltingBonus.get(Arrays.asList(Item.getIdFromItem(in.getItem()),OreDictionary.WILDCARD_VALUE));
+		}
+		if (out==null) {
 			String od = OreDictionary.getOreName( OreDictionary.getOreID(in));
 			out = smeltingBonus.get(od);
 		}
@@ -427,9 +430,35 @@ public class ThaumcraftApi {
 	//LAMP OF GROWTH BLACKLIST ///////////////////////////////////////////////////////////////////////////
 	/**
 	 * You can blacklist crops that should not be effected by the Lamp of Growth via FMLInterModComms 
-	 * in your @Mod.Init method using the "lampBlacklist" string message.
+	 * in your @Mod.Init method using the "lampBlacklist" itemstack message.
 	 * Sending a metadata of [OreDictionary.WILDCARD_VALUE] will mean the metadata won't get checked.
 	 * Example for vanilla wheat: 
 	 * FMLInterModComms.sendMessage("Thaumcraft", "lampBlacklist", new ItemStack(Block.crops,1,OreDictionary.WILDCARD_VALUE));
+	 */
+	
+	//DIMENSION BLACKLIST ///////////////////////////////////////////////////////////////////////////
+	/**
+	 * You can blacklist a dimension to not spawn certain thaumcraft features 
+	 * in your @Mod.Init method using the "dimensionBlacklist" string message in the format "[dimension]:[level]"
+	 * The level values are as follows:
+	 * [0] stop all tc spawning and generation
+	 * [1] allow ore and node generation
+	 * [2] allow mob spawning
+	 * [3] allow ore and node gen + mob spawning
+	 * Example: 
+	 * FMLInterModComms.sendMessage("Thaumcraft", "dimensionBlacklist", "15:1");
+	 */
+	
+	//BIOME BLACKLIST ///////////////////////////////////////////////////////////////////////////
+	/**
+	 * You can blacklist a biome to not spawn certain thaumcraft features 
+	 * in your @Mod.Init method using the "biomeBlacklist" string message in the format "[biome id]:[level]"
+	 * The level values are as follows:
+	 * [0] stop all tc spawning and generation
+	 * [1] allow ore and node generation
+	 * [2] allow mob spawning
+	 * [3] allow ore and node gen + mob spawning
+	 * Example: 
+	 * FMLInterModComms.sendMessage("Thaumcraft", "biomeBlacklist", "180:2");
 	 */
 }
