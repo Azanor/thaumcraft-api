@@ -239,7 +239,6 @@ public class ThaumcraftApiHelper {
 	        ot = (Boolean) consumeVisFromWandCrafting.invoke(
 	        		consumeVisFromWandCrafting.getDeclaringClass().cast(wand.getItem()), wand, player, cost, doit);
 	    } catch(Exception ex) { 
-	    	ex.printStackTrace();
 	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.items.wands.ItemWandCasting method consumeAllVisCrafting");
 	    }
 		return ot;
@@ -264,7 +263,6 @@ public class ThaumcraftApiHelper {
 	        }
 	        ot = (Boolean) consumeVisFromInventory.invoke(null, player, cost);
 	    } catch(Exception ex) { 
-	    	ex.printStackTrace();
 	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.items.wands.WandManager method consumeVisFromInventory");
 	    }
 		return ot;
