@@ -1,6 +1,7 @@
 package thaumcraft.api.nodes;
 
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
 
 public interface INode extends IAspectContainer {
@@ -10,6 +11,8 @@ public interface INode extends IAspectContainer {
 	 * @return
 	 */
 	public String getId();
+	
+	public AspectList getAspectsBase();
 	
 	/**
 	 * Return the type of node
