@@ -8,25 +8,16 @@ import net.minecraft.item.ItemStack;
  * @author Azanor
  * 
  * Armor or bauble slot items that implement this interface can provide runic shielding.
- * Recharging is handled internally by thaumcraft. 
+ * Recharging, hardening, etc. is handled internally by thaumcraft. 
  *
  */
 
 public interface IRunicArmor {
 	
 	/**
-	 * returns how much charge this item can provide. 
+	 * returns how much charge this item can provide. This is the base shielding value - any hardening is stored and calculated internally. 
 	 */
-	public int getRunicCharge(ItemStack itemstack, EntityLivingBase player);
+	public int getRunicCharge(ItemStack itemstack);
 	
-	/**
-	 * can this item recieve the standard runic augments 
-	 */
-	public boolean canAcceptRunicAugments(ItemStack itemstack, EntityLivingBase player);
-	
-	/**
-	 * what augments does this item have 
-	 */
-	public EnumRunicAugment[] getRunicAugments(ItemStack itemstack, EntityLivingBase player);
 
 }

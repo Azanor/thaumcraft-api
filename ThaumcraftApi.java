@@ -219,8 +219,8 @@ public class ThaumcraftApi {
 	public static InfusionRecipe getInfusionRecipe(ItemStack res) {
 		for (Object r:getCraftingRecipes()) {
 			if (r instanceof InfusionRecipe) {
-				if (((InfusionRecipe)r).recipeOutput instanceof ItemStack) {
-					if (((ItemStack) ((InfusionRecipe)r).recipeOutput).isItemEqual(res))
+				if (((InfusionRecipe)r).getRecipeOutput() instanceof ItemStack) {
+					if (((ItemStack) ((InfusionRecipe)r).getRecipeOutput()).isItemEqual(res))
 						return (InfusionRecipe)r;
 				} 
 			}
