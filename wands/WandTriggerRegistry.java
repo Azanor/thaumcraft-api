@@ -30,16 +30,16 @@ public class WandTriggerRegistry {
 	 * @param meta send -1 as a wildcard value for all possible meta values
 	 */
 	public static void registerWandBlockTrigger(IWandTriggerManager manager, int event, Block block, int meta) {
-		triggers.put(Arrays.asList(Block.getIdFromBlock(block),meta),
+		triggers.put(Arrays.asList(block,meta),
 				Arrays.asList(manager,event));
 		
 	}
 	
-	private static HashMap<List<Integer>,List> triggers = new  HashMap<List<Integer>,List>();
+	private static HashMap<List,List> triggers = new  HashMap<List,List>();
 	
 	public static boolean hasTrigger(Block block, int meta) {
-		if (triggers.containsKey(Arrays.asList(Block.getIdFromBlock(block),meta)) ||
-			triggers.containsKey(Arrays.asList(Block.getIdFromBlock(block),-1))) return true;
+		if (triggers.containsKey(Arrays.asList(block,meta)) ||
+			triggers.containsKey(Arrays.asList(block,-1))) return true;
 		return false;
 	}
 	
@@ -60,8 +60,8 @@ public class WandTriggerRegistry {
 	public static boolean performTrigger(World world, ItemStack wand, EntityPlayer player, 
 			int x, int y, int z, int side, Block block, int meta) {
 				
-		List l = triggers.get(Arrays.asList(Block.getIdFromBlock(block),meta));
-		if (l==null) l = triggers.get(Arrays.asList(Block.getIdFromBlock(block),-1));
+		List l = triggers.get(Arrays.asList(block,meta));
+		if (l==null) l = triggers.get(Arrays.asList(block,-1));
 		if (l==null) return false;
 		
 		IWandTriggerManager manager = (IWandTriggerManager) l.get(0);

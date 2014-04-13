@@ -106,16 +106,14 @@ public class ThaumcraftApiHelper {
 		return ot;
 	}
 
-	public static AspectList generateTags(int id, int meta) {
+	public static AspectList generateTags(Item item, int meta) {
 	    try {
 	        if(generateTags == null) {
 	            Class fake = Class.forName("thaumcraft.common.lib.crafting.ThaumcraftCraftingManager");
-	            generateTags = fake.getMethod("generateTags", int.class, int.class);
+	            generateTags = fake.getMethod("generateTags", Item.class, int.class);
 	        }
-	        return (AspectList) generateTags.invoke(null, id, meta);
+	        return (AspectList) generateTags.invoke(null, item, meta);
 	    } catch(Exception ex) { 
-	    	ex.printStackTrace();
-	    	System.out.println(new ItemStack(Item.getItemById(id),1,meta));
 	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.lib.crafting.ThaumcraftCraftingManager method generateTags");
 	    }
 		return null;

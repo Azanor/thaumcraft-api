@@ -110,7 +110,7 @@ public class ResearchPage {
 	public ResearchPage(CrucibleRecipe recipe) {
 		this.type = PageType.CRUCIBLE_CRAFTING;
 		this.recipe = recipe;
-		this.recipeOutput = recipe.recipeOutput;
+		this.recipeOutput = recipe.getRecipeOutput();
 	}
 	
 	/**

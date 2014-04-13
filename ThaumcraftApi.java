@@ -249,7 +249,7 @@ public class ThaumcraftApi {
 	public static CrucibleRecipe getCrucibleRecipe(ItemStack stack) {
 		for (Object r:getCraftingRecipes()) {
 			if (r instanceof CrucibleRecipe) {
-				if (((CrucibleRecipe)r).recipeOutput.isItemEqual(stack))
+				if (((CrucibleRecipe)r).getRecipeOutput().isItemEqual(stack))
 					return (CrucibleRecipe)r;
 			}
 		}
@@ -301,14 +301,14 @@ public class ThaumcraftApi {
 	 * @param meta
 	 * @return 
 	 */
-	public static boolean exists(int id, int meta) {
-		AspectList tmp = ThaumcraftApi.objectTags.get(Arrays.asList(id,meta));
+	public static boolean exists(Item item, int meta) {
+		AspectList tmp = ThaumcraftApi.objectTags.get(Arrays.asList(item,meta));
 		if (tmp==null) {
-			tmp = ThaumcraftApi.objectTags.get(Arrays.asList(id,OreDictionary.WILDCARD_VALUE));
+			tmp = ThaumcraftApi.objectTags.get(Arrays.asList(item,OreDictionary.WILDCARD_VALUE));
 			if (meta==OreDictionary.WILDCARD_VALUE && tmp==null) {
 				int index=0;
 				do {
-					tmp = ThaumcraftApi.objectTags.get(Arrays.asList(id,index));
+					tmp = ThaumcraftApi.objectTags.get(Arrays.asList(item,index));
 					index++;
 				} while (index<16 && tmp==null);
 			}
@@ -326,8 +326,9 @@ public class ThaumcraftApi {
 	 */
 	public static void registerObjectTag(ItemStack item, AspectList aspects) {
 		if (aspects==null) aspects=new AspectList();
-		
-		objectTags.put(Arrays.asList(Item.getIdFromItem(item.getItem()),item.getItemDamage()), aspects);
+		try {
+		objectTags.put(Arrays.asList(item.getItem(),item.getItemDamage()), aspects);
+		} catch (Exception e) {}
 	}	
 	
 	
@@ -340,7 +341,9 @@ public class ThaumcraftApi {
 	 */
 	public static void registerObjectTag(ItemStack item, int[] meta, AspectList aspects) {
 		if (aspects==null) aspects=new AspectList();
-		objectTags.put(Arrays.asList(Item.getIdFromItem(item.getItem()),meta), aspects);
+		try {
+		objectTags.put(Arrays.asList(item.getItem(),meta), aspects);
+		} catch (Exception e) {}
 	}
 	
 	/**
@@ -353,7 +356,9 @@ public class ThaumcraftApi {
 		ArrayList<ItemStack> ores = OreDictionary.getOres(oreDict);
 		if (ores!=null && ores.size()>0) {
 			for (ItemStack ore:ores) {
-				objectTags.put(Arrays.asList(Item.getIdFromItem(ore.getItem()), ore.getItemDamage()), aspects);
+				try {
+				objectTags.put(Arrays.asList(ore.getItem(), ore.getItemDamage()), aspects);
+				} catch (Exception e) {}
 			}
 		}
 	}
@@ -367,8 +372,8 @@ public class ThaumcraftApi {
 	 * @param aspects A ObjectTags object of the associated aspects
 	 */
 	public static void registerComplexObjectTag(ItemStack item, AspectList aspects ) {
-		if (!exists(Item.getIdFromItem(item.getItem()),item.getItemDamage())) {
-			AspectList tmp = ThaumcraftApiHelper.generateTags(Item.getIdFromItem(item.getItem()), item.getItemDamage());
+		if (!exists(item.getItem(),item.getItemDamage())) {
+			AspectList tmp = ThaumcraftApiHelper.generateTags(item.getItem(), item.getItemDamage());
 			if (tmp != null && tmp.size()>0) {
 				for(Aspect tag:tmp.getAspects()) {
 					aspects.add(tag, tmp.getAmount(tag));
