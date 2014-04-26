@@ -83,46 +83,54 @@ public class AspectList implements Serializable {
 	 * @return an array of all the aspects in this collection sorted by name
 	 */
 	public Aspect[] getAspectsSorted() {
-		Aspect[] out = aspects.keySet().toArray(new Aspect[1]);
-		boolean change=false;
-		do {
-			change=false;
-			for(int a=0;a<out.length-1;a++) {
-				Aspect e1 = out[a];
-				Aspect e2 = out[a+1];
-				if (e1!=null && e2!=null && e1.getTag().compareTo(e2.getTag())>0) {
-					out[a] = e2;
-					out[a+1] = e1;
-					change = true;
-					break;
+		try {
+			Aspect[] out = aspects.keySet().toArray(new Aspect[1]);
+			boolean change=false;
+			do {
+				change=false;
+				for(int a=0;a<out.length-1;a++) {
+					Aspect e1 = out[a];
+					Aspect e2 = out[a+1];
+					if (e1!=null && e2!=null && e1.getTag().compareTo(e2.getTag())>0) {
+						out[a] = e2;
+						out[a+1] = e1;
+						change = true;
+						break;
+					}
 				}
-			}
-		} while (change==true);
-		return out;
+			} while (change==true);
+			return out;
+		} catch (Exception e) {
+			return this.getAspects(); 
+		}
 	}
 	
 	/**
 	 * @return an array of all the aspects in this collection sorted by amount
 	 */
 	public Aspect[] getAspectsSortedAmount() {
-		Aspect[] out = aspects.keySet().toArray(new Aspect[1]);
-		boolean change=false;
-		do {
-			change=false;
-			for(int a=0;a<out.length-1;a++) {
-				int e1 = getAmount(out[a]); 
-				int e2 = getAmount(out[a+1]);
-				if (e1>0 && e2>0 && e2>e1) {
-					Aspect ea = out[a];
-					Aspect eb = out[a+1];
-					out[a] = eb;
-					out[a+1] = ea;
-					change = true;
-					break;
+		try {
+			Aspect[] out = aspects.keySet().toArray(new Aspect[1]);
+			boolean change=false;
+			do {
+				change=false;
+				for(int a=0;a<out.length-1;a++) {
+					int e1 = getAmount(out[a]); 
+					int e2 = getAmount(out[a+1]);
+					if (e1>0 && e2>0 && e2>e1) {
+						Aspect ea = out[a];
+						Aspect eb = out[a+1];
+						out[a] = eb;
+						out[a+1] = ea;
+						change = true;
+						break;
+					}
 				}
-			}
-		} while (change==true);
-		return out;
+			} while (change==true);
+			return out;
+		} catch (Exception e) {
+			return this.getAspects();
+		}
 	}
 	
 	/**

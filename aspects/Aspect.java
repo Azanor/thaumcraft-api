@@ -157,11 +157,11 @@ public class Aspect {
 		public static final Aspect POISON = new Aspect("venenum",0x89f000,  new Aspect[] {WATER, ENTROPY});	
 		public static final Aspect ENERGY = new Aspect("potentia",0xc0ffff, new Aspect[] {ORDER, FIRE});
 		public static final Aspect EXCHANGE = new Aspect("permutatio",0x578357, new Aspect[] {ENTROPY, ORDER});
-//		public static final Aspect ?? = new Aspect("motus",0xcdccf4, new Aspect[] {AIR, EARTH});
-//		public static final Aspect ?? = new Aspect("motus",0xcdccf4, new Aspect[] {FIRE, EARTH});
-//		public static final Aspect ?? = new Aspect("motus",0xcdccf4, new Aspect[] {FIRE, WATER});
-//		public static final Aspect ?? = new Aspect("motus",0xcdccf4, new Aspect[] {ORDER, WATER});
-//		public static final Aspect ?? = new Aspect("motus",0xcdccf4, new Aspect[] {EARTH, ENTROPY});
+//		public static final Aspect ?? = new Aspect("??",0xcdccf4, new Aspect[] {AIR, EARTH});
+//		public static final Aspect ?? = new Aspect("??",0xcdccf4, new Aspect[] {FIRE, EARTH});
+//		public static final Aspect ?? = new Aspect("??",0xcdccf4, new Aspect[] {FIRE, WATER});
+//		public static final Aspect ?? = new Aspect("??",0xcdccf4, new Aspect[] {ORDER, WATER});
+//		public static final Aspect ?? = new Aspect("??",0xcdccf4, new Aspect[] {EARTH, ENTROPY});
 		
 	//TERTIARY  			
 		public static final Aspect METAL = new Aspect("metallum",0xb5b5cd, new Aspect[] {EARTH, CRYSTAL});
