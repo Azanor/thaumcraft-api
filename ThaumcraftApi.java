@@ -232,6 +232,7 @@ public class ThaumcraftApi {
     /**
      * @param key the research key required for this recipe to work. 
      * @param result the output result
+     * @param catalyst an itemstack of the catalyst or a string if it is an ore dictionary item
      * @param cost the vis cost
      * @param tags the aspects required to craft this
      */
