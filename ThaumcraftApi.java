@@ -115,7 +115,7 @@ public class ThaumcraftApi {
 	 */
 	public static void addSmeltingBonus(ItemStack in, ItemStack out) {
 		smeltingBonus.put(
-				Arrays.asList(Item.getIdFromItem(in.getItem()),in.getItemDamage()), 
+				Arrays.asList(in.getItem(),in.getItemDamage()), 
 				new ItemStack(out.getItem(),0,out.getItemDamage()));
 	}
 	
@@ -135,9 +135,9 @@ public class ThaumcraftApi {
 	 * @return the The bonus item that can be produced
 	 */
 	public static ItemStack getSmeltingBonus(ItemStack in) {
-		ItemStack out = smeltingBonus.get(Arrays.asList(Item.getIdFromItem(in.getItem()),in.getItemDamage()));
+		ItemStack out = smeltingBonus.get(Arrays.asList(in.getItem(),in.getItemDamage()));
 		if (out==null) {
-			out = smeltingBonus.get(Arrays.asList(Item.getIdFromItem(in.getItem()),OreDictionary.WILDCARD_VALUE));
+			out = smeltingBonus.get(Arrays.asList(in.getItem(),OreDictionary.WILDCARD_VALUE));
 		}
 		if (out==null) {
 			String od = OreDictionary.getOreName( OreDictionary.getOreID(in));
