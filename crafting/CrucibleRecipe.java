@@ -77,7 +77,6 @@ public class CrucibleRecipe {
 		
 		for (Aspect tag:aspects.getAspects()) {
 			temptags.remove(tag, aspects.getAmount(tag));
-//			if (!temptags.remove(tag, aspects.getAmount(tag))) return null;
 		}
 		
 		itags = temptags;
@@ -88,24 +87,5 @@ public class CrucibleRecipe {
 		return recipeOutput;
 	}
 	
-	
-//	@Override
-//	public int hashCode() {
-//		String hash = "";
-//		if (catalyst instanceof ItemStack) {
-//			hash += ((ItemStack)catalyst).toString();
-//		} else if (catalyst instanceof ArrayList && ((ArrayList<ItemStack>)catalyst).size()>0) {
-//			for (ItemStack s:(ArrayList<ItemStack>)catalyst) {
-//				hash += s.toString();
-//			} 
-//		} else {
-//			hash += catalyst.hashCode();
-//		}
-//		hash += getRecipeOutput().toString();
-//		for (Aspect a:aspects.getAspectsSorted()) {
-//			hash += a.getTag() + aspects.getAmount(a);
-//		}
-//		return hash.hashCode();
-//	}
 
 }

@@ -2,6 +2,7 @@ package thaumcraft.api;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -132,6 +133,29 @@ public class ThaumcraftApiHelper {
             }
         }
         return false;
+    }
+	
+	public static boolean areItemStackTagsEqualForCrafting(ItemStack slotItem,ItemStack recipeItem)
+    {
+    	if (recipeItem == null || slotItem == null) return false;
+    	if (recipeItem.stackTagCompound!=null && slotItem.stackTagCompound==null ) return false;
+    	if (recipeItem.stackTagCompound==null ) return true;
+    	
+    	Iterator iterator = recipeItem.stackTagCompound.func_150296_c().iterator();
+        while (iterator.hasNext())
+        {
+            String s = (String)iterator.next();
+            if (slotItem.stackTagCompound.hasKey(s)) {
+            	if (!slotItem.stackTagCompound.getTag(s).toString().equals(
+            			recipeItem.stackTagCompound.getTag(s).toString())) {
+            		return false;
+            	}
+            } else {
+        		return false;
+            }
+            
+        }
+        return true;
     }
 
     public static boolean itemMatches(ItemStack target, ItemStack input, boolean strict)
@@ -272,10 +296,8 @@ public class ThaumcraftApiHelper {
 	/**
 	 * This adds permanents or temporary warp to a player. It will automatically be synced clientside
 	 * @param player the player using the wand
-	 * @param amount how much warp to add 
 	 * @param amount how much warp to add. Negative amounts are only valid for temporary warp
 	 * @param temporary add temporary warp instead of permanent
-	 * @param amount how much warp to add
 	 */
 	public static void addWarpToPlayer(EntityPlayer player, int amount, boolean temporary) {
 		boolean ot = false;
@@ -288,6 +310,27 @@ public class ThaumcraftApiHelper {
 	        addWarpToPlayer.invoke(null, player, amount, temporary);
 	    } catch(Exception ex) { 
 	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.Thaumcraft method addWarpToPlayer");
+	    }
+	}
+	
+	static Method addStickyWarpToPlayer;
+	/**
+	 * This "sticky" warp to a player. Sticky warp is permanent warp that can be removed.
+	 * It will automatically be synced clientside
+	 * @param player the player using the wand
+	 * @param amount how much warp to add. Can have negative amounts.
+	 */
+	public static void addStickyWarpToPlayer(EntityPlayer player, int amount) {
+		boolean ot = false;
+	    try {
+	        if(addStickyWarpToPlayer == null) {
+	            Class fake = Class.forName("thaumcraft.common.Thaumcraft");
+	            addStickyWarpToPlayer = fake.getMethod("addStickyWarpToPlayer", 
+	            		EntityPlayer.class, int.class);
+	        }
+	        addStickyWarpToPlayer.invoke(null, player, amount);
+	    } catch(Exception ex) { 
+	    	FMLLog.warning("[Thaumcraft API] Could not invoke thaumcraft.common.Thaumcraft method addStickyWarpToPlayer");
 	    }
 	}
 }

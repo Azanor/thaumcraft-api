@@ -423,7 +423,8 @@ public class ThaumcraftApi {
 		private static HashMap<Object,Integer> warpMap = new HashMap<Object,Integer>();
 		
 		/**
-		 * This method is used to determine how much warp is gained if the item is crafted
+		 * This method is used to determine how much warp is gained if the item is crafted. The warp
+		 * added is "sticky" warp
 		 * @param craftresult The item crafted
 		 * @param amount how much warp is gained
 		 */
@@ -432,7 +433,7 @@ public class ThaumcraftApi {
 		}
 		
 		/**
-		 * This method is used to determine how much warp is gained if the sent item is crafted
+		 * This method is used to determine how much permanent warp is gained if the research is completed
 		 * @param in The item crafted
 		 * @param amount how much warp is gained
 		 */
