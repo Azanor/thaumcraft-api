@@ -22,6 +22,9 @@ import thaumcraft.api.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.crafting.ShapedArcaneRecipe;
 import thaumcraft.api.crafting.ShapelessArcaneRecipe;
+import thaumcraft.api.internal.DummyInternalMethodHandler;
+import thaumcraft.api.internal.IInternalMethodHandler;
+import thaumcraft.api.internal.WeightedRandomLoot;
 import thaumcraft.api.research.IScanEventHandler;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchCategoryList;
@@ -62,6 +65,9 @@ public class ThaumcraftApi {
 	 */
 	public static ArrayList<Block> portableHoleBlackList = new ArrayList<Block>();
 	
+	//Internal (Do not alter this unless you like pretty explosions)
+	//Calling methods from this will only work properly once Thaumcraft is past the FMLPreInitializationEvent phase.
+	public static IInternalMethodHandler internalMethods = new DummyInternalMethodHandler();	
 	
 	//RESEARCH/////////////////////////////////////////
 	public static ArrayList<IScanEventHandler> scanEventhandlers = new ArrayList<IScanEventHandler>();
@@ -323,6 +329,7 @@ public class ThaumcraftApi {
 	//ASPECTS////////////////////////////////////////
 	
 	public static ConcurrentHashMap<List,AspectList> objectTags = new ConcurrentHashMap<List,AspectList>();
+	public static ConcurrentHashMap<List,int[]> groupedObjectTags = new ConcurrentHashMap<List,int[]>();
 	
 	/**
 	 * Checks to see if the passed item/block already has aspects associated with it.
@@ -370,8 +377,12 @@ public class ThaumcraftApi {
 	 */
 	public static void registerObjectTag(ItemStack item, int[] meta, AspectList aspects) {
 		if (aspects==null) aspects=new AspectList();
-		try {
-		objectTags.put(Arrays.asList(item.getItem(),meta), aspects);
+		try {			
+			objectTags.put(Arrays.asList(item.getItem(),meta[0]), aspects);
+			for (int m:meta) {				
+				groupedObjectTags.put(Arrays.asList(item.getItem(),m), meta);
+			}
+			
 		} catch (Exception e) {}
 	}
 	
@@ -456,6 +467,32 @@ public class ThaumcraftApi {
 			}
 			return 0;
 		}
+	
+	//LOOT BAGS //////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Used to add possible loot to treasure bags. As a reference, the weight of gold coins are 2000 
+		 * and a diamond is 50.
+		 * The weights are the same for all loot bag types - the only difference is how many items the bag
+		 * contains.
+		 * @param item
+		 * @param weight
+		 * @param bagTypes array of which type of bag to add this loot to. Multiple types can be specified
+		 * 0 = common, 1 = uncommon, 2 = rare
+		 */
+		public static void addLootBagItem(ItemStack item, int weight, int... bagTypes) {
+			if (bagTypes==null || bagTypes.length==0)
+				WeightedRandomLoot.lootBagCommon.add(new WeightedRandomLoot(item,weight));
+			else {
+				for (int rarity:bagTypes) {
+					switch(rarity) {
+						case 0: WeightedRandomLoot.lootBagCommon.add(new WeightedRandomLoot(item,weight)); break;
+						case 1: WeightedRandomLoot.lootBagUncommon.add(new WeightedRandomLoot(item,weight)); break;
+						case 2: WeightedRandomLoot.lootBagRare.add(new WeightedRandomLoot(item,weight)); break;
+					}
+				}
+			}
+		}
 		
 	//CROPS //////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -515,9 +552,9 @@ public class ThaumcraftApi {
 	 * in your @Mod.Init method using the "dimensionBlacklist" string message in the format "[dimension]:[level]"
 	 * The level values are as follows:
 	 * [0] stop all tc spawning and generation
-	 * [1] allow ore and node generation
+	 * [1] allow ore and node generation (and node special features)
 	 * [2] allow mob spawning
-	 * [3] allow ore and node gen + mob spawning
+	 * [3] allow ore and node gen + mob spawning (and node special features)
 	 * Example: 
 	 * FMLInterModComms.sendMessage("Thaumcraft", "dimensionBlacklist", "15:1");
 	 */
@@ -528,9 +565,9 @@ public class ThaumcraftApi {
 	 * in your @Mod.Init method using the "biomeBlacklist" string message in the format "[biome id]:[level]"
 	 * The level values are as follows:
 	 * [0] stop all tc spawning and generation
-	 * [1] allow ore and node generation
+	 * [1] allow ore and node generation (and node special features)
 	 * [2] allow mob spawning
-	 * [3] allow ore and node gen + mob spawning
+	 * [3] allow ore and node gen + mob spawning (and node special features)
 	 * Example: 
 	 * FMLInterModComms.sendMessage("Thaumcraft", "biomeBlacklist", "180:2");
 	 */

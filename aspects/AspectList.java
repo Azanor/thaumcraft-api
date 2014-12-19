@@ -84,7 +84,7 @@ public class AspectList implements Serializable {
 	 */
 	public Aspect[] getAspectsSorted() {
 		try {
-			Aspect[] out = aspects.keySet().toArray(new Aspect[1]);
+			Aspect[] out = aspects.keySet().toArray(new Aspect[]{});
 			boolean change=false;
 			do {
 				change=false;
@@ -212,6 +212,18 @@ public class AspectList implements Serializable {
 			
 		}
 		this.aspects.put( aspect, amount );
+		return this;
+	}
+	
+	public AspectList add(AspectList in) {
+		for (Aspect a:in.getAspects()) 
+			this.add(a, in.getAmount(a));
+		return this;
+	}
+	
+	public AspectList merge(AspectList in) {
+		for (Aspect a:in.getAspects()) 
+			this.merge(a, in.getAmount(a));
 		return this;
 	}
 	
