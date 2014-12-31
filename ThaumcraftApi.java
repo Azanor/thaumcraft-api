@@ -571,4 +571,18 @@ public class ThaumcraftApi {
 	 * Example: 
 	 * FMLInterModComms.sendMessage("Thaumcraft", "biomeBlacklist", "180:2");
 	 */
+		
+	//CHAMPION MOB WHITELIST ///////////////////////////////////////////////////////////////////////////
+	/**
+	 * You can whitelist an entity class so it can rarely spawn champion versions in your @Mod.Init method using 
+	 * the "championWhiteList" string message in the format "[Entity]:[level]"
+	 * The entity must extend EntityMob.
+	 * [Entity] is in a similar format to what is used for mob spawners and such (see EntityList.class for vanilla examples).
+	 * The [level] value indicate how rare the champion version will be - the higher the number the more common. 
+	 * The number roughly equals the [n] in 100 chance of a mob being a champion version. 
+	 * You can give 0 or negative numbers to allow champions to spawn with a very low chance only in particularly dangerous places. 
+	 * However anything less than about -2 will probably result in no spawns at all.
+	 * Example: 
+	 * FMLInterModComms.sendMessage("Thaumcraft", "championWhiteList", "Thaumcraft.Wisp:1");
+	 */
 }

@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -256,4 +257,14 @@ public abstract class ItemFocusBasic extends Item {
 		}
 	}
 
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int p_77663_4_, boolean p_77663_5_) {
+		if (stack.stackTagCompound !=null && stack.stackTagCompound.hasKey("ench")) {
+			stack.stackTagCompound.removeTag("ench");
+		}
+		super.onUpdate(stack, world, entity, p_77663_4_, p_77663_5_);
+	}
+
+	
+	
 }

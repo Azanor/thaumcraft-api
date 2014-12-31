@@ -15,7 +15,7 @@ import thaumcraft.api.aspects.Aspect;
 
 public class VisNetHandler {
 
-	// / NODE DRAINING
+	// NODE DRAINING
 	/**
 	 * This method drains vis from a relay or source near the passed in
 	 * location. The amount received can be less than the amount requested so
