@@ -5,6 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public class BlockCoordinates implements Comparable
 {
+    /** the x coordinate */
     public int x;
 
     /** the y coordinate */
