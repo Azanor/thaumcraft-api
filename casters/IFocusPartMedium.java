@@ -4,7 +4,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import thaumcraft.api.casters.FocusCore.FocusEffect;
 
 public interface IFocusPartMedium extends IFocusPart {
 
@@ -15,6 +17,7 @@ public interface IFocusPartMedium extends IFocusPart {
 		CHARGE, //Spell is cast when player releases the charge. The longer you charge, the more effective & expensive the spell will be. Range of 50% - 200%
 		INSTANT; //Instantly takes effect when cast with no cooldown.
 	}
+		
 	
 	/**
 	 * Determines the number of ticks that you will need to 'charge' the gauntlet before the spell is cast. 
@@ -23,17 +26,28 @@ public interface IFocusPartMedium extends IFocusPart {
 	 */
 	public default int getChargeTime() { return 10; }
 	
-	
-	
+
 	/**
-	 * @param world
+	 * Server Side Only
 	 * @param caster
 	 * @param casterStack
-	 * @param focus
-	 * @param charge Acts as a multiplier to focus <i>effectiveness</i>. Default value 1. Used by the <i>CHARGE</i> casting method to modify casting time and cost.
+	 * @param core
+	 * @param source
+	 * @param castVector
 	 * @return
 	 */
-	public default boolean onMediumTrigger(World world, Entity caster, @Nullable ItemStack casterStack, FocusCore focus, float charge) { 
-		return true; 
-	}
+	public boolean onCast(Entity caster, ItemStack casterStack, FocusCore core, RayTraceResult source, Vec3d castVector);
+	
+	/**
+	 * This method will be called for one connected EFFECT when that effect is being processed.  
+	 * Server Side Only
+	 * @param caster
+	 * @param casterStack
+	 * @param focusEffect
+	 * @param target
+	 * @param source
+	 * @param castVector
+	 * @return if true normal effect processing will NOT occur. It will be assumed it will be handled in this method.
+	 */
+	public default boolean applyAtEffect(Entity caster, @Nullable ItemStack casterStack, FocusEffect focusEffect, RayTraceResult target, RayTraceResult source, Vec3d castVector) { return false; }
 }

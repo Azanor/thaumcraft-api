@@ -22,16 +22,11 @@ public class PotionFluxTaint extends Potion
     {
     	super(par2,par3);
     	setIconIndex(3, 1);
+    	setPotionName("potion.flux_taint");
     }
     
-    @Override
-	public String getName() {
-		return "flux_taint";
-	}
-
 	public static void init()
     {
-    	instance.setPotionName("potion.fluxtaint");
     	instance.setIconIndex(3, 1);
     	instance.setEffectiveness(0.25D);
     }

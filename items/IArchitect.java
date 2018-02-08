@@ -9,6 +9,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface IArchitect {
+	
+	/*
+	 * Items that should display the planning block display like the Shovel of the Earthmover should extend this.
+	 * Also works for focus effects that can be linked to the 'Plan' medium.
+	 */
 
 	/**
 	 * Returns a list of blocks that should be highlighted in world. The starting point is whichever block the player currently has highlighted in the world.

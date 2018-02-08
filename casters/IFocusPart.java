@@ -1,5 +1,8 @@
 package thaumcraft.api.casters;
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
@@ -25,6 +28,39 @@ public interface IFocusPart {
 	 */
 	public Aspect getAspect();
 	
+	public default boolean hasAttribute(EnumPartAttribute attribute) {
+		return getAttributes()==null || Arrays.asList(getAttributes()).contains(attribute);
+	}
+	
+	/**
+	 * 
+	 * @return returning null will count as having all attributes
+	 */
+	public EnumPartAttribute[] getAttributes();
+	
+	enum EnumPartAttribute {
+		RANGED(false,EnumFocusPartType.MEDIUM), 	//Medium only, works at range
+		TOUCH(false,EnumFocusPartType.MEDIUM), 		//Medium only, works on something you clicked on
+		BLOCKS(false,EnumFocusPartType.MEDIUM,EnumFocusPartType.EFFECT), 	//can apply to blocks
+		ENTITIES(false,EnumFocusPartType.MEDIUM,EnumFocusPartType.EFFECT), 	//can apply to entities
+		TIMED(false,EnumFocusPartType.MODIFIER), 		//has or modifies duration
+		HARVEST(true,EnumFocusPartType.EFFECT) 		//will harvest blocks or entities for resources
+		; 
+		EnumFocusPartType[] partTypes;
+		public boolean required;
+		
+		private EnumPartAttribute(boolean required, EnumFocusPartType ... partTypes) {
+			this.partTypes = partTypes;
+			this.required=required;
+		}
+		
+		public boolean shouldCheckAgainst(EnumFocusPartType checkType) {
+			for (EnumFocusPartType tt:partTypes) if (checkType==tt) return true;
+			return false;
+		}
+		
+	}
+	
 	public default String getName() {
 		return I18n.translateToLocal("focuspart."+getKey()+".name");
 	}
@@ -32,14 +68,6 @@ public interface IFocusPart {
 	public default String getText() {
 		return I18n.translateToLocal("focuspart."+getKey()+".text");
 	}
-	
-	public default float getCostMultiplier() { return 1; }
-	
-	/**
-	 * By how much effects linked to this part will be modified. Used to modify things like damage, duration, etc.
-	 * @return
-	 */
-	public default float getEffectMultiplier() { return 1; }
 	
 	public EnumFocusPartType getType();
 	
@@ -74,8 +102,13 @@ public interface IFocusPart {
 	
 	
 	
-	public default boolean hasCustomParticle() { return false; }
-	public default void drawCustomParticle(World world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ) {  }
+	public default boolean hasCustomFX() { return false; }
+	public default void drawCustomFX(World world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ) {  }
 	
+	/**
+	 * 
+	 * @param mutators
+	 */
+	public default void applyBaseMutators(MutatorStore mutators) {} 
 	
 }

@@ -74,6 +74,7 @@ public class BlocksTC {
 	
 	// Machines
 	public static Block arcaneEar;
+	public static Block arcaneEarToggle;
 	public static Block levitator;
 	public static Block dioptra;
 	public static Block crucible;	

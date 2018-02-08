@@ -16,16 +16,11 @@ public class PotionVisExhaust extends Potion
     {
     	super(par2,par3);
     	setIconIndex(5, 1);
+    	setPotionName("potion.vis_exhaust");
     }
-    
-    @Override
-	public String getName() {
-		return "vis_exhaust";
-	}
-    
+        
     public static void init()
     {
-    	instance.setPotionName("potion.visexhaust");
     	instance.setIconIndex(5, 1);
     	instance.setEffectiveness(0.25D);
     }

@@ -1,8 +1,10 @@
 package thaumcraft.api.casters;
 
 import java.util.HashMap;
+import java.util.List;
 
-import thaumcraft.api.casters.IFocusPart.EnumFocusPartType;
+import scala.actors.threadpool.Arrays;
+import thaumcraft.api.casters.IFocusPart.EnumPartAttribute;
 
 public class FocusHelper {
 	
@@ -10,6 +12,7 @@ public class FocusHelper {
 	public static IFocusPartMedium TOUCH;
 	public static IFocusPartMedium BOLT;
 	public static IFocusPartMedium PROJECTILE;
+	public static IFocusPartMedium PLAN;
 	
 	// effects
 	public static IFocusPartEffect FIRE;
@@ -21,18 +24,17 @@ public class FocusHelper {
 	public static IFocusPartEffect EXCHANGE;
 	
 	// modifiers
-	public static IFocusPart FRUGAL;
-	public static IFocusPart POTENCY;
-	public static IFocusPart LINGERING;
-	public static IFocusPart SCATTER;
-	public static IFocusPart CHAIN;
-	public static IFocusPart SILKTOUCH;
-	public static IFocusPart FORTUNE;
-	public static IFocusPart CHARGE;
+	public static IFocusPartModifier FRUGAL;
+	public static IFocusPartModifier POTENCY;
+	public static IFocusPartModifier LINGERING;
+	public static IFocusPartModifier SCATTER;
+	public static IFocusPartModifier CHAIN;
+	public static IFocusPartModifier SILKTOUCH;
+	public static IFocusPartModifier FORTUNE;
+	public static IFocusPartModifier CHARGE;
+	public static IFocusPartModifier BURST;
 	
-	public static HashMap<String,IFocusPart> focusParts = new HashMap<>();
-	public static HashMap<String,IFocusPart[]> focusPartsConnections = new HashMap<>();
-	
+	public static HashMap<String,IFocusPart> focusParts = new HashMap<>();	
 	
 	/**
 	 * Registers a focus part for use	
@@ -40,10 +42,9 @@ public class FocusHelper {
 	 * @param connections what other parts this part can connect to. By default all 'effects' & 'mediums' can connect so this does not need to be listed
 	 * @return
 	 */
-	public static boolean registerFocusPart(IFocusPart part, IFocusPart ... connections) {
+	public static boolean registerFocusPart(IFocusPart part) {
 		if (focusParts.containsKey(part.getKey())) return false;
 		focusParts.put(part.getKey(), part);
-		if (connections!=null) focusPartsConnections.put(part.getKey(), connections);
 		return true;
 	}
 	
@@ -57,17 +58,22 @@ public class FocusHelper {
 		
 		if (!part1.canConnectTo(part2) || !part2.canConnectTo(part1)) return false;
 		
-		if (part1.getType()==EnumFocusPartType.MEDIUM && part2.getType()==EnumFocusPartType.EFFECT ||
-			part2.getType()==EnumFocusPartType.MEDIUM && part1.getType()==EnumFocusPartType.EFFECT) return true;
-				
-		IFocusPart[] conns = focusPartsConnections.get(part1.getKey());
-		if (conns!=null)
-			for (IFocusPart pc:conns) 
-				if (pc==part2) return true; 
-		conns = focusPartsConnections.get(part2.getKey());
-		if (conns!=null)
-			for (IFocusPart pc:conns) 
-				if (pc==part1) return true;
-		return false;
+		EnumPartAttribute[] atr1 = part1.getAttributes();
+		EnumPartAttribute[] atr2 = part2.getAttributes();
+		
+		if (atr1!=null && atr2!=null) {
+			boolean b=false;			
+			List<EnumPartAttribute> l1 = Arrays.asList(atr1);
+			List<EnumPartAttribute> l2 = Arrays.asList(atr2);				
+			for (EnumPartAttribute atr : atr1) {
+				if (atr.shouldCheckAgainst(part2.getType())) b = l2.contains(atr);
+			} 					
+			for (EnumPartAttribute atr : atr2) {
+				if (atr.shouldCheckAgainst(part1.getType())) b = l1.contains(atr);
+			} 		
+			return b;
+		}
+		
+		return true;
 	}
 }

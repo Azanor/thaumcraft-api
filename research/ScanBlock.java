@@ -2,6 +2,7 @@ package thaumcraft.api.research;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
 public class ScanBlock implements IScanThing {
@@ -10,14 +11,15 @@ public class ScanBlock implements IScanThing {
 	Block[] blocks;
 	
 	public ScanBlock(Block block) {
-		research = "!"+block.getRegistryName().toString();
-		this.blocks = new Block[] {block};
+		this("!"+block.getRegistryName().toString(),new Block[] {block});
 	}
 
 	public ScanBlock(String research, Block ... blocks) {
 		this.research = research;
 		this.blocks = blocks;
-	}
+		for (Block block:blocks)
+			ScanningManager.addScannableThing(new ScanItem(research, new ItemStack(block)));
+	}		
 	
 	@Override
 	public boolean checkThing(EntityPlayer player, Object obj) {		

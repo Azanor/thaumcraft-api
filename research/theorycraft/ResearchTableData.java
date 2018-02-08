@@ -249,15 +249,15 @@ public class ResearchTableData
 		this.player=pe.getName();
 		ArrayList<String> availCats = getAvailableCategories(pe);
 		ArrayList<String> drawnCards = new ArrayList<>();
-		int insp = getAvailableInspiration(pe) - aidsChosen;;
 		boolean aidDrawn=false;
-		
-		while (draw>0) {	
+		int failsafe=0;
+		while (draw>0 && failsafe<10000) {
+			failsafe++;
 			if (!aidDrawn && !aidCards.isEmpty() && pe.getRNG().nextFloat()<=.25) {
 				int idx = pe.getRNG().nextInt(aidCards.size());
 				String key = aidCards.get(idx);				
 				TheorycraftCard card = generateCard(key,-1,pe);
-				if (card==null || card.getInspirationCost()>insp || isCategoryBlocked(card.getResearchCategory())) continue;		
+				if (card==null || card.getInspirationCost()>inspiration || isCategoryBlocked(card.getResearchCategory())) continue;		
 				
 				if (drawnCards.contains(key)) continue;
 				drawnCards.add(key);
@@ -268,7 +268,7 @@ public class ResearchTableData
 					String[] cards = TheorycraftManager.cards.keySet().toArray(new String[]{});
 					int idx = pe.getRNG().nextInt(cards.length);
 					TheorycraftCard card = generateCard(cards[idx],-1,pe);
-					if (card==null || card.isAidOnly() || card.getInspirationCost()>insp) continue;
+					if (card==null || card.isAidOnly() || card.getInspirationCost()>inspiration) continue;
 					if (card.getResearchCategory()!=null) {
 						boolean found=false;
 						for (String cn:availCats) {
@@ -284,7 +284,7 @@ public class ResearchTableData
 					drawnCards.add(cards[idx]);
 					cardChoices.add(new CardChoice(cards[idx],card,false,false));
 				} catch (Exception e) {
-					e.printStackTrace();
+//					e.printStackTrace();
 					continue;
 				}
 			}		

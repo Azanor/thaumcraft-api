@@ -278,17 +278,20 @@ public class ThaumcraftApi {
 		stack.stackSize=1;
 		AspectList tmp = CommonInternals.objectTags.get(stack.serializeNBT().toString());
 		if (tmp==null) {
-			stack.setItemDamage(OreDictionary.WILDCARD_VALUE);
-			tmp = CommonInternals.objectTags.get(stack.serializeNBT().toString());
-			if (item.getItemDamage()==OreDictionary.WILDCARD_VALUE && tmp==null) {
-				int index=0;
-				do {
-					stack.setItemDamage(index);
-					tmp = CommonInternals.objectTags.get(stack.serializeNBT().toString());
-					index++;
-				} while (index<16 && tmp==null);
+			try {
+				stack.setItemDamage(OreDictionary.WILDCARD_VALUE);
+				tmp = CommonInternals.objectTags.get(stack.serializeNBT().toString());
+				if (item.getItemDamage()==OreDictionary.WILDCARD_VALUE && tmp==null) {
+					int index=0;
+					do {
+						stack.setItemDamage(index);
+						tmp = CommonInternals.objectTags.get(stack.serializeNBT().toString());
+						index++;
+					} while (index<16 && tmp==null);
+				}
+				if (tmp==null) return false;
+			} catch (Exception e) {
 			}
-			if (tmp==null) return false;
 		}
 		
 		return true;
@@ -303,10 +306,11 @@ public class ThaumcraftApi {
 	public static void registerObjectTag(ItemStack item, AspectList aspects) {
 		if (aspects==null) aspects=new AspectList();
 		try {
-			item.stackSize=1;
+			ItemStack tmp = item.copy();
+			tmp.stackSize=1;
 			NBTTagCompound nbt = new NBTTagCompound();
 			aspects.writeToNBT(nbt);
-			CommonInternals.objectTags.put(item.serializeNBT().toString(), aspects);
+			CommonInternals.objectTags.put(tmp.serializeNBT().toString(), aspects);
 		} catch (Exception e) {}
 	}	
 	
@@ -321,8 +325,9 @@ public class ThaumcraftApi {
 	public static void registerObjectTag(ItemStack item, int[] meta, AspectList aspects) {
 		if (aspects==null) aspects=new AspectList();
 		try {			
-			item.stackSize=1;
-			String s = item.serializeNBT().toString();
+			ItemStack tmp = item.copy();
+			tmp.stackSize=1;
+			String s = tmp.serializeNBT().toString();
 			CommonInternals.objectTags.put(s, aspects);
 			for (int m:meta) {				
 				CommonInternals.groupedObjectTags.put(m+":"+s, meta);

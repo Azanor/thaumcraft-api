@@ -114,33 +114,7 @@ public class ThaumcraftApiHelper {
 			return te;
 		else
 			return null;
-	}
-    
-//    private static HashMap<Integer, AspectList> allAspects= new HashMap<Integer, AspectList>();
-//    private static HashMap<Integer, AspectList> allCompoundAspects= new HashMap<Integer, AspectList>();
-//    
-//    public static AspectList getAllAspects(int amount) {
-//    	if (allAspects.get(amount)==null) {
-//    		AspectList al = new AspectList();
-//    		for (Aspect aspect:Aspect.aspects.values()) {
-//    			al.add(aspect, amount);
-//    		}
-//    		allAspects.put(amount, al);
-//    	} 
-//    	return allAspects.get(amount);
-//    }
-//    
-//    public static AspectList getAllCompoundAspects(int amount) {
-//    	if (allCompoundAspects.get(amount)==null) {
-//    		AspectList al = new AspectList();
-//    		for (Aspect aspect:Aspect.getCompoundAspects()) {
-//    			al.add(aspect, amount);
-//    		}
-//    		allCompoundAspects.put(amount, al);
-//    	} 
-//    	return allCompoundAspects.get(amount);
-//    }
-    
+	}  
     
 	public static RayTraceResult rayTraceIgnoringSource(World world, Vec3d v1, Vec3d v2, 
 			boolean bool1, boolean bool2, boolean bool3)
