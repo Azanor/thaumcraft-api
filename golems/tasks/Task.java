@@ -44,7 +44,7 @@ public class Task {
 		this.sealPos = sealPos;
 		this.entity = entity;
 		if (sealPos==null) {
-			this.id = (System.currentTimeMillis()+"/ENPOS/"+pos.toString()).hashCode();
+			this.id = (System.currentTimeMillis()+"/ENPOS/"+entity.getEntityId()).hashCode();
 		} else
 			this.id = (System.currentTimeMillis()+"/E/"+sealPos.face.toString()+"/"+sealPos.pos.toString()+"/"+entity.getEntityId()).hashCode();
 		this.type = 1;

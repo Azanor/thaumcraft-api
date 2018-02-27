@@ -37,7 +37,7 @@ public class CardRethink extends TheorycraftCard {
 		for (String category:data.categoryTotals.keySet()) {
 			a+=data.getTotal(category);
 		}
-		a = Math.min(a, MathHelper.getInt(player.getRNG(), 10, 20));
+		a = Math.min(a, 10);
 		int tries = 0;
 		while (a>0 && tries < 1000) {
 			tries++;
@@ -48,7 +48,7 @@ public class CardRethink extends TheorycraftCard {
 			}
 		}
 		data.bonusDraws++;
-		if (player.getRNG().nextBoolean()) data.addTotal("BASICS", 10);
+		data.addTotal("BASICS", MathHelper.getInt(player.getRNG(), 1, 10));
 		return true;
 	}
 	

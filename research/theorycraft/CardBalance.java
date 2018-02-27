@@ -47,6 +47,7 @@ public class CardBalance extends TheorycraftCard {
 			data.categoryTotals.put(category, total/size);
 		}
 		data.addTotal("BASICS", 5);
+		data.penaltyStart++;
 		return true;
 	}
 	

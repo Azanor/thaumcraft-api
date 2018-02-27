@@ -150,8 +150,7 @@ public interface IPlayerKnowledge extends INBTSerializable<NBTTagCompound>
    
 	public enum EnumKnowledgeType {
 		THEORY(32,true,"T"),
-		OBSERVATION(16,true,"O"),		
-		EPIPHANY(256,false,"E");		
+		OBSERVATION(16,true,"O");		
 		
 		private short progression;
 		private boolean hasFields;

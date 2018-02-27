@@ -1,9 +1,9 @@
 package thaumcraft.api.casters;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import scala.actors.threadpool.Arrays;
 import thaumcraft.api.casters.IFocusPart.EnumPartAttribute;
 
 public class FocusHelper {
@@ -33,8 +33,10 @@ public class FocusHelper {
 	public static IFocusPartModifier FORTUNE;
 	public static IFocusPartModifier CHARGE;
 	public static IFocusPartModifier BURST;
+	public static IFocusPartModifier QUICKEN;	
 	
-	public static HashMap<String,IFocusPart> focusParts = new HashMap<>();	
+	public static HashMap<String,IFocusPart> focusParts = new HashMap<>();
+	
 	
 	/**
 	 * Registers a focus part for use	

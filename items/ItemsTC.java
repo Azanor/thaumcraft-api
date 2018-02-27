@@ -1,6 +1,7 @@
 package thaumcraft.api.items;
 
 import net.minecraft.item.Item;
+import thaumcraft.common.items.curios.ItemCelestialNotes;
 
 public class ItemsTC {
 	
@@ -15,6 +16,7 @@ public class ItemsTC {
 	public static Item eldritchEye;
 	public static Item runedTablet;
 	public static Item pechWand;
+	public static Item celestialNotes;
 
 	//Resources
 	public static Item alumentum;
@@ -126,6 +128,7 @@ public class ItemsTC {
 	public static Item sanitySoap;
 	/** "basic","advanced","bore"*/
 	public static Item turretPlacer;
+	public static Item enchantedPlaceholder;
 		
 	//tools	
 	public static Item resonator;	
@@ -146,6 +149,8 @@ public class ItemsTC {
 	 * use GolemHelper.getSealStack to return an itemstack of a specific seal 
 	 * **/
 	public static Item seals;
+	
+	
 	
 	
 	

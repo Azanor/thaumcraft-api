@@ -1,13 +1,10 @@
 package thaumcraft.api.research.theorycraft;
 
-import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.Arrays;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import thaumcraft.api.research.theorycraft.ResearchTableData.CardChoice;
 
 /**
  * See CardAnalyze for an example
@@ -77,10 +74,24 @@ public abstract class TheorycraftCard {
 	 * The items required to complete this operation. 
 	 * If a null is returned no items are required. The array itself can contain null itemstacks - 
 	 * that signifies an item is required, but it will display as a ? in the GUI.
-	 * You need to take care of consuming and checking for these items yourself in the activate method (see below).
+	 * You need to take care of consuming and checking for those items yourself in the activate method (see below). 
+	 * Non-null items will be handled by automatically.
 	 * @return
 	 */
 	public ItemStack[] getRequiredItems() {
+		return null;
+	}
+	
+	/**
+	 * Will the listed items be consumed when the card is picked.  
+	 * @return
+	 */
+	public boolean[] getRequiredItemsConsumed() {
+		if (getRequiredItems()!=null) {
+			boolean[] b = new boolean[getRequiredItems().length];
+			Arrays.fill(b, false);
+			return b;
+		}
 		return null;
 	}
 		

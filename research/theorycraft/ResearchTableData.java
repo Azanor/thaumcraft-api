@@ -24,6 +24,7 @@ public class ResearchTableData
 	public int bonusDraws;
 	public int placedCards;	
 	public int aidsChosen;
+	public int penaltyStart;
 	public ArrayList<Long> savedCards = new ArrayList<Long>();
 	public ArrayList<String> aidCards = new ArrayList<String>();
 	/*
@@ -101,6 +102,7 @@ public class ResearchTableData
 		nbt.setInteger("placedCards", placedCards);
 		nbt.setInteger("bonusDraws", bonusDraws);		
 		nbt.setInteger("aidsChosen", aidsChosen);		
+		nbt.setInteger("penaltyStart", penaltyStart);
 		
 		//
 		NBTTagList savedTag = new NBTTagList();
@@ -171,6 +173,7 @@ public class ResearchTableData
 		placedCards = nbt.getInteger("placedCards");
 		bonusDraws = nbt.getInteger("bonusDraws");
 		aidsChosen = nbt.getInteger("aidsChosen");
+		penaltyStart = nbt.getInteger("penaltyStart");
 		player=nbt.getString("player");
 				
 		//

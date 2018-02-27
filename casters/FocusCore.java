@@ -56,13 +56,17 @@ public class FocusCore {
 	}
 	
 	public int getFinalChargeTime() {
+		int t = this.medium.getChargeTime();
 		if (mediumModifiers!=null)
 			for (IFocusPart part:mediumModifiers) {
 				if (part==FocusHelper.CHARGE) {
-					return this.medium.getChargeTime() * 10;
+					t *= 10;
+				}
+				if (part==FocusHelper.QUICKEN) {
+					t /= 2;
 				}
 			}
-		return this.medium.getChargeTime();
+		return t;
 	}
 	
 	public void generate() {
@@ -72,6 +76,7 @@ public class FocusCore {
 	private void generate(boolean foundMutators) {
 		this.partsRaw = new LinkedHashMap<>();
 		if (medium==null) return;
+		
 		partsRaw.put(medium.getKey(), medium);
 		
 		cost=0;
@@ -104,6 +109,11 @@ public class FocusCore {
 			}
 			
 			partsRaw.put(focusEffect.effect.getKey(), focusEffect.effect);	
+			
+			if (focusEffect.modifiers!=null)
+				for (IFocusPartModifier effMod : focusEffect.modifiers) {
+					partsRaw.put(effMod.getKey(), effMod);	
+				}
 			
 			cost += focusEffect.effect.getBaseCost() * focusEffect.mutators.getValue(focusEffect.mutators.COST);
 		}
@@ -235,12 +245,15 @@ public class FocusCore {
 	}
 		
 	public String getSortingHelper() {
-		String s = medium.getKey();
-		if (mediumModifiers!=null) for (IFocusPartModifier pm:this.mediumModifiers) s += pm.getKey();
-		for (FocusEffect ef:effects) {
-			s += ef.effect.getKey();
-			if (ef.modifiers!=null) for (IFocusPartModifier pm:ef.modifiers) s += pm.getKey();
-		}
+		String s = "";
+		try {
+			s = medium.getKey();
+			if (mediumModifiers!=null) for (IFocusPartModifier pm:this.mediumModifiers) s += pm.getKey();
+			for (FocusEffect ef:effects) {
+				s += ef.effect.getKey();
+				if (ef.modifiers!=null) for (IFocusPartModifier pm:ef.modifiers) s += pm.getKey();
+			}
+		} catch (Exception e) { }
 		return s;
 	}
 	

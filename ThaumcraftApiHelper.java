@@ -44,7 +44,7 @@ public class ThaumcraftApiHelper {
         {
             for (ItemStack target : targets)
             {
-                if (OreDictionary.itemMatches(target, input, strict))
+                if (OreDictionary.itemMatches(target, input, strict) && ItemStack.areItemStackTagsEqual(target, input))
                 {
                     return true;
                 }

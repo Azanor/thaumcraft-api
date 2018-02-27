@@ -17,7 +17,7 @@
         "meta": [ "ROUND","SPIKY","HIDDEN","REVERSE","AUTOUNLOCK" ],
         "location": [ 0,0 ], /* x and y location of the research icon in the gui
         "reward_item": [ "minecraft:stick" ], /* and item the player will receive as a reward for completing this research */
-        "reward_knowledge": [ "EPIPHANY;1" ], /* knowledge the player will receive as a reward for completing this research */
+        "reward_knowledge": [ "OBSERVATION;AUROMANCY;1" ], /* knowledge the player will receive as a reward for completing this research */
         
         "stages": [
                 {
@@ -25,7 +25,7 @@
                     "recipes": ["A_RECIPE","ANOTHER_RECIPE"],  /* list of recipes to display on page. The name must have an entry in the thaumcraft recipe catalog */
                     "required_item":["minecraft:planks;30;1;{display:{Lore:['Stuff you need to hand in']}}"],
                     "required_craft":["minecraft:stick","thaumcraft:nitor"],
-                    "required_knowledge":["THEORY;GOLEMANCY;2","OBSERVATION;AUROMANCY;1","EPIPHANY"],
+                    "required_knowledge":["THEORY;GOLEMANCY;2","OBSERVATION;AUROMANCY;1"],
                     "required_research":["RESEARCH_YOU_NEED"] /* follows similar logic to parent research. You can specify things that are not full blown research entries in their own right. In that case a ? will be shown instead of their icon and you will have to add localization in the format "research.RESEARCH_YOU_NEED.text" if you want a proper name to be shown. Some other icons are also possible. Starting the research with "m_" will show a map, "f_" a flask and "c_" a chest.
                 },
                 {

@@ -37,21 +37,26 @@ public class ScanningManager {
 	 */
 	public static void scanTheThing(EntityPlayer player, Object object) {
 		boolean found = false;
+		boolean suppress = false;
 		for (IScanThing thing:things) {
 			if (thing.checkThing(player, object)) {						
-				if (ThaumcraftApi.internalMethods.progressResearch(player, thing.getResearchKey(player, object))) {					
-					found=true;
+				if (thing.getResearchKey(player, object)==null || thing.getResearchKey(player, object).isEmpty() ||
+						ThaumcraftApi.internalMethods.progressResearch(player, thing.getResearchKey(player, object))) {		
+					if (thing.getResearchKey(player, object)==null || thing.getResearchKey(player, object).isEmpty())
+						suppress = true;
+					found = true;
 					thing.onSuccess(player, object);
 				}
 			}			
 		}
-		
-		if (!found) {
-			//REPLACENOTIFICATION
-			player.sendMessage(new TextComponentString("\u00a75\u00a7o"+I18n.translateToLocal("tc.unknownobject")));
-		} else {
-			//REPLACENOTIFICATION
-			player.sendMessage(new TextComponentString("\u00a7a\u00a7o"+I18n.translateToLocal("tc.knownobject")));
+		if (!suppress) {
+			if (!found) {
+				//REPLACENOTIFICATION
+				player.sendMessage(new TextComponentString("\u00a75\u00a7o"+I18n.translateToLocal("tc.unknownobject")));
+			} else {
+				//REPLACENOTIFICATION
+				player.sendMessage(new TextComponentString("\u00a7a\u00a7o"+I18n.translateToLocal("tc.knownobject")));
+			}
 		}
 		
 		// scan contents of inventories

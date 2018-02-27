@@ -28,7 +28,7 @@ public class CardExperimentation extends TheorycraftCard {
 			String[] s = ResearchCategories.researchCategories.keySet().toArray(new String[] {});
 			String cat = s[ player.getRNG().nextInt(s.length) ];
 			data.addTotal(cat, MathHelper.getInt(player.getRNG(), 10, 25));
-			data.addTotal("BASICS", 5);
+			data.addTotal("BASICS", MathHelper.getInt(player.getRNG(), 1, 10));
 		} catch (Exception e) {
 			return false;
 		}		

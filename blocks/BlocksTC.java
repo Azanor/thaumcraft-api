@@ -100,6 +100,7 @@ public class BlocksTC {
 	public static Block smelterVoid;
 	public static Block smelterAux;
 	public static Block smelterVent;
+	public static Block fluxScrubber;
 	public static Block alembic;
 	public static Block infusionMatrix;
 	public static Block infernalFurnace;
@@ -119,6 +120,7 @@ public class BlocksTC {
 	public static Block essentiaTransportOutput;
 	public static Block patternCrafter;
 	public static Block activatorRail;
+	public static Block potionSprayer;
 	
 	// Fluids
 	public static Block fluxGoo;	
@@ -130,6 +132,8 @@ public class BlocksTC {
 	public static Block effect;
 	public static Block barrier;
 	public static Block placeholder;
+	
+	
 	
 	
 	

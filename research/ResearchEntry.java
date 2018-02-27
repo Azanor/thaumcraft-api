@@ -151,7 +151,6 @@ public class ResearchEntry
 		if (parents!=null) { 
 			out = getParentsStripped();
 			for (int q=0;q<out.length;q++) {
-				out[q] = ""+parents[q];
 				if (out[q].contains("@")) 
 					out[q] = out[q].substring(0,out[q].indexOf("@"));
 			}

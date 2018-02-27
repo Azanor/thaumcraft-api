@@ -31,10 +31,7 @@ public class OreDictionaryEntries {
 		OreDictionary.registerOre("slabWood", new ItemStack(BlocksTC.slabWood,1,1));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlocksTC.sapling,1,0));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlocksTC.sapling,1,1));
-		
-		// not defined here: 
-		// shardAir,shardFire,shardWater,shardEarth,shardOrder,shardEntropy,shardTainted		
-		
+				
 		OreDictionary.registerOre("nitor", new ItemStack(BlocksTC.nitor,1,OreDictionary.WILDCARD_VALUE));
 		
 		OreDictionary.registerOre("gemAmber", new ItemStack(ItemsTC.amber));

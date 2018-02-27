@@ -38,6 +38,11 @@ public class CardStudy extends TheorycraftCard {
 		cat = list.get(r.nextInt(list.size()));
 		return cat!=null;
 	}
+	
+	@Override
+	public boolean isAidOnly() {
+		return true;
+	}
 
 	@Override
 	public int getInspirationCost() {
@@ -60,7 +65,7 @@ public class CardStudy extends TheorycraftCard {
 	
 	@Override
 	public boolean activate(EntityPlayer player, ResearchTableData data) {		
-		data.addTotal(cat, 10);		
+		data.addTotal(cat, MathHelper.getInt(player.getRNG(), 15, 25));		
 		return true;
 	}
 	

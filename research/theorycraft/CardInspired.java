@@ -1,17 +1,9 @@
 package thaumcraft.api.research.theorycraft;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import thaumcraft.api.capabilities.IPlayerKnowledge.EnumKnowledgeType;
-import thaumcraft.api.capabilities.ThaumcraftCapabilities;
-import thaumcraft.api.research.ResearchCategories;
-import thaumcraft.api.research.ResearchCategory;
 
 public class CardInspired extends TheorycraftCard {
 	

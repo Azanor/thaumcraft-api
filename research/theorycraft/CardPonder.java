@@ -27,7 +27,7 @@ public class CardPonder extends TheorycraftCard {
 
 	@Override
 	public boolean activate(EntityPlayer player, ResearchTableData data) {
-		int a = 20;
+		int a = 25;
 		int tries=0;
 		while (a>0 && tries<1000) {
 			tries++;
