@@ -68,7 +68,7 @@ public class ThaumcraftApiHelper {
 		
 		if (in instanceof ItemStack) {
 			//nbt
-			boolean t1=areItemStackTagsEqualForCrafting(stack0, (ItemStack) in);		
+			boolean t1= !stack0.hasTagCompound() || areItemStackTagsEqualForCrafting(stack0, (ItemStack) in);		
 			if (!t1) return false;	
 	        return OreDictionary.itemMatches((ItemStack) in, stack0, false);
 		}
@@ -119,16 +119,16 @@ public class ThaumcraftApiHelper {
 	public static RayTraceResult rayTraceIgnoringSource(World world, Vec3d v1, Vec3d v2, 
 			boolean bool1, boolean bool2, boolean bool3)
 	{
-	    if (!Double.isNaN(v1.xCoord) && !Double.isNaN(v1.yCoord) && !Double.isNaN(v1.zCoord))
+	    if (!Double.isNaN(v1.x) && !Double.isNaN(v1.y) && !Double.isNaN(v1.z))
 	    {
-	        if (!Double.isNaN(v2.xCoord) && !Double.isNaN(v2.yCoord) && !Double.isNaN(v2.zCoord))
+	        if (!Double.isNaN(v2.x) && !Double.isNaN(v2.y) && !Double.isNaN(v2.z))
 	        {
-	            int i = MathHelper.floor(v2.xCoord);
-	            int j = MathHelper.floor(v2.yCoord);
-	            int k = MathHelper.floor(v2.zCoord);
-	            int l = MathHelper.floor(v1.xCoord);
-	            int i1 = MathHelper.floor(v1.yCoord);
-	            int j1 = MathHelper.floor(v1.zCoord);
+	            int i = MathHelper.floor(v2.x);
+	            int j = MathHelper.floor(v2.y);
+	            int k = MathHelper.floor(v2.z);
+	            int l = MathHelper.floor(v1.x);
+	            int i1 = MathHelper.floor(v1.y);
+	            int j1 = MathHelper.floor(v1.z);
 	            IBlockState block = world.getBlockState(new BlockPos(l, i1, j1));
 	
 	            RayTraceResult rayTraceResult2 = null;
@@ -136,7 +136,7 @@ public class ThaumcraftApiHelper {
 	
 	            while (k1-- >= 0)
 	            {
-	                if (Double.isNaN(v1.xCoord) || Double.isNaN(v1.yCoord) || Double.isNaN(v1.zCoord))
+	                if (Double.isNaN(v1.x) || Double.isNaN(v1.y) || Double.isNaN(v1.z))
 	                {
 	                    return null;
 	                }
@@ -195,23 +195,23 @@ public class ThaumcraftApiHelper {
 	                double d3 = 999.0D;
                     double d4 = 999.0D;
                     double d5 = 999.0D;
-                    double d6 = v2.xCoord - v1.xCoord;
-                    double d7 = v2.yCoord - v1.yCoord;
-                    double d8 = v2.zCoord - v1.zCoord;
+                    double d6 = v2.x - v1.x;
+                    double d7 = v2.y - v1.y;
+                    double d8 = v2.z - v1.z;
 
                     if (flag6)
                     {
-                        d3 = (d0 - v1.xCoord) / d6;
+                        d3 = (d0 - v1.x) / d6;
                     }
 
                     if (flag3)
                     {
-                        d4 = (d1 - v1.yCoord) / d7;
+                        d4 = (d1 - v1.y) / d7;
                     }
 
                     if (flag4)
                     {
-                        d5 = (d2 - v1.zCoord) / d8;
+                        d5 = (d2 - v1.z) / d8;
                     }
 
                     if (d3 == -0.0D)
@@ -234,22 +234,22 @@ public class ThaumcraftApiHelper {
                     if (d3 < d4 && d3 < d5)
                     {
                         enumfacing = i > l ? EnumFacing.WEST : EnumFacing.EAST;
-                        v1 = new Vec3d(d0, v1.yCoord + d7 * d3, v1.zCoord + d8 * d3);
+                        v1 = new Vec3d(d0, v1.y + d7 * d3, v1.z + d8 * d3);
                     }
                     else if (d4 < d5)
                     {
                         enumfacing = j > i1 ? EnumFacing.DOWN : EnumFacing.UP;
-                        v1 = new Vec3d(v1.xCoord + d6 * d4, d1, v1.zCoord + d8 * d4);
+                        v1 = new Vec3d(v1.x + d6 * d4, d1, v1.z + d8 * d4);
                     }
                     else
                     {
                         enumfacing = k > j1 ? EnumFacing.NORTH : EnumFacing.SOUTH;
-                        v1 = new Vec3d(v1.xCoord + d6 * d5, v1.yCoord + d7 * d5, d2);
+                        v1 = new Vec3d(v1.x + d6 * d5, v1.y + d7 * d5, d2);
                     }
 
-                    l = MathHelper.floor(v1.xCoord) - (enumfacing == EnumFacing.EAST ? 1 : 0);
-                    i1 = MathHelper.floor(v1.yCoord) - (enumfacing == EnumFacing.UP ? 1 : 0);
-                    j1 = MathHelper.floor(v1.zCoord) - (enumfacing == EnumFacing.SOUTH ? 1 : 0);
+                    l = MathHelper.floor(v1.x) - (enumfacing == EnumFacing.EAST ? 1 : 0);
+                    i1 = MathHelper.floor(v1.y) - (enumfacing == EnumFacing.UP ? 1 : 0);
+                    j1 = MathHelper.floor(v1.z) - (enumfacing == EnumFacing.SOUTH ? 1 : 0);
 	
 	                IBlockState block1 = world.getBlockState(new BlockPos(l, i1, j1));
 	

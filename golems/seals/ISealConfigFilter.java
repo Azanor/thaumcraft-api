@@ -1,10 +1,11 @@
 package thaumcraft.api.golems.seals;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public interface ISealConfigFilter {
 	
-	public ItemStack[] getInv();
+	public NonNullList<ItemStack> getInv();
 	
 	public int getFilterSize();
 	

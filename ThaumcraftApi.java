@@ -6,19 +6,18 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.GameData;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectHelper;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.IArcaneRecipe;
+import thaumcraft.api.crafting.IThaumcraftRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.crafting.Part;
-import thaumcraft.api.crafting.RecipeMisc;
 import thaumcraft.api.internal.CommonInternals;
 import thaumcraft.api.internal.DummyInternalMethodHandler;
 import thaumcraft.api.internal.IInternalMethodHandler;
@@ -86,76 +85,64 @@ public class ThaumcraftApi {
 	}
 		
 	
-	public static HashMap<String, Object> getCraftingRecipes() {
+	public static HashMap<ResourceLocation, IThaumcraftRecipe> getCraftingRecipes() {
 		return CommonInternals.craftingRecipeCatalog;
 	}
 	
-	/**
-	 * All the methods below that add recipes to the catalog assume they are linked to a research stage. 
-	 * This method allows an unlinked recipe to still be picked up in the catalog. Useful for common 
-	 * recipes that do not require research that you want to display the recipe for in the thaumonomicon. 
-	 * @param recipeKey
-	 */
-	public static void addRecipeUnlinked(String recipeKey) {
-		CommonInternals.craftingRecipesUnlinked.add(recipeKey);
+	public static HashMap<ResourceLocation, Object> getCraftingRecipesFake() {
+		return CommonInternals.craftingRecipeCatalogFake;
 	}
-	
+
 	/**
-	 * Use this method to add vanilla or similar recipes to the thaumcraft recipe catalog. This is used for display purposes in the thaumonomicon
-	 * @param name unique identifier for this recipe. I advise making your mod-id part of this
-	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
-	 * @param fake if set to true the recipe will not actually be craftable. Useful for entries in thaumonomicon and so forth.
-	 * @param recipes the IRecipe object
+	 * This adds recipes to the 'fake' recipe catalog. These recipes won't be craftable, but are useful for display in the thaumonomicon if
+	 * they are dynamic recipes like infusion enchantment or runic infusion. 
+	 * @param registry
+	 * @param recipe
 	 */
-	public static void addIRecipeToCatalog(String name, boolean fake, IRecipe... recipes) {
-		getCraftingRecipes().put(name, recipes);
-		if (fake) CommonInternals.craftingRecipesCatalogFake.add(name); 
-	}
+	public static void addFakeCraftingRecipe(ResourceLocation registry, Object recipe)
+    {
+		getCraftingRecipesFake().put(registry, recipe);
+    }
 	
+		
 	/**
-	 * Use this method to add a dummy recipe to the thaumcraft recipe catalog. This is used for display purposes in the thaumonomicon
-	 * @param name unique identifier for this recipe. I advise making your mod-id part of this
-	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
-	 * @param recipes the RecipeMisc object
-	 */
-	public static void addMiscRecipeToCatalog(String name, RecipeMisc... recipes) {
-		getCraftingRecipes().put(name, recipes);
-		CommonInternals.craftingRecipesCatalogFake.add(name); 
-	}
-	
-	/**
-	 * Use this method to add a dummy recipe to the thaumcraft recipe catalog. This is used for display purposes in the thaumonomicon
+	 * Use this method to add a multiblock blueprint recipe to the thaumcraft recipe catalog. This is used for display purposes in the thaumonomicon
 	 * @param name unique identifier for this recipe. I advise making your mod-id part of this
 	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
 	 * @param recipes a matrix of placable objects and what they will turn into
 	 */
-	public static void addMultiblockRecipeToCatalog(String name, BluePrint... recipes) {
-		getCraftingRecipes().put(name, recipes);
-		CommonInternals.craftingRecipesCatalogFake.add(name); 
+	public static void addMultiblockRecipeToCatalog(ResourceLocation registry, BluePrint recipe) {
+		getCraftingRecipes().put(registry, recipe);
 	}
 	
-	public static class BluePrint {
+	public static class BluePrint implements IThaumcraftRecipe{
 		Part[][][] parts;
 		String research;		
 		ItemStack displayStack;
 		ItemStack[] ingredientList;
+		
 		public BluePrint(String research, Part[][][] parts, ItemStack... ingredientList) {
 			this.parts = parts;
 			this.research = research;
 			this.ingredientList = ingredientList;
 		}
+		
 		public BluePrint(String research, ItemStack display, Part[][][] parts, ItemStack... ingredientList) {
 			this.parts = parts;
 			this.research = research;
 			this.displayStack = display;
 			this.ingredientList = ingredientList;
 		}
+		
 		public Part[][][] getParts() {
 			return parts;
 		}		
+		
+		@Override
 		public String getResearch() {
 			return research;
 		}	
+		
 		/**
 		 * the items needed to craft this block - used for listing in the thaumonomicon and does not influance the actual recipe
 		 * @return
@@ -163,6 +150,7 @@ public class ThaumcraftApi {
 		public ItemStack[] getIngredientList() {
 			return ingredientList;
 		}
+		
 		/**
 		 * This stack will be displayed instead of multipart object - used for recipe bookmark display in thaumonomicon only.
 		 * @return
@@ -170,34 +158,44 @@ public class ThaumcraftApi {
 		public ItemStack getDisplayStack() {
 			return displayStack;
 		}
+		
+		private String group;
+
+		@Override
+		public String getGroup() {
+			return group;
+		}
+		
+		public BluePrint setGroup(ResourceLocation loc) {
+			group = loc.toString();
+			return this;
+		}
 	}
 	
 	/**
 	 * @param name unique identifier for this recipe used my thaumonomicon to link a recipe to research. I advise making your mod-id part of this. 
 	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
-	 * @param fake if set to true the recipe will not actually be craftable. Useful for dummy entries in thaumonomicon and so forth.
-	 * @param recipes One or more recipes linked to the unique identifier. 
+	 * @param @param registry
+	 * @param recipe
 	 */
-	public static void addArcaneCraftingRecipe(String name, boolean fake, IArcaneRecipe... recipes)
-    {
-        getCraftingRecipes().put(name, recipes);
-        for (IArcaneRecipe recipe:recipes) {
-        	recipe.setRecipeName(name);
-        	if (!fake) CraftingManager.getInstance().addRecipe(recipe); else CommonInternals.craftingRecipesCatalogFake.add(name);
-    	}
+	public static void addArcaneCraftingRecipe(ResourceLocation registry, IArcaneRecipe recipe)
+    {		
+		recipe.setRegistryName(registry);
+	    GameData.register_impl(recipe);
     }
 	
 	/**
-	 * @param name unique identifier for this recipe used my thaumonomicon to link a recipe to research. I advise making your mod-id part of this
+	 * @param name unique identifier for this recipe used my thaumonomicon to link a recipe to research. 
 	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
-	 * @param fake if set to true the recipe will not actually be craftable. Useful for dummy entries in thaumonomicon and so forth.
-	 * @param recipes One or more recipes linked to the unique identifier. 
+	 * @param registry
+	 * @param recipe
 	 */
-	public static void addInfusionCraftingRecipe(String name, boolean fake, InfusionRecipe... recipes)
+	public static void addInfusionCraftingRecipe(ResourceLocation registry, InfusionRecipe recipe)
     {
-		getCraftingRecipes().put(name, recipes);
-		if (fake) CommonInternals.craftingRecipesCatalogFake.add(name);
+		getCraftingRecipes().put(registry, recipe);
     }
+	
+	
 		
 	/**
 	 * @param stack the recipe result
@@ -219,15 +217,13 @@ public class ThaumcraftApi {
 	}
     
 	/**
-	 * @param name unique identifier for this recipe used my thaumonomicon to link a recipe to research. I advise making your mod-id part of this
+	 * @param name unique identifier for this recipe used my thaumonomicon to link a recipe to research. 
 	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
-	 * @param fake if set to true the recipe will not actually be craftable. Useful for dummy entries in thaumonomicon and so forth.
 	 * @param recipes One or more recipes linked to the unique identifier. 
 	 */
     
-    public static void addCrucibleRecipe(String name, boolean fake, CrucibleRecipe... recipes) {
-    	getCraftingRecipes().put(name, recipes);
-    	if (fake) CommonInternals.craftingRecipesCatalogFake.add(name);
+    public static void addCrucibleRecipe(ResourceLocation registry, CrucibleRecipe recipe) {
+    	getCraftingRecipes().put(registry, recipe);
 	}
 	
 	/**
@@ -275,7 +271,7 @@ public class ThaumcraftApi {
 	 */
 	public static boolean exists(ItemStack item) {
 		ItemStack stack = item.copy();
-		stack.stackSize=1;
+		stack.setCount(1);
 		AspectList tmp = CommonInternals.objectTags.get(stack.serializeNBT().toString());
 		if (tmp==null) {
 			try {
@@ -307,7 +303,7 @@ public class ThaumcraftApi {
 		if (aspects==null) aspects=new AspectList();
 		try {
 			ItemStack tmp = item.copy();
-			tmp.stackSize=1;
+			tmp.setCount(1);
 			NBTTagCompound nbt = new NBTTagCompound();
 			aspects.writeToNBT(nbt);
 			CommonInternals.objectTags.put(tmp.serializeNBT().toString(), aspects);
@@ -326,7 +322,7 @@ public class ThaumcraftApi {
 		if (aspects==null) aspects=new AspectList();
 		try {			
 			ItemStack tmp = item.copy();
-			tmp.stackSize=1;
+			tmp.setCount(1);
 			String s = tmp.serializeNBT().toString();
 			CommonInternals.objectTags.put(s, aspects);
 			for (int m:meta) {				
@@ -348,7 +344,7 @@ public class ThaumcraftApi {
 			for (ItemStack ore:ores) {
 				try {					
 					ItemStack oc = ore.copy();
-					oc.stackSize=1;
+					oc.setCount(1);
 					registerObjectTag(oc,aspects.copy());
 				} catch (Exception e) {}
 			}
@@ -396,7 +392,7 @@ public class ThaumcraftApi {
 			for (ItemStack ore:ores) {
 				try {					
 					ItemStack oc = ore.copy();
-					oc.stackSize=1;
+					oc.setCount(1);
 					registerComplexObjectTag(oc,aspects.copy());
 				} catch (Exception e) {}
 			}

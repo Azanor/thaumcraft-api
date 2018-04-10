@@ -26,10 +26,10 @@ public class ScanOreDictionary implements IScanThing {
 		}
 		if (obj!=null && obj instanceof ItemStack) 
 			stack = (ItemStack) obj;
-		if (obj!=null && obj instanceof EntityItem && ((EntityItem)obj).getEntityItem()!=null) 
-			stack = ((EntityItem)obj).getEntityItem();
+		if (obj!=null && obj instanceof EntityItem && ((EntityItem)obj).getItem()!=null) 
+			stack = ((EntityItem)obj).getItem();
 		
-		if (stack!=null) {
+		if (stack!=null && !stack.isEmpty()) {
 			int[] ids = OreDictionary.getOreIDs(stack);
 			for (String entry:entries) {
 				for (int id:ids) {

@@ -129,11 +129,11 @@ public class GolemHelper {
 					seal.getSealPos().face.getFrontOffsetX(), 
 					seal.getSealPos().face.getFrontOffsetY(), 
 					seal.getSealPos().face.getFrontOffsetZ())
-				.addCoord(
+				.expand(
 					seal.getSealPos().face.getFrontOffsetX()!=0?(seal.getArea().getX()-1) * seal.getSealPos().face.getFrontOffsetX():0, 
 					seal.getSealPos().face.getFrontOffsetY()!=0?(seal.getArea().getY()-1) * seal.getSealPos().face.getFrontOffsetY():0, 
 					seal.getSealPos().face.getFrontOffsetZ()!=0?(seal.getArea().getZ()-1) * seal.getSealPos().face.getFrontOffsetZ():0)
-				.expand(
+				.grow(
 					seal.getSealPos().face.getFrontOffsetX()==0?seal.getArea().getX()-1:0,
 					seal.getSealPos().face.getFrontOffsetY()==0?seal.getArea().getY()-1:0,
 					seal.getSealPos().face.getFrontOffsetZ()==0?seal.getArea().getZ()-1:0 );

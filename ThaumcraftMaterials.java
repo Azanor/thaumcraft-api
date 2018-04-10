@@ -35,33 +35,7 @@ public class ThaumcraftMaterials {
 	    {
 	        return true;
 	    }
-	    
-//	    @Override
-//		protected Material setNoPushMobility()
-//	    {
-//	        this.mobilityFlag = 1;
-//	        return this;
-//	    }
-//		
-//		private int mobilityFlag;
-//		
-//		
-//		
-//		@Override
-//		public EnumPushReaction getMobilityFlag() {
-//			// TODO Auto-generated method stub
-//			return super.getMobilityFlag();
-//		}
-//
-//		@Override
-//		public int getMaterialMobility()
-//	    {
-//	        return this.mobilityFlag;
-//	    }
-	    
+	    	    
 	}
-
-	
-	
 	
 }

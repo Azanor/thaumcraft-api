@@ -1,96 +1,78 @@
 package thaumcraft.api.crafting;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
-import thaumcraft.api.ThaumcraftApiHelper;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.util.RecipeMatcher;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
-public class InfusionRecipe implements ITCRecipe
+public class InfusionRecipe implements IThaumcraftRecipe
 {
 	public AspectList aspects;
 	public String research;
 	private String name;
-	public Object[] components;
-	public Object recipeInput;
+	protected NonNullList<Ingredient> components = NonNullList.create();
+	public Ingredient sourceInput; //Use Ingredient.EMPTY of the source item can be anything
 	public Object recipeOutput;
 	public int instability;
 	
-	/**
-	 * @param research the research key required for this recipe to work. Leave blank if it will work without research<br>
-	 * 		  Can specify stage like IPlayerKnowledge.isResearchKnown
-	 * @param result the recipe output. It can either be an itemstack or an nbt compound tag that will be added to the central item
-	 * 		If nbt it needs to be in the format Object[] {"nbttagname", NBT Tag Object}  eg. new Object[] { "mask", new NBTTagInt(1) }
-	 * @param instability a number that represents the N in 1000 chance for the infusion altar to spawn an
-	 * 		  instability effect each second while the crafting is in progress
-	 * @param aspects the essentia cost per aspect. 
-	 * @param aspects input the central item to be infused. If string is passed it will look up oredictionary entries
-	 * @param recipe An array of items required to craft this. Input itemstacks are NBT sensitive. 
-	 * 				If string is passed it will look up oredictionary entries.
-	 */
-	
-	public InfusionRecipe(String research, Object output, int inst, AspectList aspects2, Object input, Object[] recipe) {
+	public InfusionRecipe(String research, Object outputResult, int inst, AspectList aspects2, Object centralItem, Object ... recipe) {
 		this.name="";
 		this.research = research;
-		this.recipeOutput = output;
-		this.recipeInput = input;
+		this.recipeOutput = outputResult;
 		this.aspects = aspects2;
-		this.components = recipe;
-		this.instability = inst;
+		this.instability = inst;		
+		this.sourceInput = CraftingHelper.getIngredient(centralItem);
+		if (sourceInput==null) {
+			String ret = "Invalid infusion central item: "+centralItem;
+            throw new RuntimeException(ret);
+		}		
+		for (Object in : recipe)
+        {
+            Ingredient ing = CraftingHelper.getIngredient(in);
+            if (ing != null) {
+            	components.add(ing);
+            } else {
+                String ret = "Invalid infusion recipe: ";
+                for (Object tmp :  recipe)
+                {
+                    ret += tmp + ", ";
+                }
+                ret += outputResult;
+                throw new RuntimeException(ret);
+            }
+        }
 	}
 
 	/**
      * Used to check if a recipe matches current crafting inventory
      * @param player 
      */
-	public boolean matches(ArrayList<ItemStack> input, ItemStack central, World world, EntityPlayer player) {
-		if (getRecipeInput()==null) return false;
-			
+	public boolean matches(List<ItemStack> input, ItemStack central, World world, EntityPlayer player) {
+		if (getRecipeInput()==null) return false;			
 		if (!ThaumcraftCapabilities.getKnowledge(player).isResearchKnown(research)) {
     		return false;
-    	}
-		
-		ItemStack i2 = central.copy();
-		if (getRecipeInput() instanceof ItemStack &&
-				((ItemStack)getRecipeInput()).getItemDamage()==OreDictionary.WILDCARD_VALUE) {
-			i2.setItemDamage(OreDictionary.WILDCARD_VALUE);
-		}
-		
-		if (!ThaumcraftApiHelper.areItemStacksEqualForCrafting(i2, getRecipeInput())) return false;
-		
-		ArrayList<ItemStack> ii = new ArrayList<ItemStack>();
-		for (ItemStack is:input) {
-			ii.add(is.copy());
-		}
-		
-		for (Object comp:getComponents()) {
-			boolean b=false;
-			for (int a=0;a<ii.size();a++) {
-				 i2 = ii.get(a).copy();
-				if (ThaumcraftApiHelper.areItemStacksEqualForCrafting(i2, comp)) {
-					ii.remove(a);
-					b=true;
-					break;
-				}
-			}
-			if (!b) return false;
-		}
-		return ii.size()==0?true:false;
+    	}		
+		return (getRecipeInput()==Ingredient.EMPTY || this.getRecipeInput().apply(central)) && RecipeMatcher.findMatches(input, getComponents()) != null;
     }
     
+	@Override
     public String getResearch() {
 		return research;
     }
     
-	public Object getRecipeInput() {
-		return recipeInput;
+	public Ingredient getRecipeInput() {
+		return sourceInput;
 	}
 
-	public Object[] getComponents() {
+	public NonNullList<Ingredient> getComponents() {
 		return components;
 	}
 	
@@ -100,28 +82,29 @@ public class InfusionRecipe implements ITCRecipe
 	
 	public AspectList getAspects() {
 		return aspects;
-	}
-			
+	}			
 	
-	public Object getRecipeOutput(EntityPlayer player, ItemStack input, ArrayList<ItemStack> comps ) {
+	public Object getRecipeOutput(EntityPlayer player, ItemStack input, List<ItemStack> comps ) {
 		return recipeOutput;
     }
     
-    public AspectList getAspects(EntityPlayer player, ItemStack input, ArrayList<ItemStack> comps) {
+    public AspectList getAspects(EntityPlayer player, ItemStack input, List<ItemStack> comps) {
 		return aspects;
     }
     
-    public int getInstability(EntityPlayer player, ItemStack input, ArrayList<ItemStack> comps) {
+    public int getInstability(EntityPlayer player, ItemStack input, List<ItemStack> comps) {
 		return instability;
     }
-
-	@Override
-	public String getRecipeName() {
-		return name;
-	}
+    
+    private String group="";
 	
 	@Override
-	public void setRecipeName(String name) {
-		this.name=name;
+	public String getGroup() {
+		return group;
+	}
+	
+	public InfusionRecipe setGroup(ResourceLocation s) {
+		this.group=s.toString();
+		return this;
 	}
 }

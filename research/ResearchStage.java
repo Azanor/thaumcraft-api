@@ -1,16 +1,13 @@
 package thaumcraft.api.research;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatBase;
-import net.minecraft.stats.StatList;
-import net.minecraft.stats.StatisticsManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import thaumcraft.api.capabilities.IPlayerKnowledge.EnumKnowledgeType;
 
 public class ResearchStage {
 	String text;
-	String[] recipes;
+	ResourceLocation[] recipes;
 	ItemStack[] obtain;
 	ItemStack[] craft;
 	int[] craftReference;
@@ -37,13 +34,13 @@ public class ResearchStage {
 	/**
 	 * @return the recipes
 	 */
-	public String[] getRecipes() {
+	public ResourceLocation[] getRecipes() {
 		return recipes;
 	}
 	/**
 	 * @param recipes the recipes to set
 	 */
-	public void setRecipes(String[] recipes) {
+	public void setRecipes(ResourceLocation[] recipes) {
 		this.recipes = recipes;
 	}
 	/**

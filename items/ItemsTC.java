@@ -1,7 +1,6 @@
 package thaumcraft.api.items;
 
 import net.minecraft.item.Item;
-import thaumcraft.common.items.curios.ItemCelestialNotes;
 
 public class ItemsTC {
 	
@@ -31,8 +30,8 @@ public class ItemsTC {
 	public static Item crystalEssence;	
 	public static Item tallow;
 	public static Item fabric;	
-	/** "brass","thaumium","void"*/
-	public static Item gear;
+	public static Item mechanismSimple;
+	public static Item mechanismComplex;
 	/** "brass","iron","thaumium","void"*/
 	public static Item plate;
 	public static Item voidSeed;	
@@ -80,6 +79,11 @@ public class ItemsTC {
 	public static Item crimsonBlade;	
 	public static Item primalCrusher;
 	public static Item sanityChecker;
+	public static Item resonator;	
+	public static Item handMirror;
+	public static Item grappleGun;
+	public static Item grappleGunTip;
+	public static Item grappleGunSpool;
 	
 	//Armor
 	public static Item goggles;	
@@ -129,15 +133,12 @@ public class ItemsTC {
 	/** "basic","advanced","bore"*/
 	public static Item turretPlacer;
 	public static Item enchantedPlaceholder;
-		
-	//tools	
-	public static Item resonator;	
-	public static Item handMirror;
-	
+			
 	//casters & foci
 	public static Item casterBasic;	
-	public static Item focusBlank;
-	public static Item focus;	
+	public static Item focus1;	
+	public static Item focus2;
+	public static Item focus3;
 	public static Item focusPouch;			
 	
 	//golems
@@ -149,6 +150,8 @@ public class ItemsTC {
 	 * use GolemHelper.getSealStack to return an itemstack of a specific seal 
 	 * **/
 	public static Item seals;
+	
+	
 	
 	
 	

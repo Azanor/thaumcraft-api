@@ -1,13 +1,12 @@
 package thaumcraft.api.items;
 
-import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,11 +31,11 @@ public class ItemGenericEssentiaContainer extends Item implements IEssentiaConta
 	
 	@SideOnly(Side.CLIENT)
     @Override
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs,List par3List) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
     	for (Aspect tag:Aspect.aspects.values()) {
     		ItemStack i = new ItemStack(this);
     		this.setAspects(i, new AspectList().add(tag, base));
-    		par3List.add(i);
+    		items.add(i);
 		}
 	}
     

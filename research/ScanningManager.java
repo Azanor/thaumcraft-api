@@ -64,7 +64,7 @@ public class ScanningManager {
 			IInventory inv = (IInventory) player.getEntityWorld().getTileEntity((BlockPos) object);
 			for (int slot=0;slot<inv.getSizeInventory();slot++) {
 				ItemStack stack = inv.getStackInSlot(slot);
-				if (stack!=null) scanTheThing(player,stack);
+				if (stack!=null && !stack.isEmpty()) scanTheThing(player,stack);
 			}
 			return;
 		}
@@ -91,23 +91,23 @@ public class ScanningManager {
 		
 	
 	public static ItemStack getItemFromParms(EntityPlayer player, Object obj) {
-		ItemStack is = null;
+		ItemStack is = ItemStack.EMPTY;
 		if (obj instanceof ItemStack) 
 			is = (ItemStack) obj;
-		if (obj instanceof EntityItem && ((EntityItem)obj).getEntityItem()!=null) 
-			is = ((EntityItem)obj).getEntityItem();
+		if (obj instanceof EntityItem && ((EntityItem)obj).getItem()!=null) 
+			is = ((EntityItem)obj).getItem();
 		if (obj instanceof BlockPos) {
 			IBlockState state = player.world.getBlockState((BlockPos) obj);
 			is = state.getBlock().getItem(player.world, (BlockPos) obj, state);
 			try {
-				if (is==null) is = state.getBlock().getPickBlock(state, rayTrace(player), player.world, (BlockPos) obj, player);
+				if (is==null||is.isEmpty()) is = state.getBlock().getPickBlock(state, rayTrace(player), player.world, (BlockPos) obj, player);
 			} catch (Exception e) {	}
 			// Water and Lava blocks cant be registered as itemstacks anymore, Oh Minecraft!
 			try {
-				if (is==null && state.getMaterial()==Material.WATER) {
+				if ((is==null||is.isEmpty()) && state.getMaterial()==Material.WATER) {
 					is = new ItemStack(Items.WATER_BUCKET);
 				}
-				if (is==null && state.getMaterial()==Material.LAVA) {
+				if ((is==null||is.isEmpty()) && state.getMaterial()==Material.LAVA) {
 					is = new ItemStack(Items.LAVA_BUCKET);
 				}
 			} catch (Exception e) {e.printStackTrace();	}			
@@ -119,7 +119,7 @@ public class ScanningManager {
     {
         Vec3d vec3d = player.getPositionEyes(0);
         Vec3d vec3d1 = player.getLook(0);
-        Vec3d vec3d2 = vec3d.addVector(vec3d1.xCoord * 4, vec3d1.yCoord * 4, vec3d1.zCoord * 4);
+        Vec3d vec3d2 = vec3d.addVector(vec3d1.x * 4, vec3d1.y * 4, vec3d1.z * 4);
         return player.world.rayTraceBlocks(vec3d, vec3d2, true, false, true);
     }
 }

@@ -23,10 +23,10 @@ public class ScanItem implements IScanThing {
 		
 		if (obj instanceof ItemStack) 
 			is = (ItemStack) obj;
-		if (obj instanceof EntityItem && ((EntityItem)obj).getEntityItem()!=null) 
-			is = ((EntityItem)obj).getEntityItem();
+		if (obj instanceof EntityItem && ((EntityItem)obj).getItem()!=null) 
+			is = ((EntityItem)obj).getItem();
 		
-		return is!=null && ThaumcraftApiHelper.areItemStacksEqualForCrafting(is, stack);
+		return is!=null && !is.isEmpty() && ThaumcraftApiHelper.areItemStacksEqualForCrafting(is, stack);
 	}
 
 	@Override

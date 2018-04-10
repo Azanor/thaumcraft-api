@@ -11,24 +11,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.damagesource.DamageSourceThaumcraft;
 import thaumcraft.api.entities.ITaintedMob;
-import thaumcraft.common.lib.utils.EntityUtils;
 
 public class PotionFluxTaint extends Potion
 {
-    public static PotionFluxTaint instance = null; // will be instantiated at runtime
+    public static Potion instance = null; // will be instantiated at runtime
     private int statusIconIndex = -1;
     
     public PotionFluxTaint(boolean par2, int par3)
     {
     	super(par2,par3);
     	setIconIndex(3, 1);
+    	setEffectiveness(0.25D);
     	setPotionName("potion.flux_taint");
-    }
-    
-	public static void init()
-    {
-    	instance.setIconIndex(3, 1);
-    	instance.setEffectiveness(0.25D);
     }
     
 	@Override
@@ -53,10 +47,7 @@ public class PotionFluxTaint extends Potion
 		} else {
 			if (!target.isEntityUndead() && !(target instanceof EntityPlayer))
 	        {
-				target.attackEntityFrom(DamageSourceThaumcraft.taint, 1);				
-				if (!target.isDead && target.getHealth()<2 && target.getRNG().nextBoolean()) {
-					EntityUtils.makeTainted(target);
-				}
+				target.attackEntityFrom(DamageSourceThaumcraft.taint, 1);		
 	        } 
 			else
 			if (!target.isEntityUndead() && (target.getMaxHealth() > 1 || (target instanceof EntityPlayer)))

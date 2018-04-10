@@ -95,7 +95,7 @@ public class ProvisionRequest {
 	
 	private boolean isItemStackEqual(ItemStack first, ItemStack other)
     {
-        return first.stackSize != other.stackSize ? false : 
+        return first.getCount() != other.getCount() ? false : 
         	(first.getItem() != other.getItem() ? false : 
         		(first.getItemDamage() != other.getItemDamage() ? false : 
         			(first.getTagCompound() == null && other.getTagCompound() != null ? false : 
