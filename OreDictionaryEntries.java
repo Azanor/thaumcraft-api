@@ -50,6 +50,13 @@ public class OreDictionaryEntries {
 		OreDictionary.registerOre("nuggetBrass", new ItemStack(ItemsTC.nuggets,1,8));
 		OreDictionary.registerOre("nuggetQuartz", new ItemStack(ItemsTC.nuggets,1,9));		
 		
+		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,0));
+		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,1));
+		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,2));
+		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,3));
+		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,4));
+		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,5));
+		
 		OreDictionary.registerOre("ingotThaumium", new ItemStack(ItemsTC.ingots,1,0));
 		OreDictionary.registerOre("ingotVoid", new ItemStack(ItemsTC.ingots,1,1));
 		OreDictionary.registerOre("ingotBrass", new ItemStack(ItemsTC.ingots,1,2));

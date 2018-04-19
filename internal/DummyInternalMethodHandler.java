@@ -142,6 +142,12 @@ public class DummyInternalMethodHandler implements IInternalMethodHandler {
 		return false;
 	}
 
+	@Override
+	public int getActualWarp(EntityPlayer player) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 
 	

@@ -29,7 +29,6 @@ public class ItemGenericEssentiaContainer extends Item implements IEssentiaConta
 	
 	protected int base = 1;
 	
-	@SideOnly(Side.CLIENT)
     @Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
     	for (Aspect tag:Aspect.aspects.values()) {

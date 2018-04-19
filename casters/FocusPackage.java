@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
@@ -90,6 +90,14 @@ public class FocusPackage implements IFocusElement {
 	public EntityLivingBase getCaster() {
 		try {
 			if (caster==null) caster = world.getPlayerEntityByUUID(getCasterUUID());
+			if (caster==null) {
+				for (Entity e : world.getLoadedEntityList()) {
+					if (e instanceof EntityLivingBase && getCasterUUID().equals(e.getUniqueID())) {
+						caster = (EntityLivingBase) e;
+						break;
+					}
+				}
+			}
 		} catch (Exception e) {}
 		return caster;
 	}
@@ -211,7 +219,7 @@ public class FocusPackage implements IFocusElement {
 	
 	public void initialize(EntityLivingBase caster) {
 		IFocusElement node = nodes.get(0);
-		if (node instanceof FocusMediumRoot) {
+		if (node instanceof FocusMediumRoot && ((FocusMediumRoot)node).supplyTargets()==null) {
 			((FocusMediumRoot)node).setupFromCaster(caster);
 		}
 	}

@@ -51,11 +51,9 @@ public class ScanningManager {
 		}
 		if (!suppress) {
 			if (!found) {
-				//REPLACENOTIFICATION
-				player.sendMessage(new TextComponentString("\u00a75\u00a7o"+I18n.translateToLocal("tc.unknownobject")));
+				player.sendStatusMessage(new TextComponentString("\u00a75\u00a7o"+I18n.translateToLocal("tc.unknownobject")),true);
 			} else {
-				//REPLACENOTIFICATION
-				player.sendMessage(new TextComponentString("\u00a7a\u00a7o"+I18n.translateToLocal("tc.knownobject")));
+				player.sendStatusMessage(new TextComponentString("\u00a7a\u00a7o"+I18n.translateToLocal("tc.knownobject")),true);
 			}
 		}
 		

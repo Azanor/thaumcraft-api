@@ -11,7 +11,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import thaumcraft.api.ThaumcraftApiHelper;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.items.ItemsTC;
 
 public class ShapedArcaneRecipe extends ShapedOreRecipe implements IArcaneRecipe
 {
@@ -38,7 +41,28 @@ public class ShapedArcaneRecipe extends ShapedOreRecipe implements IArcaneRecipe
 	
 	@Override
 	public boolean matches(InventoryCrafting inv, World world) {
-		return inv instanceof IArcaneWorkbench && super.matches(inv, world);
+		
+		if (inv.getSizeInventory()<15) return false;
+		
+		InventoryCrafting dummy = new InventoryCrafting(new ContainerDummy(),3,3);
+		for (int a=0;a<9;a++) dummy.setInventorySlotContents(a, inv.getStackInSlot(a));
+		
+		if (crystals!=null)
+		for (Aspect aspect:crystals.getAspects()) {
+			ItemStack cs = ThaumcraftApiHelper.makeCrystal(aspect,crystals.getAmount(aspect));
+			boolean b = false;
+    		for (int i = 0; i < 6; ++i)
+            {
+            	ItemStack itemstack1 = inv.getStackInSlot(9+i);            	
+            	if (itemstack1.getItem()==ItemsTC.crystalEssence && itemstack1.getCount()>=cs.getCount() && ItemStack.areItemStackTagsEqual(cs,itemstack1))
+                {
+                    b = true;
+                }
+            }
+    		if (!b) return false;
+    	}
+		
+		return inv instanceof IArcaneWorkbench && super.matches(dummy, world);
 	}
 
 	@Override
