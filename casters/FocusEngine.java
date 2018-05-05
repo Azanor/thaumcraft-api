@@ -60,11 +60,13 @@ public class FocusEngine {
 			focusPackageCopy = focusPackage;
 		else
 			focusPackageCopy = focusPackage.copy(caster);
+		
 		focusPackageCopy.initialize(caster);		
 		focusPackageCopy.setUniqueID(UUID.randomUUID());
 		for (FocusEffect effect:focusPackageCopy.getFocusEffects()) {
 			effect.onCast(caster);
 		}	
+		
 		runFocusPackage(focusPackageCopy, null, null);
 	}
 	

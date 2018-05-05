@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.GameData;
@@ -203,14 +202,11 @@ public class ThaumcraftApi {
 	 */
 	public static InfusionRecipe getInfusionRecipe(ItemStack res) {
 		for (Object r:getCraftingRecipes().values()) {
-			if (r instanceof InfusionRecipe[]) {
-				for (InfusionRecipe recipe:(InfusionRecipe[])r) {
-					if (recipe.getRecipeOutput() instanceof ItemStack) {
-						if (((ItemStack) recipe.getRecipeOutput()).isItemEqual(res))
-							return recipe;
-					} 
-				}
-				
+			if (r instanceof InfusionRecipe) {
+				if (((InfusionRecipe)r).getRecipeOutput() instanceof ItemStack) {
+					if (((ItemStack) ((InfusionRecipe)r).getRecipeOutput()).isItemEqual(res))
+						return ((InfusionRecipe)r);
+				} 				
 			}
 		}
 		return null;
@@ -232,12 +228,9 @@ public class ThaumcraftApi {
 	 */
 	public static CrucibleRecipe getCrucibleRecipe(ItemStack stack) {
 		for (Object r:getCraftingRecipes().values()) {
-			if (r instanceof CrucibleRecipe[]) {
-				for (CrucibleRecipe recipe:(CrucibleRecipe[])r) {
-					if (recipe.getRecipeOutput().isItemEqual(stack))
-						return recipe;
-				}
-				
+			if (r instanceof CrucibleRecipe) {
+				if (((CrucibleRecipe)r).getRecipeOutput().isItemEqual(stack))
+					return ((CrucibleRecipe)r);				
 			}
 		}
 		return null;
@@ -248,13 +241,9 @@ public class ThaumcraftApi {
 	 * @return the recipe
 	 */
 	public static CrucibleRecipe getCrucibleRecipeFromHash(int hash) {
-		for (Object r:getCraftingRecipes().values()) {
-			if (r instanceof CrucibleRecipe[]) {
-				for (CrucibleRecipe recipe:(CrucibleRecipe[])r) {
-					if (recipe.hash==hash)
-						return recipe;
-				}
-			}
+		for (Object recipe:getCraftingRecipes().values()) {
+			if (recipe instanceof CrucibleRecipe && ((CrucibleRecipe)recipe).hash==hash) 
+				return (CrucibleRecipe)recipe;
 		}
 		return null;
 	}
@@ -302,35 +291,18 @@ public class ThaumcraftApi {
 	public static void registerObjectTag(ItemStack item, AspectList aspects) {
 		if (aspects==null) aspects=new AspectList();
 		try {
-			ItemStack tmp = item.copy();
-			tmp.setCount(1);
-			NBTTagCompound nbt = new NBTTagCompound();
-			aspects.writeToNBT(nbt);
-			CommonInternals.objectTags.put(tmp.serializeNBT().toString(), aspects);
+			CommonInternals.objectTags.put(CommonInternals.generateUniqueItemstackId(item), aspects);
 		} catch (Exception e) {}
 	}	
 	
 	
 	/**
-	 * Used to assign apsects to the given item/block. Here is an example of the declaration for cobblestone:<p>
-	 * <i>ThaumcraftApi.registerObjectTag(new ItemStack(Blocks.COBBLESTONE), new int[]{0,1}, (new AspectList()).add(Aspect.ENTROPY, 1).add(Aspect.EARTH, 1));</i>
-	 * @param item
-	 * @param meta A range of meta values if you wish to lump several item meta's together as being the "same" item (i.e. stair orientations)
-	 * @param aspects A ObjectTags object of the associated aspects
+	 * THIS WILL BE REMOVED SOON(TM). DO NOT USE. 
+	 * I'M JUST LEAVING IT IN TO PREVENT CRASHES.
 	 */
-	public static void registerObjectTag(ItemStack item, int[] meta, AspectList aspects) {
-		if (aspects==null) aspects=new AspectList();
-		try {			
-			ItemStack tmp = item.copy();
-			tmp.setCount(1);
-			String s = tmp.serializeNBT().toString();
-			CommonInternals.objectTags.put(s, aspects);
-			for (int m:meta) {				
-				CommonInternals.groupedObjectTags.put(m+":"+s, meta);
-			}
-			
-		} catch (Exception e) {}
-	}
+	@Deprecated
+	public static void registerObjectTag(ItemStack item, int[] meta, AspectList aspects) { }
+	
 	
 	/**
 	 * Used to assign apsects to the given ore dictionary item. 

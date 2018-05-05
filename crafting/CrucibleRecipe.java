@@ -3,7 +3,7 @@ package thaumcraft.api.crafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper;
+import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
@@ -22,7 +22,7 @@ public class CrucibleRecipe implements IThaumcraftRecipe  {
 		this.name="";
 		this.setAspects(tags);
 		this.research = researchKey;
-		this.setCatalyst(CraftingHelper.getIngredient(catalyst));
+		this.setCatalyst(ThaumcraftApiHelper.getIngredient(catalyst));
 		
 		if (this.getCatalyst() == null)
         {
@@ -35,12 +35,19 @@ public class CrucibleRecipe implements IThaumcraftRecipe  {
 	private void generateHash() {
 		String hc = research;		
 		hc += recipeOutput.toString();
-		for (ItemStack is:getCatalyst().getMatchingStacks())
+		if (recipeOutput.hasTagCompound()) {
+			hc += recipeOutput.getTagCompound().toString();
+		}	
+		for (ItemStack is:getCatalyst().getMatchingStacks()) {
 			hc += is.toString();
+			if (is.hasTagCompound()) {
+				hc += is.getTagCompound().toString();
+			}			
+		}
 		hash = hc.hashCode();
 	}
 
-	public boolean matches(AspectList itags, ItemStack cat) {		
+	public boolean matches(AspectList itags, ItemStack cat) {	
 		if (!getCatalyst().apply(cat)) return false;		
 		if (itags==null) return false;
 		for (Aspect tag:getAspects().getAspects()) {

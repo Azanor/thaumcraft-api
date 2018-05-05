@@ -24,8 +24,7 @@ public class CommonInternals {
 	public static HashMap<ResourceLocation,IThaumcraftRecipe> craftingRecipeCatalog = new HashMap<>();
 	public static HashMap<ResourceLocation,Object> craftingRecipeCatalogFake = new HashMap<>();
 	public static ArrayList<SmeltBonus> smeltingBonus = new ArrayList<SmeltBonus>();
-	public static ConcurrentHashMap<String,AspectList> objectTags = new ConcurrentHashMap<>();
-	public static ConcurrentHashMap<String,int[]> groupedObjectTags = new ConcurrentHashMap<>();	 
+	public static ConcurrentHashMap<Integer,AspectList> objectTags = new ConcurrentHashMap<>();
 	public static HashMap<Object,Integer> warpMap = new HashMap<Object,Integer>();
 	public static HashMap<String,ItemStack> seedList = new HashMap<String,ItemStack>();
 	
@@ -37,4 +36,15 @@ public class CommonInternals {
 		return craftingRecipeCatalogFake.get(key);
 	}
 	
+	/**
+	 * Obviously the int generated is not truly unique, but it is unique enough for this purpose.
+	 * @param stack
+	 * @return
+	 */
+	public static int generateUniqueItemstackId(ItemStack stack) {
+    	ItemStack sc = stack.copy();
+    	sc.setCount(1);
+    	String ss = sc.serializeNBT().toString();
+    	return ss.hashCode();
+    }
 }

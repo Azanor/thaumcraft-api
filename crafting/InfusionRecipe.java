@@ -8,8 +8,8 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.util.RecipeMatcher;
+import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
@@ -29,14 +29,14 @@ public class InfusionRecipe implements IThaumcraftRecipe
 		this.recipeOutput = outputResult;
 		this.aspects = aspects2;
 		this.instability = inst;		
-		this.sourceInput = CraftingHelper.getIngredient(centralItem);
+		this.sourceInput = ThaumcraftApiHelper.getIngredient(centralItem);
 		if (sourceInput==null) {
 			String ret = "Invalid infusion central item: "+centralItem;
             throw new RuntimeException(ret);
 		}		
 		for (Object in : recipe)
         {
-            Ingredient ing = CraftingHelper.getIngredient(in);
+            Ingredient ing = ThaumcraftApiHelper.getIngredient(in);
             if (ing != null) {
             	components.add(ing);
             } else {

@@ -5,10 +5,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -18,10 +23,16 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.VanillaInventoryCodeHooks;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IEssentiaTransport;
+import thaumcraft.api.crafting.IngredientNBTTC;
 import thaumcraft.api.items.ItemGenericEssentiaContainer;
 import thaumcraft.api.items.ItemsTC;
 
@@ -377,6 +388,29 @@ public class ThaumcraftApiHelper {
 	}
 
 	
+	public static Ingredient getIngredient(Object obj)
+    {
+        if (obj!=null && obj instanceof ItemStack && ((ItemStack)obj).hasTagCompound())
+            return new IngredientNBTTC((ItemStack)obj);
+        else 
+        	return CraftingHelper.getIngredient(obj);
+    }
 
+	public static IItemHandler getItemHandlerAt(World world, BlockPos pos, EnumFacing side) {
+		Pair<IItemHandler, Object> dest = VanillaInventoryCodeHooks.getItemHandler(world, pos.getX(), pos.getY(), pos.getZ(), side);
+		if (dest!=null && dest.getLeft()!=null) {
+			return dest.getLeft();
+		} else {
+			TileEntity tileentity = world.getTileEntity(pos);
+	        if (tileentity != null && tileentity instanceof IInventory) {            	
+	        	return wrapInventory ((IInventory) tileentity, side);
+	        }
+		}
+		return null;
+	}
+
+	public static IItemHandler wrapInventory(IInventory inventory, EnumFacing side) {
+		return inventory instanceof ISidedInventory? new SidedInvWrapper((ISidedInventory) inventory, side) : new InvWrapper((IInventory) inventory);
+	}
 	
 }

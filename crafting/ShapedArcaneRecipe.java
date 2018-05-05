@@ -54,7 +54,7 @@ public class ShapedArcaneRecipe extends ShapedOreRecipe implements IArcaneRecipe
     		for (int i = 0; i < 6; ++i)
             {
             	ItemStack itemstack1 = inv.getStackInSlot(9+i);            	
-            	if (itemstack1.getItem()==ItemsTC.crystalEssence && itemstack1.getCount()>=cs.getCount() && ItemStack.areItemStackTagsEqual(cs,itemstack1))
+            	if (itemstack1!=null && itemstack1.getItem()==ItemsTC.crystalEssence && itemstack1.getCount()>=cs.getCount() && ItemStack.areItemStackTagsEqual(cs,itemstack1))
                 {
                     b = true;
                 }

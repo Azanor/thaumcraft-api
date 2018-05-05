@@ -7,14 +7,16 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.items.IItemHandler;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
 public class ScanningManager {
@@ -58,12 +60,14 @@ public class ScanningManager {
 		}
 		
 		// scan contents of inventories
-		if (object instanceof BlockPos && player.getEntityWorld().getTileEntity((BlockPos) object) instanceof IInventory) {
-			IInventory inv = (IInventory) player.getEntityWorld().getTileEntity((BlockPos) object);
-			for (int slot=0;slot<inv.getSizeInventory();slot++) {
-				ItemStack stack = inv.getStackInSlot(slot);
-				if (stack!=null && !stack.isEmpty()) scanTheThing(player,stack);
-			}
+		if (object instanceof BlockPos) {
+			IItemHandler handler = ThaumcraftApiHelper.getItemHandlerAt(player.getEntityWorld(), (BlockPos) object, EnumFacing.UP);
+			if (handler != null) {
+				for (int slot=0;slot<handler.getSlots();slot++) {
+					ItemStack stack = handler.getStackInSlot(slot);
+					if (stack!=null && !stack.isEmpty()) scanTheThing(player,stack);
+				}
+			}			
 			return;
 		}
 		
@@ -100,7 +104,7 @@ public class ScanningManager {
 			try {
 				if (is==null||is.isEmpty()) is = state.getBlock().getPickBlock(state, rayTrace(player), player.world, (BlockPos) obj, player);
 			} catch (Exception e) {	}
-			// Water and Lava blocks cant be registered as itemstacks anymore, Oh Minecraft!
+			// Water and Lava blocks cant be registered as itemstacks anymore? Oh Minecraft!
 			try {
 				if ((is==null||is.isEmpty()) && state.getMaterial()==Material.WATER) {
 					is = new ItemStack(Items.WATER_BUCKET);
@@ -108,7 +112,7 @@ public class ScanningManager {
 				if ((is==null||is.isEmpty()) && state.getMaterial()==Material.LAVA) {
 					is = new ItemStack(Items.LAVA_BUCKET);
 				}
-			} catch (Exception e) {e.printStackTrace();	}			
+			} catch (Exception e) {}			
 		}
 		return is;
 	}

@@ -124,6 +124,7 @@ public class ItemsTC {
 	public static Item charmVoidseer;
 	public static Item bandCuriosity;
 	public static Item ringCloud;
+	public static Item charmUndying;
 	
 	//Misc
 	public static Item creativePlacer;
@@ -150,6 +151,7 @@ public class ItemsTC {
 	 * use GolemHelper.getSealStack to return an itemstack of a specific seal 
 	 * **/
 	public static Item seals;
+	
 	
 	
 	
