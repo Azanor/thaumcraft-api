@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import thaumcraft.api.ThaumcraftApiHelper;
 
 public class IngredientNBTTC extends Ingredient
 {
@@ -21,7 +22,7 @@ public class IngredientNBTTC extends Ingredient
         	return false;
         return  this.stack.getItem() == input.getItem() && 
         		this.stack.getItemDamage() == input.getItemDamage() && 
-        		ItemStack.areItemStackShareTagsEqual(this.stack, input);
+        		ThaumcraftApiHelper.areItemStackTagsEqualRelaxed(this.stack, input);
     }
 
     @Override

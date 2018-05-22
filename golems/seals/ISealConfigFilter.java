@@ -11,7 +11,11 @@ public interface ISealConfigFilter {
 	
 	public ItemStack getFilterSlot(int i);
 	
+	public int getFilterSlotSize(int i);
+	
 	public void setFilterSlot(int i, ItemStack stack);
+	
+	public void setFilterSlotSize(int i, int size);
 	
 	public boolean isBlacklist();
 	

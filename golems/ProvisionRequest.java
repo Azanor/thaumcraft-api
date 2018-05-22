@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import thaumcraft.api.golems.seals.ISealEntity;
+import thaumcraft.api.golems.tasks.Task;
 
 public class ProvisionRequest { 
 	private ISealEntity seal;
@@ -13,6 +14,8 @@ public class ProvisionRequest {
 	private EnumFacing side;
 	private ItemStack stack;
 	private int id;
+	private Task linkedTask;
+	private boolean invalid;
 	
 	ProvisionRequest(ISealEntity seal, ItemStack stack) {
 		this.seal = seal;
@@ -73,6 +76,22 @@ public class ProvisionRequest {
 
 	public void setSide(EnumFacing side) {
 		this.side = side;
+	}
+
+	public Task getLinkedTask() {
+		return linkedTask;
+	}
+
+	public void setLinkedTask(Task linkedTask) {
+		this.linkedTask = linkedTask;
+	}
+
+	public boolean isInvalid() {
+		return invalid;
+	}
+
+	public void setInvalid(boolean invalid) {
+		this.invalid = invalid;
 	}
 
 	@Override

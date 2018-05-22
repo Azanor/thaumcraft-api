@@ -412,5 +412,44 @@ public class ThaumcraftApiHelper {
 	public static IItemHandler wrapInventory(IInventory inventory, EnumFacing side) {
 		return inventory instanceof ISidedInventory? new SidedInvWrapper((ISidedInventory) inventory, side) : new InvWrapper((IInventory) inventory);
 	}
+
+	/**
+	 * Unlike the normal nbt comparison used by itemstacks, this method only checks if all the tags in stackA is present and equal in stackB. Any extra tags in stackB is ignored. 
+	 * Some mods love adding their own nbt data to itemstacks which ends up breaking a lot of crafting recipes or similar checks
+	 * This version of the check ignores capabilities as this method is primarily used on my side by things that do not have capabilities in any case.
+	 * @param prime
+	 * @param other
+	 * @return
+	 */	
+	public static boolean areItemStackTagsEqualRelaxed(ItemStack prime, ItemStack other) {
+		if (prime.isEmpty() && other.isEmpty())
+	    {
+	        return true;
+	    }
+	    else if (!prime.isEmpty() && !other.isEmpty())
+	    {
+	        if (prime.getTagCompound() == null && other.getTagCompound() != null)
+	        {
+	            return false;
+	        }
+	        else
+	        {
+	            return (prime.getTagCompound() == null || compareTagsRelaxed(prime.getTagCompound(),other.getTagCompound()));
+	        }
+	    }
+	    else
+	    {
+	        return false;
+	    }
+	}
 	
+	public static boolean compareTagsRelaxed(NBTTagCompound prime, NBTTagCompound other) {
+		for (String key : prime.getKeySet()) {			
+			if (!other.hasKey(key) || !prime.getTag(key).equals(other.getTag(key))) {
+				return false;
+			}
+		}		
+		return true;
+	}
+		
 }

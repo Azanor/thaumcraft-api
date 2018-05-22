@@ -9,7 +9,7 @@ public class CardExperimentation extends TheorycraftCard {
 
 	@Override
 	public int getInspirationCost() {
-		return 1;
+		return 2;
 	}
 	
 	@Override
@@ -27,7 +27,7 @@ public class CardExperimentation extends TheorycraftCard {
 		try {
 			String[] s = ResearchCategories.researchCategories.keySet().toArray(new String[] {});
 			String cat = s[ player.getRNG().nextInt(s.length) ];
-			data.addTotal(cat, MathHelper.getInt(player.getRNG(), 10, 25));
+			data.addTotal(cat, MathHelper.getInt(player.getRNG(), 15, 30));
 			data.addTotal("BASICS", MathHelper.getInt(player.getRNG(), 1, 10));
 		} catch (Exception e) {
 			return false;
