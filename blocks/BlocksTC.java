@@ -160,6 +160,9 @@ public class BlocksTC {
 	public static Block potionSprayer;
 	public static Block stabilizer;
 	public static Block visGenerator;
+	public static Block condenser;
+	public static Block condenserlattice;
+	public static Block condenserlatticeDirty;
 	
 	// Fluids
 	public static Block fluxGoo;	

@@ -50,7 +50,7 @@ public class ShapelessArcaneRecipe extends ShapelessOreRecipe implements IArcane
 		InventoryCrafting dummy = new InventoryCrafting(new ContainerDummy(),3,3);
 		for (int a=0;a<9;a++) dummy.setInventorySlotContents(a, inv.getStackInSlot(a));
 		
-		if (crystals!=null)
+		if (crystals!=null && inv.getSizeInventory()>=15)
 		for (Aspect aspect:crystals.getAspects()) {
 			ItemStack cs = ThaumcraftApiHelper.makeCrystal(aspect,crystals.getAmount(aspect));
 			boolean b = false;

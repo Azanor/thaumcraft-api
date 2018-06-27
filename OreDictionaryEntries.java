@@ -31,7 +31,9 @@ public class OreDictionaryEntries {
 		OreDictionary.registerOre("slabWood", new ItemStack(BlocksTC.slabGreatwood));
 		OreDictionary.registerOre("slabWood", new ItemStack(BlocksTC.slabSilverwood));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlocksTC.saplingGreatwood));
-		OreDictionary.registerOre("treeSapling", new ItemStack(BlocksTC.saplingSilverwood));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BlocksTC.saplingSilverwood));		
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlocksTC.leafGreatwood, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlocksTC.leafSilverwood, 1, OreDictionary.WILDCARD_VALUE));
 				
 		for (Block b:BlocksTC.nitor.values())
 			OreDictionary.registerOre("nitor", new ItemStack(b));

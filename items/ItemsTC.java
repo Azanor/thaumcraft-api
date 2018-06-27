@@ -54,8 +54,6 @@ public class ItemsTC {
 	public static Item phial;
 	public static Item label;
 	public static Item bottleTaint;
-	public static Item bucketDeath;
-	public static Item bucketPure;
 	public static Item jarBrace;
 	
 	//Tools

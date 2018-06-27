@@ -47,4 +47,18 @@ public class CommonInternals {
     	String ss = sc.serializeNBT().toString();
     	return ss.hashCode();
     }
+	
+	/**
+	 * Obviously the int generated is not truly unique, but it is unique enough for this purpose.
+	 * Strips all nbt data from itemstack
+	 * @param stack
+	 * @return
+	 */
+	public static int generateUniqueItemstackIdStripped(ItemStack stack) {
+    	ItemStack sc = stack.copy();
+    	sc.setCount(1);
+    	sc.setTagCompound(null);
+    	String ss = sc.serializeNBT().toString();
+    	return ss.hashCode();
+    }
 }
