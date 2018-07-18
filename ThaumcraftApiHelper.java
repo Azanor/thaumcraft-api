@@ -428,14 +428,14 @@ public class ThaumcraftApiHelper {
 	    }
 	    else if (!prime.isEmpty() && !other.isEmpty())
 	    {
-	        if (prime.getTagCompound() == null && other.getTagCompound() != null)
-	        {
-	            return false;
-	        }
-	        else
-	        {
+//	        if (prime.getTagCompound() == null && other.getTagCompound() != null)
+//	        {
+//	            return false;
+//	        }
+//	        else
+//	        {
 	            return (prime.getTagCompound() == null || compareTagsRelaxed(prime.getTagCompound(),other.getTagCompound()));
-	        }
+//	        }
 	    }
 	    else
 	    {

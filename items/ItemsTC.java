@@ -55,6 +55,7 @@ public class ItemsTC {
 	public static Item label;
 	public static Item bottleTaint;
 	public static Item jarBrace;
+	public static Item causalityCollapser;
 	
 	//Tools
 	public static Item scribingTools;	

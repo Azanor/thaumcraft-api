@@ -63,9 +63,17 @@ public class ScanningManager {
 		if (object instanceof BlockPos) {
 			IItemHandler handler = ThaumcraftApiHelper.getItemHandlerAt(player.getEntityWorld(), (BlockPos) object, EnumFacing.UP);
 			if (handler != null) {
+				int scanned = 0;
 				for (int slot=0;slot<handler.getSlots();slot++) {
 					ItemStack stack = handler.getStackInSlot(slot);
-					if (stack!=null && !stack.isEmpty()) scanTheThing(player,stack);
+					if (stack!=null && !stack.isEmpty()) {
+						scanTheThing(player,stack);
+						scanned++;
+					}
+					if (scanned>=100) {
+						player.sendStatusMessage(new TextComponentString("\u00a75\u00a7o"+I18n.translateToLocal("tc.invtoolarge")),true);
+						break; // to prevent lag with massive inventories
+					}
 				}
 			}			
 			return;
