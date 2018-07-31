@@ -2,16 +2,14 @@ package thaumcraft.api;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.GameData;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectHelper;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.AspectRegistryEvent;
 import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.IArcaneRecipe;
 import thaumcraft.api.crafting.IThaumcraftRecipe;
@@ -283,16 +281,15 @@ public class ThaumcraftApi {
 	}
 	
 	/**
+	 * @Deprecated Use the methods exposed via the thaumcraft.api.aspects.AspectRegistryEvent event instead.<p>
 	 * Used to assign apsects to the given item/block. Here is an example of the declaration for cobblestone:<p>
 	 * <i>ThaumcraftApi.registerObjectTag(new ItemStack(Blocks.COBBLESTONE), (new AspectList()).add(Aspect.ENTROPY, 1).add(Aspect.EARTH, 1));</i>
 	 * @param item the item passed. Pass OreDictionary.WILDCARD_VALUE if all damage values of this item/block should have the same aspects
 	 * @param aspects A ObjectTags object of the associated aspects
 	 */
+	@Deprecated
 	public static void registerObjectTag(ItemStack item, AspectList aspects) {
-		if (aspects==null) aspects=new AspectList();
-		try {
-			CommonInternals.objectTags.put(CommonInternals.generateUniqueItemstackId(item), aspects);
-		} catch (Exception e) {}
+		(new AspectRegistryEvent()).registerObjectTag(item, aspects);
 	}	
 	
 	
@@ -305,25 +302,18 @@ public class ThaumcraftApi {
 	
 	
 	/**
+	 * @Deprecated Use the methods exposed via the thaumcraft.api.aspects.AspectRegistryEvent events instead.<p>
 	 * Used to assign apsects to the given ore dictionary item. 
 	 * @param oreDict the ore dictionary name
 	 * @param aspects A ObjectTags object of the associated aspects
 	 */
+	@Deprecated
 	public static void registerObjectTag(String oreDict, AspectList aspects) {
-		if (aspects==null) aspects=new AspectList();
-		List<ItemStack> ores = ThaumcraftApiHelper.getOresWithWildCards(oreDict);
-		if (ores!=null && ores.size()>0) {
-			for (ItemStack ore:ores) {
-				try {					
-					ItemStack oc = ore.copy();
-					oc.setCount(1);
-					registerObjectTag(oc,aspects.copy());
-				} catch (Exception e) {}
-			}
-		}
+		(new AspectRegistryEvent()).registerObjectTag(oreDict, aspects);
 	}
 		
 	/**
+	 * @Deprecated Use the methods exposed via the thaumcraft.api.aspects.AspectRegistryEvent events instead.<p>
 	 * Used to assign aspects to the given item/block. 
 	 * Attempts to automatically generate aspect tags by checking registered recipes.
 	 * Here is an example of the declaration for pistons:<p>
@@ -332,43 +322,22 @@ public class ThaumcraftApi {
 	 * @param item, pass OreDictionary.WILDCARD_VALUE to meta if all damage values of this item/block should have the same aspects
 	 * @param aspects A ObjectTags object of the associated aspects
 	 */
+	@Deprecated
 	public static void registerComplexObjectTag(ItemStack item, AspectList aspects ) {
-		if (!exists(item)) {			
-			AspectList tmp = AspectHelper.generateTags(item);
-			if (tmp != null && tmp.size()>0) {
-				for(Aspect tag:tmp.getAspects()) {
-					aspects.add(tag, tmp.getAmount(tag));
-				}
-			}
-			registerObjectTag(item,aspects);
-		} else {
-			AspectList tmp = AspectHelper.getObjectAspects(item);
-			for(Aspect tag:aspects.getAspects()) {
-				tmp.merge(tag, tmp.getAmount(tag));
-			}
-			registerObjectTag(item,tmp);
-		}
+		(new AspectRegistryEvent()).registerComplexObjectTag(item, aspects);
 	}
 	
 	/**
+	 * @Deprecated Use the methods exposed via the thaumcraft.api.aspects.AspectRegistryEvent events instead.<p> 
 	 * Used to assign apsects to the given ore dictionary item. 
 	 * Attempts to automatically generate aspect tags by checking registered recipes.
 	 * IMPORTANT - this should only be used if you are not happy with the default aspects the object would be assigned.
 	 * @param oreDict the ore dictionary name
 	 * @param aspects A ObjectTags object of the associated aspects
 	 */
+	@Deprecated
 	public static void registerComplexObjectTag(String oreDict, AspectList aspects) {
-		if (aspects==null) aspects=new AspectList();
-		List<ItemStack> ores = ThaumcraftApiHelper.getOresWithWildCards(oreDict);
-		if (ores!=null && ores.size()>0) {
-			for (ItemStack ore:ores) {
-				try {					
-					ItemStack oc = ore.copy();
-					oc.setCount(1);
-					registerComplexObjectTag(oc,aspects.copy());
-				} catch (Exception e) {}
-			}
-		}
+		(new AspectRegistryEvent()).registerComplexObjectTag(oreDict, aspects);
 	}
 	
 	public static class EntityTagsNBT {
@@ -393,6 +362,7 @@ public class ThaumcraftApi {
 	
 	
 	/**
+	 * @Deprecated Use the methods exposed via the thaumcraft.api.aspects.AspectRegistryEvent events instead.<p>
 	 * This is used to add aspects to entities which you can then scan using a thaumometer.
 	 * Also used to calculate vis drops from mobs.
 	 * @param entityName
@@ -402,6 +372,7 @@ public class ThaumcraftApi {
 	 * 	<br>ThaumcraftApi.registerEntityTag("Skeleton", (new AspectList()).add(Aspect.DEATH, 5));
 	 * 	<br>ThaumcraftApi.registerEntityTag("Skeleton", (new AspectList()).add(Aspect.DEATH, 8), new NBTTagByte("SkeletonType",(byte) 1));
 	 */
+	@Deprecated
 	public static void registerEntityTag(String entityName, AspectList aspects, EntityTagsNBT... nbt ) {
 		CommonInternals.scanEntities.add(new EntityTags(entityName,aspects,nbt));
 	}

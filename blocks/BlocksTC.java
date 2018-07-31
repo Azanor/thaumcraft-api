@@ -5,6 +5,7 @@ import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.item.EnumDyeColor;
+import thaumcraft.common.blocks.world.taint.BlockFluxGoo;
 
 public class BlocksTC {
 
@@ -163,11 +164,13 @@ public class BlocksTC {
 	public static Block condenser;
 	public static Block condenserlattice;
 	public static Block condenserlatticeDirty;
+	public static Block voidSiphon;
 	
 	// Fluids
 	public static Block fluxGoo;	
 	public static Block purifyingFluid;
 	public static Block liquidDeath;
+	public static Block taintDust;
 		
 	// Misc
 	public static Block hole;
@@ -181,6 +184,8 @@ public class BlocksTC {
 	public static Block placeholderAnvil;
 	public static Block placeholderCauldron;
 	public static Block placeholderTable;
+	
+	
 	
 	
 	

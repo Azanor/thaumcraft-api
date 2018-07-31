@@ -26,7 +26,5 @@ public abstract class FocusMedium extends FocusNode {
 		return true;
 	}
 	
-	public boolean isExclusive() {
-		return false;
-	}
+	
 }

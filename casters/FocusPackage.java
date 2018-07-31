@@ -231,7 +231,11 @@ public class FocusPackage implements IFocusElement {
 		String s="";
 		for (IFocusElement k:this.nodes) {
 			s+=k.getKey();
-		}
+			if (k instanceof FocusNode && ((FocusNode)k).getSettingList()!=null)
+				for (String ns : ((FocusNode)k).getSettingList()) {
+					s += ""+((FocusNode)k).getSettingValue(ns);
+				}
+		}		
 		return s.hashCode();
 	}
 
