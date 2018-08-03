@@ -116,7 +116,7 @@ public class ItemsTC {
 	public static Item crimsonPraetorLegs;
 	
 	//Baubles
-	/** "amulet_mundane","ring_mundane","girdle_mundane","ring_apprentice","amulet_fancy","ring_fancy","girdle_fancy"*/
+	/** "amulet_mundane","ring_mundane","girdle_mundane","ring_apprentice","amulet_fancy","ring_fancy","girdle_fancy","girdle_fancy"*/
 	public static Item baubles; 
 	public static Item amuletVis;	
 	public static Item charmVerdant;
