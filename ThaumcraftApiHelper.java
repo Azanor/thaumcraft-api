@@ -390,6 +390,7 @@ public class ThaumcraftApiHelper {
 	
 	public static Ingredient getIngredient(Object obj)
     {
+		if (obj instanceof Ingredient) return (Ingredient) obj;
         if (obj!=null && obj instanceof ItemStack && ((ItemStack)obj).hasTagCompound())
             return new IngredientNBTTC((ItemStack)obj);
         else 
