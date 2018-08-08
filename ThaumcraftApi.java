@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.GameData;
+import thaumcraft.api.aspects.AspectEventProxy;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.aspects.AspectRegistryEvent;
 import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.IArcaneRecipe;
 import thaumcraft.api.crafting.IThaumcraftRecipe;
@@ -289,7 +289,7 @@ public class ThaumcraftApi {
 	 */
 	@Deprecated
 	public static void registerObjectTag(ItemStack item, AspectList aspects) {
-		(new AspectRegistryEvent()).registerObjectTag(item, aspects);
+		(new AspectEventProxy()).registerObjectTag(item, aspects);
 	}	
 	
 	
@@ -309,7 +309,7 @@ public class ThaumcraftApi {
 	 */
 	@Deprecated
 	public static void registerObjectTag(String oreDict, AspectList aspects) {
-		(new AspectRegistryEvent()).registerObjectTag(oreDict, aspects);
+		(new AspectEventProxy()).registerObjectTag(oreDict, aspects);
 	}
 		
 	/**
@@ -324,7 +324,7 @@ public class ThaumcraftApi {
 	 */
 	@Deprecated
 	public static void registerComplexObjectTag(ItemStack item, AspectList aspects ) {
-		(new AspectRegistryEvent()).registerComplexObjectTag(item, aspects);
+		(new AspectEventProxy()).registerComplexObjectTag(item, aspects);
 	}
 	
 	/**
@@ -337,7 +337,7 @@ public class ThaumcraftApi {
 	 */
 	@Deprecated
 	public static void registerComplexObjectTag(String oreDict, AspectList aspects) {
-		(new AspectRegistryEvent()).registerComplexObjectTag(oreDict, aspects);
+		(new AspectEventProxy()).registerComplexObjectTag(oreDict, aspects);
 	}
 	
 	public static class EntityTagsNBT {

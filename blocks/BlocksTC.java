@@ -5,7 +5,6 @@ import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.item.EnumDyeColor;
-import thaumcraft.common.blocks.world.taint.BlockFluxGoo;
 
 public class BlocksTC {
 
