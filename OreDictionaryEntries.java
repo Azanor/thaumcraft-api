@@ -1,6 +1,7 @@
 package thaumcraft.api;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.blocks.BlocksTC;
@@ -80,6 +81,9 @@ public class OreDictionaryEntries {
 		OreDictionary.registerOre("clusterLead", new ItemStack(ItemsTC.clusters,1,5));
 		OreDictionary.registerOre("clusterCinnabar", new ItemStack(ItemsTC.clusters,1,6));
 		OreDictionary.registerOre("clusterQuartz", new ItemStack(ItemsTC.clusters,1,7));
+		
+		// for mod recipe compatibility
+		OreDictionary.registerOre("trapdoorWood", new ItemStack(Blocks.TRAPDOOR));
 	
 	}
 
