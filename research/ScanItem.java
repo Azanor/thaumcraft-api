@@ -3,7 +3,7 @@ package thaumcraft.api.research;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import thaumcraft.api.ThaumcraftApiHelper;
+import thaumcraft.api.ThaumcraftInvHelper;
 
 public class ScanItem implements IScanThing {
 	
@@ -26,7 +26,7 @@ public class ScanItem implements IScanThing {
 		if (obj instanceof EntityItem && ((EntityItem)obj).getItem()!=null) 
 			is = ((EntityItem)obj).getItem();
 		
-		return is!=null && !is.isEmpty() && ThaumcraftApiHelper.areItemStacksEqualForCrafting(is, stack);
+		return is!=null && !is.isEmpty() && ThaumcraftInvHelper.areItemStacksEqualForCrafting(is, stack);
 	}
 
 	@Override

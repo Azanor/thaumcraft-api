@@ -2,16 +2,12 @@ package thaumcraft.api;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,9 +21,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.VanillaInventoryCodeHooks;
-import net.minecraftforge.items.wrapper.InvWrapper;
-import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -40,75 +33,37 @@ public class ThaumcraftApiHelper {
 	
 	public static final IAttribute CHAMPION_MOD = (new RangedAttribute((IAttribute)null, "tc.mobmod", -2D, -2D, 100D)).setDescription("Champion modifier").setShouldWatch(true);
 	
+	/**
+	 * @deprecated Use {@link ThaumcraftInvHelper#areItemsEqual(ItemStack,ItemStack)} instead
+	 */
 	public static boolean areItemsEqual(ItemStack s1,ItemStack s2)
-    {
-		if (s1.isItemStackDamageable() && s2.isItemStackDamageable())
-		{
-			return s1.getItem() == s2.getItem();
-		} else
-			return s1.getItem() == s2.getItem() && s1.getItemDamage() == s2.getItemDamage();
-    }
+	{
+		return ThaumcraftInvHelper.areItemsEqual(s1, s2);
+	}
 		
+	/**
+	 * @deprecated Use {@link InventoryHelper#containsMatch(boolean,ItemStack[],List<ItemStack>)} instead
+	 */
 	public static boolean containsMatch(boolean strict, ItemStack[] inputs, List<ItemStack> targets)
-    {
-        for (ItemStack input : inputs)
-        {
-            for (ItemStack target : targets)
-            {
-                if (OreDictionary.itemMatches(target, input, strict) && ItemStack.areItemStackTagsEqual(target, input))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+	{
+		return ThaumcraftInvHelper.containsMatch(strict, inputs, targets);
+	}
 	
+	/**
+	 * @deprecated Use {@link ThaumcraftInvHelper#areItemStacksEqualForCrafting(ItemStack,Object)} instead
+	 */
 	public static boolean areItemStacksEqualForCrafting(ItemStack stack0, Object in)
-    {
-		if (stack0==null && in!=null) return false;
-		if (stack0!=null && in==null) return false;
-		if (stack0==null && in==null) return true;
-		
-		if (in instanceof Object[]) return true;
-		
-		if (in instanceof String) {
-			List<ItemStack> l = OreDictionary.getOres((String) in,false);
-			return containsMatch(false, new ItemStack[]{stack0}, l);
-		}
-		
-		if (in instanceof ItemStack) {
-			//nbt
-			boolean t1= !stack0.hasTagCompound() || areItemStackTagsEqualForCrafting(stack0, (ItemStack) in);		
-			if (!t1) return false;	
-	        return OreDictionary.itemMatches((ItemStack) in, stack0, false);
-		}
-		
-		return false;
-    }
+	{
+		return ThaumcraftInvHelper.areItemStacksEqualForCrafting(stack0, in);
+	}
 	
+	/**
+	 * @deprecated Use {@link ThaumcraftInvHelper#areItemStackTagsEqualForCrafting(ItemStack,ItemStack)} instead
+	 */
 	public static boolean areItemStackTagsEqualForCrafting(ItemStack slotItem,ItemStack recipeItem)
-    {
-    	if (recipeItem == null || slotItem == null) return false;
-    	if (recipeItem.getTagCompound()!=null && slotItem.getTagCompound()==null ) return false;
-    	if (recipeItem.getTagCompound()==null ) return true;
-    	
-    	Iterator iterator = recipeItem.getTagCompound().getKeySet().iterator();
-        while (iterator.hasNext())
-        {
-            String s = (String)iterator.next();
-            if (slotItem.getTagCompound().hasKey(s)) {
-            	if (!slotItem.getTagCompound().getTag(s).toString().equals(
-            			recipeItem.getTagCompound().getTag(s).toString())) {
-            		return false;
-            	}
-            } else {
-        		return false;
-            }
-            
-        }
-        return true;
-    }
+	{
+		return ThaumcraftInvHelper.areItemStackTagsEqualForCrafting(slotItem, recipeItem);
+	}
    
     
     public static TileEntity getConnectableTile(World world, BlockPos pos, EnumFacing face) {
@@ -397,60 +352,32 @@ public class ThaumcraftApiHelper {
         	return CraftingHelper.getIngredient(obj);
     }
 
+	/**
+	 * @deprecated Use {@link ThaumcraftInvHelper#getItemHandlerAt(World,BlockPos,EnumFacing)} instead
+	 */
 	public static IItemHandler getItemHandlerAt(World world, BlockPos pos, EnumFacing side) {
-		Pair<IItemHandler, Object> dest = VanillaInventoryCodeHooks.getItemHandler(world, pos.getX(), pos.getY(), pos.getZ(), side);
-		if (dest!=null && dest.getLeft()!=null) {
-			return dest.getLeft();
-		} else {
-			TileEntity tileentity = world.getTileEntity(pos);
-	        if (tileentity != null && tileentity instanceof IInventory) {            	
-	        	return wrapInventory ((IInventory) tileentity, side);
-	        }
-		}
-		return null;
-	}
-
-	public static IItemHandler wrapInventory(IInventory inventory, EnumFacing side) {
-		return inventory instanceof ISidedInventory? new SidedInvWrapper((ISidedInventory) inventory, side) : new InvWrapper((IInventory) inventory);
+		return ThaumcraftInvHelper.getItemHandlerAt(world, pos, side);
 	}
 
 	/**
-	 * Unlike the normal nbt comparison used by itemstacks, this method only checks if all the tags in stackA is present and equal in stackB. Any extra tags in stackB is ignored. 
-	 * Some mods love adding their own nbt data to itemstacks which ends up breaking a lot of crafting recipes or similar checks
-	 * This version of the check ignores capabilities as this method is primarily used on my side by things that do not have capabilities in any case.
-	 * @param prime
-	 * @param other
-	 * @return
+	 * @deprecated Use {@link ThaumcraftInvHelper#wrapInventory(IInventory,EnumFacing)} instead
+	 */
+	public static IItemHandler wrapInventory(IInventory inventory, EnumFacing side) {
+		return ThaumcraftInvHelper.wrapInventory(inventory, side);
+	}
+
+	/**
+	 * @deprecated Use {@link ThaumcraftInvHelper#areItemStackTagsEqualRelaxed(ItemStack,ItemStack)} instead
 	 */	
 	public static boolean areItemStackTagsEqualRelaxed(ItemStack prime, ItemStack other) {
-		if (prime.isEmpty() && other.isEmpty())
-	    {
-	        return true;
-	    }
-	    else if (!prime.isEmpty() && !other.isEmpty())
-	    {
-//	        if (prime.getTagCompound() == null && other.getTagCompound() != null)
-//	        {
-//	            return false;
-//	        }
-//	        else
-//	        {
-	            return (prime.getTagCompound() == null || compareTagsRelaxed(prime.getTagCompound(),other.getTagCompound()));
-//	        }
-	    }
-	    else
-	    {
-	        return false;
-	    }
+		return ThaumcraftInvHelper.areItemStackTagsEqualRelaxed(prime, other);
 	}
 	
+	/**
+	 * @deprecated Use {@link ThaumcraftInvHelper#compareTagsRelaxed(NBTTagCompound,NBTTagCompound)} instead
+	 */
 	public static boolean compareTagsRelaxed(NBTTagCompound prime, NBTTagCompound other) {
-		for (String key : prime.getKeySet()) {			
-			if (!other.hasKey(key) || !prime.getTag(key).equals(other.getTag(key))) {
-				return false;
-			}
-		}		
-		return true;
+		return ThaumcraftInvHelper.compareTagsRelaxed(prime, other);
 	}
 		
 }

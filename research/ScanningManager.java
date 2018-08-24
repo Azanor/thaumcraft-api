@@ -15,8 +15,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.items.IItemHandler;
+import thaumcraft.api.ThaumcraftInvHelper;
 import thaumcraft.api.ThaumcraftApi;
-import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
 public class ScanningManager {
@@ -61,7 +61,7 @@ public class ScanningManager {
 		
 		// scan contents of inventories
 		if (object instanceof BlockPos) {
-			IItemHandler handler = ThaumcraftApiHelper.getItemHandlerAt(player.getEntityWorld(), (BlockPos) object, EnumFacing.UP);
+			IItemHandler handler = ThaumcraftInvHelper.getItemHandlerAt(player.getEntityWorld(), (BlockPos) object, EnumFacing.UP);
 			if (handler != null) {
 				int scanned = 0;
 				for (int slot=0;slot<handler.getSlots();slot++) {
