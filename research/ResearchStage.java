@@ -13,6 +13,7 @@ public class ResearchStage {
 	int[] craftReference;
 	Knowledge[] know;
 	String[] research;
+	String[] researchIcon;
 	int warp;
 	
 	/**
@@ -104,6 +105,20 @@ public class ResearchStage {
 	public void setResearch(String[] research) {
 		this.research = research;
 	}
+	
+	/**
+	 * @return the research
+	 */
+	public String[] getResearchIcon() {
+		return researchIcon;
+	}
+	/**
+	 * @param research the research to set
+	 */
+	public void setResearchIcon(String[] research) {
+		this.researchIcon = research;
+	}
+	
 	/**
 	 * @return the warp
 	 */

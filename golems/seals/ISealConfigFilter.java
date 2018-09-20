@@ -7,6 +7,8 @@ public interface ISealConfigFilter {
 	
 	public NonNullList<ItemStack> getInv();
 	
+	public NonNullList<Integer> getSizes();
+	
 	public int getFilterSize();
 	
 	public ItemStack getFilterSlot(int i);
@@ -22,5 +24,7 @@ public interface ISealConfigFilter {
 	public void setBlacklist(boolean black);
 	
 	public boolean hasStacksizeLimiters();
+
+	
 	
 }

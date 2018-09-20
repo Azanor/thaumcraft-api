@@ -14,8 +14,10 @@ public class ProvisionRequest {
 	private EnumFacing side;
 	private ItemStack stack;
 	private int id;
+	private int ui = 0;
 	private Task linkedTask;
 	private boolean invalid;
+	private long timeout;
 	
 	ProvisionRequest(ISealEntity seal, ItemStack stack) {
 		this.seal = seal;
@@ -23,6 +25,7 @@ public class ProvisionRequest {
 		String s = seal.getSealPos().pos.toString() + seal.getSealPos().face.name() +stack.toString();
 		if (stack.hasTagCompound()) s += stack.getTagCompound().toString();
 		this.id = s.hashCode();
+		this.timeout = System.currentTimeMillis() + 10000;
 	}
 	
 	ProvisionRequest(BlockPos pos, EnumFacing side, ItemStack stack) {
@@ -32,6 +35,7 @@ public class ProvisionRequest {
 		String s = pos.toString() + side.name() +stack.toString();
 		if (stack.hasTagCompound()) s += stack.getTagCompound().toString();
 		this.id = s.hashCode();
+		this.timeout = System.currentTimeMillis() + 10000;
 	}
 	
 	ProvisionRequest(Entity entity, ItemStack stack) {
@@ -40,14 +44,25 @@ public class ProvisionRequest {
 		String s = entity.getEntityId() + stack.toString();
 		if (stack.hasTagCompound()) s += stack.getTagCompound().toString();
 		this.id = s.hashCode();
+		this.timeout = System.currentTimeMillis() + 10000;
 	}
+		
 	
+
+	public long getTimeout() {
+		return timeout;
+	}
+
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public void setUI(int ui) {
+		this.ui = ui;
 	}
 
 	public ISealEntity getSeal() {
@@ -84,6 +99,7 @@ public class ProvisionRequest {
 
 	public void setLinkedTask(Task linkedTask) {
 		this.linkedTask = linkedTask;
+		this.timeout = System.currentTimeMillis() + 120000;
 	}
 
 	public boolean isInvalid() {
@@ -108,7 +124,7 @@ public class ProvisionRequest {
         else
         {        	
         	ProvisionRequest pr = (ProvisionRequest)p_equals_1_;        	
-            return this.id == pr.id;
+            return this.id == pr.id && this.ui == pr.ui;
         }
     }
 	

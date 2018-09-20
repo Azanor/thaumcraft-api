@@ -180,6 +180,15 @@ public class ThaumcraftInvHelper {
 		}
 		return stack;
 	}
+	
+	public static ItemStack hasRoomFor(World world, BlockPos pos, EnumFacing side, ItemStack stack) {
+		ItemStack testStack = insertStackAt(world, pos, side, stack.copy(), true);
+		if (testStack.isEmpty()) {
+			return stack.copy();
+		}
+		testStack.setCount(stack.getCount() - testStack.getCount()); 
+		return testStack;
+	}
 
 	public static boolean hasRoomForSome(World world, BlockPos pos, EnumFacing side, ItemStack stack) {
 		ItemStack testStack = insertStackAt(world, pos, side, stack.copy(), true);
