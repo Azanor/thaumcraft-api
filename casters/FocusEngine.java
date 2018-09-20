@@ -45,44 +45,32 @@ public class FocusEngine {
 		return false;
 	}
 	
-	
-	
-	/**
-	 * 
-	 * @param caster
-	 * @param focusPackage
-	 * @param nocopy set to true only if the focus package passed in is temporary and not attached to an actual focus. 
-	 * Use this to preserve any settings, targets, etc that has been set during package construction
-	 */
-	public static void castFocusPackage(EntityLivingBase caster, FocusPackage focusPackage, boolean nocopy) {
-		FocusPackage focusPackageCopy;
-		if (nocopy) 
-			focusPackageCopy = focusPackage;
-		else
-			focusPackageCopy = focusPackage.copy(caster);
-		
+	public static void castFocusPackage(EntityLivingBase caster, FocusPackage focusPackage) {
+		FocusPackage focusPackageCopy = focusPackage.copy(caster);
 		focusPackageCopy.initialize(caster);		
 		focusPackageCopy.setUniqueID(UUID.randomUUID());
 		for (FocusEffect effect:focusPackageCopy.getFocusEffects()) {
 			effect.onCast(caster);
 		}	
-		
 		runFocusPackage(focusPackageCopy, null, null);
 	}
 	
-	/**
-	 * Overrides castFocusPackage(EntityLivingBase caster, FocusPackage focusPackage, boolean nocopy) with nocopy = false
-	 * @param caster
-	 * @param focusPackage
-	 */
-	public static void castFocusPackage(EntityLivingBase caster, FocusPackage focusPackage) {
-		castFocusPackage(caster,focusPackage,false);
-	}
+//	public static class LastParameters {
+//		Trajectory lastTrajectory;
+//		RayTraceResult lastTarget;
+//		public LastParameters(RayTraceResult lastTarget, Trajectory lastTrajectory) {
+//			this.lastTrajectory = lastTrajectory;
+//			this.lastTarget = lastTarget;
+//		}
+//		
+//	}
 	
-	public static void runFocusPackage(FocusPackage focusPackage, Trajectory[] trajectories, RayTraceResult[] targets) {
+	public static void /*LastParameters*/ runFocusPackage(FocusPackage focusPackage, Trajectory[] trajectories, RayTraceResult[] targets) {
 		
 		Trajectory[] prevTrajectories = trajectories;
 		RayTraceResult[] prevTargets = targets;
+		
+//		LastParameters returnLast = null;
 		
 		synchronized (focusPackage.nodes) {
 
@@ -156,6 +144,7 @@ public class FocusEngine {
 							}
 							Trajectory tra = prevTrajectories!=null? ((prevTrajectories.length==prevTargets.length) ? prevTrajectories[num] : prevTrajectories[0]) : null;
 							effect.execute(target, tra, focusPackage.getPower(), num);
+//							returnLast = new LastParameters(target, tra);
 							num++;
 						}
 					}
@@ -168,6 +157,8 @@ public class FocusEngine {
 				
 			}
 		}
+		
+//		return returnLast;
 		
 	}
 	

@@ -1,11 +1,10 @@
 package thaumcraft.api.research;
 
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 
 public class ResearchAddendum {
 	String text;
-	ResourceLocation[] recipes;
+	String[] recipes;
 	String[] research;
 	
 	/**
@@ -28,13 +27,13 @@ public class ResearchAddendum {
 	/**
 	 * @return the recipes
 	 */
-	public ResourceLocation[] getRecipes() {
+	public String[] getRecipes() {
 		return recipes;
 	}
 	/**
 	 * @param recipes the recipes to set
 	 */
-	public void setRecipes(ResourceLocation[] recipes) {
+	public void setRecipes(String[] recipes) {
 		this.recipes = recipes;
 	}
 	

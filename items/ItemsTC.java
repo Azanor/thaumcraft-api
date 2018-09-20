@@ -30,8 +30,8 @@ public class ItemsTC {
 	public static Item crystalEssence;	
 	public static Item tallow;
 	public static Item fabric;	
-	public static Item mechanismSimple;
-	public static Item mechanismComplex;
+	/** "brass","thaumium","void"*/
+	public static Item gear;
 	/** "brass","iron","thaumium","void"*/
 	public static Item plate;
 	public static Item voidSeed;	
@@ -54,8 +54,9 @@ public class ItemsTC {
 	public static Item phial;
 	public static Item label;
 	public static Item bottleTaint;
+	public static Item bucketDeath;
+	public static Item bucketPure;
 	public static Item jarBrace;
-	public static Item causalityCollapser;
 	
 	//Tools
 	public static Item scribingTools;	
@@ -116,14 +117,13 @@ public class ItemsTC {
 	public static Item crimsonPraetorLegs;
 	
 	//Baubles
-	/** "amulet_mundane","ring_mundane","girdle_mundane","ring_apprentice","amulet_fancy","ring_fancy","girdle_fancy","girdle_fancy"*/
+	/** "amulet_mundane","ring_mundane","girdle_mundane","ring_apprentice","amulet_fancy","ring_fancy","girdle_fancy"*/
 	public static Item baubles; 
 	public static Item amuletVis;	
 	public static Item charmVerdant;
 	public static Item charmVoidseer;
 	public static Item bandCuriosity;
 	public static Item ringCloud;
-	public static Item charmUndying;
 	
 	//Misc
 	public static Item creativePlacer;
@@ -150,7 +150,6 @@ public class ItemsTC {
 	 * use GolemHelper.getSealStack to return an itemstack of a specific seal 
 	 * **/
 	public static Item seals;
-	
 	
 	
 	

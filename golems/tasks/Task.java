@@ -6,7 +6,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import thaumcraft.api.golems.GolemHelper;
 import thaumcraft.api.golems.IGolemAPI;
-import thaumcraft.api.golems.ProvisionRequest;
 import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.seals.SealPos;
 
@@ -21,8 +20,7 @@ public class Task {
 	private boolean reserved;
 	private boolean suspended;
 	private boolean completed;
-	private int data;
-	private ProvisionRequest linkedProvision;
+	private int data; 
 	/**
 	 * Lifespan in seconds. Default 300 seconds
 	 */
@@ -108,7 +106,6 @@ public class Task {
 	}
 
 	public void setSuspended(boolean suspended) {
-		this.setLinkedProvision(null);
 		this.suspended = suspended;
 	}
 
@@ -153,16 +150,7 @@ public class Task {
 
 	public void setData(int data) {
 		this.data = data;
-	}
-
-	public ProvisionRequest getLinkedProvision() {
-		return linkedProvision;
-	}
-
-	public void setLinkedProvision(ProvisionRequest linkedProvision) {
-		this.linkedProvision = linkedProvision;
-	}
-
+	}		
 	
 	
 	

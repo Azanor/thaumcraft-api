@@ -14,15 +14,20 @@ import thaumcraft.api.entities.ITaintedMob;
 
 public class PotionFluxTaint extends Potion
 {
-    public static Potion instance = null; // will be instantiated at runtime
+    public static PotionFluxTaint instance = null; // will be instantiated at runtime
     private int statusIconIndex = -1;
     
     public PotionFluxTaint(boolean par2, int par3)
     {
     	super(par2,par3);
     	setIconIndex(3, 1);
-    	setEffectiveness(0.25D);
     	setPotionName("potion.flux_taint");
+    }
+    
+	public static void init()
+    {
+    	instance.setIconIndex(3, 1);
+    	instance.setEffectiveness(0.25D);
     }
     
 	@Override

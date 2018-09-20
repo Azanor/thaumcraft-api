@@ -1,5 +1,6 @@
 package thaumcraft.api.internal;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -86,13 +87,6 @@ public interface IInternalMethodHandler {
 	 * @return
 	 */
 	public void addWarpToPlayer(EntityPlayer player, int amount, EnumWarpType type);
-	
-	/**
-	 * The total of the players normal + permanent warp. NOT temporary warp.
-	 * @param player
-	 * @return
-	 */
-	public int getActualWarp(EntityPlayer player);
 
 	public AspectList getObjectAspects(ItemStack is);
 	public AspectList generateTags(ItemStack is);
@@ -119,8 +113,6 @@ public interface IInternalMethodHandler {
 	public void addGolemTask(int dim, Task task);
 	public boolean shouldPreserveAura(World world, EntityPlayer player, BlockPos pos);
 	public ItemStack getSealStack(String key);
-
-	
 
 	
 

@@ -2,19 +2,23 @@ package thaumcraft.api;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.registries.GameData;
-import thaumcraft.api.aspects.AspectEventProxy;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectHelper;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.IArcaneRecipe;
-import thaumcraft.api.crafting.IThaumcraftRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.crafting.Part;
+import thaumcraft.api.crafting.RecipeMisc;
 import thaumcraft.api.internal.CommonInternals;
 import thaumcraft.api.internal.DummyInternalMethodHandler;
 import thaumcraft.api.internal.IInternalMethodHandler;
@@ -82,64 +86,76 @@ public class ThaumcraftApi {
 	}
 		
 	
-	public static HashMap<ResourceLocation, IThaumcraftRecipe> getCraftingRecipes() {
+	public static HashMap<String, Object> getCraftingRecipes() {
 		return CommonInternals.craftingRecipeCatalog;
 	}
 	
-	public static HashMap<ResourceLocation, Object> getCraftingRecipesFake() {
-		return CommonInternals.craftingRecipeCatalogFake;
-	}
-
 	/**
-	 * This adds recipes to the 'fake' recipe catalog. These recipes won't be craftable, but are useful for display in the thaumonomicon if
-	 * they are dynamic recipes like infusion enchantment or runic infusion. 
-	 * @param registry
-	 * @param recipe
+	 * All the methods below that add recipes to the catalog assume they are linked to a research stage. 
+	 * This method allows an unlinked recipe to still be picked up in the catalog. Useful for common 
+	 * recipes that do not require research that you want to display the recipe for in the thaumonomicon. 
+	 * @param recipeKey
 	 */
-	public static void addFakeCraftingRecipe(ResourceLocation registry, Object recipe)
-    {
-		getCraftingRecipesFake().put(registry, recipe);
-    }
+	public static void addRecipeUnlinked(String recipeKey) {
+		CommonInternals.craftingRecipesUnlinked.add(recipeKey);
+	}
 	
-		
 	/**
-	 * Use this method to add a multiblock blueprint recipe to the thaumcraft recipe catalog. This is used for display purposes in the thaumonomicon
+	 * Use this method to add vanilla or similar recipes to the thaumcraft recipe catalog. This is used for display purposes in the thaumonomicon
+	 * @param name unique identifier for this recipe. I advise making your mod-id part of this
+	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
+	 * @param fake if set to true the recipe will not actually be craftable. Useful for entries in thaumonomicon and so forth.
+	 * @param recipes the IRecipe object
+	 */
+	public static void addIRecipeToCatalog(String name, boolean fake, IRecipe... recipes) {
+		getCraftingRecipes().put(name, recipes);
+		if (fake) CommonInternals.craftingRecipesCatalogFake.add(name); 
+	}
+	
+	/**
+	 * Use this method to add a dummy recipe to the thaumcraft recipe catalog. This is used for display purposes in the thaumonomicon
+	 * @param name unique identifier for this recipe. I advise making your mod-id part of this
+	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
+	 * @param recipes the RecipeMisc object
+	 */
+	public static void addMiscRecipeToCatalog(String name, RecipeMisc... recipes) {
+		getCraftingRecipes().put(name, recipes);
+		CommonInternals.craftingRecipesCatalogFake.add(name); 
+	}
+	
+	/**
+	 * Use this method to add a dummy recipe to the thaumcraft recipe catalog. This is used for display purposes in the thaumonomicon
 	 * @param name unique identifier for this recipe. I advise making your mod-id part of this
 	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
 	 * @param recipes a matrix of placable objects and what they will turn into
 	 */
-	public static void addMultiblockRecipeToCatalog(ResourceLocation registry, BluePrint recipe) {
-		getCraftingRecipes().put(registry, recipe);
+	public static void addMultiblockRecipeToCatalog(String name, BluePrint... recipes) {
+		getCraftingRecipes().put(name, recipes);
+		CommonInternals.craftingRecipesCatalogFake.add(name); 
 	}
 	
-	public static class BluePrint implements IThaumcraftRecipe{
+	public static class BluePrint {
 		Part[][][] parts;
 		String research;		
 		ItemStack displayStack;
 		ItemStack[] ingredientList;
-		
 		public BluePrint(String research, Part[][][] parts, ItemStack... ingredientList) {
 			this.parts = parts;
 			this.research = research;
 			this.ingredientList = ingredientList;
 		}
-		
 		public BluePrint(String research, ItemStack display, Part[][][] parts, ItemStack... ingredientList) {
 			this.parts = parts;
 			this.research = research;
 			this.displayStack = display;
 			this.ingredientList = ingredientList;
 		}
-		
 		public Part[][][] getParts() {
 			return parts;
 		}		
-		
-		@Override
 		public String getResearch() {
 			return research;
 		}	
-		
 		/**
 		 * the items needed to craft this block - used for listing in the thaumonomicon and does not influance the actual recipe
 		 * @return
@@ -147,7 +163,6 @@ public class ThaumcraftApi {
 		public ItemStack[] getIngredientList() {
 			return ingredientList;
 		}
-		
 		/**
 		 * This stack will be displayed instead of multipart object - used for recipe bookmark display in thaumonomicon only.
 		 * @return
@@ -155,44 +170,34 @@ public class ThaumcraftApi {
 		public ItemStack getDisplayStack() {
 			return displayStack;
 		}
-		
-		private String group;
-
-		@Override
-		public String getGroup() {
-			return group;
-		}
-		
-		public BluePrint setGroup(ResourceLocation loc) {
-			group = loc.toString();
-			return this;
-		}
 	}
 	
 	/**
 	 * @param name unique identifier for this recipe used my thaumonomicon to link a recipe to research. I advise making your mod-id part of this. 
 	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
-	 * @param @param registry
-	 * @param recipe
+	 * @param fake if set to true the recipe will not actually be craftable. Useful for dummy entries in thaumonomicon and so forth.
+	 * @param recipes One or more recipes linked to the unique identifier. 
 	 */
-	public static void addArcaneCraftingRecipe(ResourceLocation registry, IArcaneRecipe recipe)
-    {		
-		recipe.setRegistryName(registry);
-	    GameData.register_impl(recipe);
+	public static void addArcaneCraftingRecipe(String name, boolean fake, IArcaneRecipe... recipes)
+    {
+        getCraftingRecipes().put(name, recipes);
+        for (IArcaneRecipe recipe:recipes) {
+        	recipe.setRecipeName(name);
+        	if (!fake) CraftingManager.getInstance().addRecipe(recipe); else CommonInternals.craftingRecipesCatalogFake.add(name);
+    	}
     }
 	
 	/**
-	 * @param name unique identifier for this recipe used my thaumonomicon to link a recipe to research. 
+	 * @param name unique identifier for this recipe used my thaumonomicon to link a recipe to research. I advise making your mod-id part of this
 	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
-	 * @param registry
-	 * @param recipe
+	 * @param fake if set to true the recipe will not actually be craftable. Useful for dummy entries in thaumonomicon and so forth.
+	 * @param recipes One or more recipes linked to the unique identifier. 
 	 */
-	public static void addInfusionCraftingRecipe(ResourceLocation registry, InfusionRecipe recipe)
+	public static void addInfusionCraftingRecipe(String name, boolean fake, InfusionRecipe... recipes)
     {
-		getCraftingRecipes().put(registry, recipe);
+		getCraftingRecipes().put(name, recipes);
+		if (fake) CommonInternals.craftingRecipesCatalogFake.add(name);
     }
-	
-	
 		
 	/**
 	 * @param stack the recipe result
@@ -200,24 +205,29 @@ public class ThaumcraftApi {
 	 */
 	public static InfusionRecipe getInfusionRecipe(ItemStack res) {
 		for (Object r:getCraftingRecipes().values()) {
-			if (r instanceof InfusionRecipe) {
-				if (((InfusionRecipe)r).getRecipeOutput() instanceof ItemStack) {
-					if (((ItemStack) ((InfusionRecipe)r).getRecipeOutput()).isItemEqual(res))
-						return ((InfusionRecipe)r);
-				} 				
+			if (r instanceof InfusionRecipe[]) {
+				for (InfusionRecipe recipe:(InfusionRecipe[])r) {
+					if (recipe.getRecipeOutput() instanceof ItemStack) {
+						if (((ItemStack) recipe.getRecipeOutput()).isItemEqual(res))
+							return recipe;
+					} 
+				}
+				
 			}
 		}
 		return null;
 	}
     
 	/**
-	 * @param name unique identifier for this recipe used my thaumonomicon to link a recipe to research. 
+	 * @param name unique identifier for this recipe used my thaumonomicon to link a recipe to research. I advise making your mod-id part of this
 	 * Recipes grouped under the same name will be displayed under one bookmark in thaumonomicon.
+	 * @param fake if set to true the recipe will not actually be craftable. Useful for dummy entries in thaumonomicon and so forth.
 	 * @param recipes One or more recipes linked to the unique identifier. 
 	 */
     
-    public static void addCrucibleRecipe(ResourceLocation registry, CrucibleRecipe recipe) {
-    	getCraftingRecipes().put(registry, recipe);
+    public static void addCrucibleRecipe(String name, boolean fake, CrucibleRecipe... recipes) {
+    	getCraftingRecipes().put(name, recipes);
+    	if (fake) CommonInternals.craftingRecipesCatalogFake.add(name);
 	}
 	
 	/**
@@ -226,9 +236,12 @@ public class ThaumcraftApi {
 	 */
 	public static CrucibleRecipe getCrucibleRecipe(ItemStack stack) {
 		for (Object r:getCraftingRecipes().values()) {
-			if (r instanceof CrucibleRecipe) {
-				if (((CrucibleRecipe)r).getRecipeOutput().isItemEqual(stack))
-					return ((CrucibleRecipe)r);				
+			if (r instanceof CrucibleRecipe[]) {
+				for (CrucibleRecipe recipe:(CrucibleRecipe[])r) {
+					if (recipe.getRecipeOutput().isItemEqual(stack))
+						return recipe;
+				}
+				
 			}
 		}
 		return null;
@@ -239,9 +252,13 @@ public class ThaumcraftApi {
 	 * @return the recipe
 	 */
 	public static CrucibleRecipe getCrucibleRecipeFromHash(int hash) {
-		for (Object recipe:getCraftingRecipes().values()) {
-			if (recipe instanceof CrucibleRecipe && ((CrucibleRecipe)recipe).hash==hash) 
-				return (CrucibleRecipe)recipe;
+		for (Object r:getCraftingRecipes().values()) {
+			if (r instanceof CrucibleRecipe[]) {
+				for (CrucibleRecipe recipe:(CrucibleRecipe[])r) {
+					if (recipe.hash==hash)
+						return recipe;
+				}
+			}
 		}
 		return null;
 	}
@@ -258,7 +275,7 @@ public class ThaumcraftApi {
 	 */
 	public static boolean exists(ItemStack item) {
 		ItemStack stack = item.copy();
-		stack.setCount(1);
+		stack.stackSize=1;
 		AspectList tmp = CommonInternals.objectTags.get(stack.serializeNBT().toString());
 		if (tmp==null) {
 			try {
@@ -281,39 +298,64 @@ public class ThaumcraftApi {
 	}
 	
 	/**
-	 * @Deprecated Use the methods exposed via the thaumcraft.api.aspects.AspectRegistryEvent event instead.<p>
 	 * Used to assign apsects to the given item/block. Here is an example of the declaration for cobblestone:<p>
 	 * <i>ThaumcraftApi.registerObjectTag(new ItemStack(Blocks.COBBLESTONE), (new AspectList()).add(Aspect.ENTROPY, 1).add(Aspect.EARTH, 1));</i>
 	 * @param item the item passed. Pass OreDictionary.WILDCARD_VALUE if all damage values of this item/block should have the same aspects
 	 * @param aspects A ObjectTags object of the associated aspects
 	 */
-	@Deprecated
 	public static void registerObjectTag(ItemStack item, AspectList aspects) {
-		(new AspectEventProxy()).registerObjectTag(item, aspects);
+		if (aspects==null) aspects=new AspectList();
+		try {
+			ItemStack tmp = item.copy();
+			tmp.stackSize=1;
+			NBTTagCompound nbt = new NBTTagCompound();
+			aspects.writeToNBT(nbt);
+			CommonInternals.objectTags.put(tmp.serializeNBT().toString(), aspects);
+		} catch (Exception e) {}
 	}	
 	
 	
 	/**
-	 * THIS WILL BE REMOVED SOON(TM). DO NOT USE. 
-	 * I'M JUST LEAVING IT IN TO PREVENT CRASHES.
+	 * Used to assign apsects to the given item/block. Here is an example of the declaration for cobblestone:<p>
+	 * <i>ThaumcraftApi.registerObjectTag(new ItemStack(Blocks.COBBLESTONE), new int[]{0,1}, (new AspectList()).add(Aspect.ENTROPY, 1).add(Aspect.EARTH, 1));</i>
+	 * @param item
+	 * @param meta A range of meta values if you wish to lump several item meta's together as being the "same" item (i.e. stair orientations)
+	 * @param aspects A ObjectTags object of the associated aspects
 	 */
-	@Deprecated
-	public static void registerObjectTag(ItemStack item, int[] meta, AspectList aspects) { }
-	
+	public static void registerObjectTag(ItemStack item, int[] meta, AspectList aspects) {
+		if (aspects==null) aspects=new AspectList();
+		try {			
+			ItemStack tmp = item.copy();
+			tmp.stackSize=1;
+			String s = tmp.serializeNBT().toString();
+			CommonInternals.objectTags.put(s, aspects);
+			for (int m:meta) {				
+				CommonInternals.groupedObjectTags.put(m+":"+s, meta);
+			}
+			
+		} catch (Exception e) {}
+	}
 	
 	/**
-	 * @Deprecated Use the methods exposed via the thaumcraft.api.aspects.AspectRegistryEvent events instead.<p>
 	 * Used to assign apsects to the given ore dictionary item. 
 	 * @param oreDict the ore dictionary name
 	 * @param aspects A ObjectTags object of the associated aspects
 	 */
-	@Deprecated
 	public static void registerObjectTag(String oreDict, AspectList aspects) {
-		(new AspectEventProxy()).registerObjectTag(oreDict, aspects);
+		if (aspects==null) aspects=new AspectList();
+		List<ItemStack> ores = ThaumcraftApiHelper.getOresWithWildCards(oreDict);
+		if (ores!=null && ores.size()>0) {
+			for (ItemStack ore:ores) {
+				try {					
+					ItemStack oc = ore.copy();
+					oc.stackSize=1;
+					registerObjectTag(oc,aspects.copy());
+				} catch (Exception e) {}
+			}
+		}
 	}
 		
 	/**
-	 * @Deprecated Use the methods exposed via the thaumcraft.api.aspects.AspectRegistryEvent events instead.<p>
 	 * Used to assign aspects to the given item/block. 
 	 * Attempts to automatically generate aspect tags by checking registered recipes.
 	 * Here is an example of the declaration for pistons:<p>
@@ -322,22 +364,43 @@ public class ThaumcraftApi {
 	 * @param item, pass OreDictionary.WILDCARD_VALUE to meta if all damage values of this item/block should have the same aspects
 	 * @param aspects A ObjectTags object of the associated aspects
 	 */
-	@Deprecated
 	public static void registerComplexObjectTag(ItemStack item, AspectList aspects ) {
-		(new AspectEventProxy()).registerComplexObjectTag(item, aspects);
+		if (!exists(item)) {			
+			AspectList tmp = AspectHelper.generateTags(item);
+			if (tmp != null && tmp.size()>0) {
+				for(Aspect tag:tmp.getAspects()) {
+					aspects.add(tag, tmp.getAmount(tag));
+				}
+			}
+			registerObjectTag(item,aspects);
+		} else {
+			AspectList tmp = AspectHelper.getObjectAspects(item);
+			for(Aspect tag:aspects.getAspects()) {
+				tmp.merge(tag, tmp.getAmount(tag));
+			}
+			registerObjectTag(item,tmp);
+		}
 	}
 	
 	/**
-	 * @Deprecated Use the methods exposed via the thaumcraft.api.aspects.AspectRegistryEvent events instead.<p> 
 	 * Used to assign apsects to the given ore dictionary item. 
 	 * Attempts to automatically generate aspect tags by checking registered recipes.
 	 * IMPORTANT - this should only be used if you are not happy with the default aspects the object would be assigned.
 	 * @param oreDict the ore dictionary name
 	 * @param aspects A ObjectTags object of the associated aspects
 	 */
-	@Deprecated
 	public static void registerComplexObjectTag(String oreDict, AspectList aspects) {
-		(new AspectEventProxy()).registerComplexObjectTag(oreDict, aspects);
+		if (aspects==null) aspects=new AspectList();
+		List<ItemStack> ores = ThaumcraftApiHelper.getOresWithWildCards(oreDict);
+		if (ores!=null && ores.size()>0) {
+			for (ItemStack ore:ores) {
+				try {					
+					ItemStack oc = ore.copy();
+					oc.stackSize=1;
+					registerComplexObjectTag(oc,aspects.copy());
+				} catch (Exception e) {}
+			}
+		}
 	}
 	
 	public static class EntityTagsNBT {
@@ -362,7 +425,6 @@ public class ThaumcraftApi {
 	
 	
 	/**
-	 * @Deprecated Use the methods exposed via the thaumcraft.api.aspects.AspectRegistryEvent events instead.<p>
 	 * This is used to add aspects to entities which you can then scan using a thaumometer.
 	 * Also used to calculate vis drops from mobs.
 	 * @param entityName
@@ -372,7 +434,6 @@ public class ThaumcraftApi {
 	 * 	<br>ThaumcraftApi.registerEntityTag("Skeleton", (new AspectList()).add(Aspect.DEATH, 5));
 	 * 	<br>ThaumcraftApi.registerEntityTag("Skeleton", (new AspectList()).add(Aspect.DEATH, 8), new NBTTagByte("SkeletonType",(byte) 1));
 	 */
-	@Deprecated
 	public static void registerEntityTag(String entityName, AspectList aspects, EntityTagsNBT... nbt ) {
 		CommonInternals.scanEntities.add(new EntityTags(entityName,aspects,nbt));
 	}

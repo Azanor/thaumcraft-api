@@ -1,71 +1,107 @@
 package thaumcraft.api.crafting;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
-public class CrucibleRecipe implements IThaumcraftRecipe  {
+public class CrucibleRecipe implements ITCRecipe {
 
-	private ItemStack recipeOutput;	
-	private Ingredient catalyst;
-	private AspectList aspects;
-	private String research;
+	private ItemStack recipeOutput;
+	
+	public Object catalyst;
+	public AspectList aspects;
+	public String[] research;
 	private String name;
 	public int hash;
 	
+	/**
+	 * @param researchKey the research key required for this recipe to work.<br>
+	 * 		  Can specify stage like IPlayerKnowledge.isResearchKnown
+	 * @param result the output result
+     * @param cat an itemstack of the catalyst or a string if it is an ore dictionary item
+     * @param tags the aspects required to craft this
+     */
+	public CrucibleRecipe(String researchKey, ItemStack result, Object cat, AspectList tags) {
+		this(new String[] {researchKey}, result, cat, tags);
+	}
 	
-	public CrucibleRecipe(String researchKey, ItemStack result, Object catalyst, AspectList tags) {
+	/**
+	 * @param researchKey the research key required for this recipe to work.<br>
+	 * 		  Can specify stage like IPlayerKnowledge.isResearchKnown
+	 * @param result the output result
+     * @param cat an itemstack of the catalyst or a string if it is an ore dictionary item
+     * @param tags the aspects required to craft this
+     */
+	public CrucibleRecipe(String[] researchKey, ItemStack result, Object cat, AspectList tags) {
 		recipeOutput = result;
 		this.name="";
-		this.setAspects(tags);
+		this.aspects = tags;
 		this.research = researchKey;
-		this.setCatalyst(ThaumcraftApiHelper.getIngredient(catalyst));
-		
-		if (this.getCatalyst() == null)
-        {
-            throw new RuntimeException("Invalid crucible recipe catalyst: "+ catalyst);
-        }
-		
-		generateHash();
-	}
-		
-	private void generateHash() {
-		String hc = research;		
-		hc += recipeOutput.toString();
-		if (recipeOutput.hasTagCompound()) {
-			hc += recipeOutput.getTagCompound().toString();
-		}	
-		for (ItemStack is:getCatalyst().getMatchingStacks()) {
-			hc += is.toString();
-			if (is.hasTagCompound()) {
-				hc += is.getTagCompound().toString();
-			}			
+		this.catalyst = cat;
+		if (cat instanceof String) {
+			this.catalyst = OreDictionary.getOres((String) cat,false);
 		}
+		String hc = "";
+		for (String ss:research) hc+=ss;
+		hc += result.toString();
+		for (Aspect tag:tags.getAspects()) {
+			hc += tag.getTag()+tags.getAmount(tag);
+		}
+		if (cat instanceof ItemStack) {
+			hc += ((ItemStack)cat).toString();
+			if (((ItemStack)cat).hasTagCompound()) hc += ((ItemStack)cat).getTagCompound().toString();
+		} else
+		if (cat instanceof List && ((List<ItemStack>)catalyst).size()>0) {
+			for (ItemStack is :(List<ItemStack>)catalyst) {
+				hc += is.toString();
+				if (is.hasTagCompound()) hc += is.getTagCompound().toString();
+			}
+		}
+		
 		hash = hc.hashCode();
 	}
+	
+		
 
-	public boolean matches(AspectList itags, ItemStack cat) {	
-		if (!getCatalyst().apply(cat)) return false;		
+	public boolean matches(AspectList itags, ItemStack cat) {
+		if (catalyst instanceof ItemStack && !ThaumcraftApiHelper.areItemStacksEqualForCrafting((ItemStack) catalyst, cat)
+//				!OreDictionary.itemMatches((ItemStack) catalyst,cat,false)
+				) {
+			return false;
+		} else 
+		if (catalyst instanceof List && ((List<ItemStack>)catalyst).size()>0) {
+			if (!ThaumcraftApiHelper.containsMatch(false, new ItemStack[]{cat},
+					(List<ItemStack>)catalyst)) return false;
+		}
 		if (itags==null) return false;
-		for (Aspect tag:getAspects().getAspects()) {
-			if (itags.getAmount(tag)<getAspects().getAmount(tag)) return false;
+		for (Aspect tag:aspects.getAspects()) {
+			if (itags.getAmount(tag)<aspects.getAmount(tag)) return false;
 		}
 		return true;
 	}
 	
 	public boolean catalystMatches(ItemStack cat) {
-		return getCatalyst().apply(cat);
+		if (catalyst instanceof ItemStack && ThaumcraftApiHelper.areItemStacksEqualForCrafting((ItemStack) catalyst, cat)) { //OreDictionary.itemMatches((ItemStack) catalyst,cat,false)) {
+			return true;
+		} else 
+		if (catalyst instanceof List && ((List<ItemStack>)catalyst).size()>0) {
+			if (ThaumcraftApiHelper.containsMatch(false, new ItemStack[]{cat}, (List<ItemStack>)catalyst)) return true;
+		}
+		return false;
 	}
 	
 	public AspectList removeMatching(AspectList itags) {
 		AspectList temptags = new AspectList();
-		temptags.aspects.putAll(itags.aspects);		
-		for (Aspect tag:getAspects().getAspects()) {
-			temptags.remove(tag, getAspects().getAmount(tag));
-		}		
+		temptags.aspects.putAll(itags.aspects);
+		
+		for (Aspect tag:aspects.getAspects()) {
+			temptags.remove(tag, aspects.getAmount(tag));
+		}
+		
 		itags = temptags;
 		return itags;
 	}
@@ -74,36 +110,22 @@ public class CrucibleRecipe implements IThaumcraftRecipe  {
 		return recipeOutput;
 	}
 
+
+
 	@Override
-	public String getResearch() {
-		return research;
+	public String getRecipeName() {
+		return name;
 	}
 
-	public Ingredient getCatalyst() {
-		return catalyst;
-	}
 
-	public void setCatalyst(Ingredient catalyst) {
-		this.catalyst = catalyst;
-	}
 
-	public AspectList getAspects() {
-		return aspects;
-	}
-
-	public void setAspects(AspectList aspects) {
-		this.aspects = aspects;
-	}
-
-	private String group="";
-	
 	@Override
-	public String getGroup() {
-		return group;
+	public void setRecipeName(String name) {
+		this.name=name;
 	}
+
+
+
 	
-	public CrucibleRecipe setGroup(ResourceLocation s) {
-		this.group=s.toString();
-		return this;
-	}
+
 }

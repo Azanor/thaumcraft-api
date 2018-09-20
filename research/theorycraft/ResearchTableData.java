@@ -35,6 +35,7 @@ public class ResearchTableData
 	public ArrayList<CardChoice> cardChoices = new ArrayList<>();
 	
 	public CardChoice lastDraw;
+//	public CardChoice savedCard;
 	
 	public class CardChoice {
 		public TheorycraftCard card;		
@@ -89,7 +90,7 @@ public class ResearchTableData
 	
 	public void addInspiration(int amt) {
 		inspiration += amt;
-		if (inspiration>inspirationStart) inspiration = inspirationStart;
+		if (inspiration>inspirationStart) inspirationStart = inspiration;
 	}	
 	
 	public NBTTagCompound serialize() {
@@ -149,6 +150,7 @@ public class ResearchTableData
 		nbt.setTag("cardChoices", cardChoicesTag);	
 		
 		if (lastDraw!=null) nbt.setTag("lastDraw", serializeCardChoice(lastDraw));
+//		if (savedCard!=null) nbt.setTag("savedCard", serializeCardChoice(savedCard));
 				
 		return nbt;
 	}
@@ -221,6 +223,7 @@ public class ResearchTableData
 		}
 		
 		lastDraw = deserializeCardChoice(nbt.getCompoundTag("lastDraw"));
+//		savedCard = deserializeCardChoice(nbt.getCompoundTag("savedCard"));
 		
 	}
 	

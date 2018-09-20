@@ -39,8 +39,8 @@ public class ScanAspect implements IScanThing {
 			ItemStack is = null;		
 			if (obj instanceof ItemStack) 
 				is = (ItemStack) obj;
-			if (obj instanceof EntityItem && ((EntityItem)obj).getItem()!=null) 
-				is = ((EntityItem)obj).getItem();
+			if (obj instanceof EntityItem && ((EntityItem)obj).getEntityItem()!=null) 
+				is = ((EntityItem)obj).getEntityItem();
 			if (obj instanceof BlockPos) {
 				Block b = player.world.getBlockState((BlockPos) obj).getBlock();
 				is = new ItemStack(b,1,b.getMetaFromState(player.world.getBlockState((BlockPos) obj)));

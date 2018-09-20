@@ -113,7 +113,5 @@ public abstract class FocusNode implements IFocusElement {
 		return 1;
 	}
 	
-	public boolean isExclusive() {
-		return false;
-	}
+	
 }

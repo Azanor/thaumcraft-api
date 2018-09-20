@@ -75,7 +75,6 @@ public class AspectHelper {
 
 	public static AspectList getEntityAspects(Entity entity) { 		
 		AspectList tags = null;               
-		String entityString = EntityList.getEntityString(entity);
 	    if (entity instanceof EntityPlayer) {
 	    	tags = new AspectList();
 	    	tags.add(Aspect.MAN, 4);        	
@@ -87,7 +86,7 @@ public class AspectHelper {
 	    } else {
 	        f1:
 			for (ThaumcraftApi.EntityTags et:CommonInternals.scanEntities) {
-				if (!et.entityName.equals(entityString)) continue;
+				if (!et.entityName.equals(EntityList.getEntityString(entity))) continue;
 				if (et.nbts==null || et.nbts.length==0) {
 					tags = et.aspects;
 				} else {
@@ -103,7 +102,7 @@ public class AspectHelper {
 					tags = et.aspects;
 				}
 			}
-	    }           	
+	    }           		
 		return tags;
 	}
 

@@ -31,7 +31,7 @@ public class RechargeHelper {
 	 * @return how much charge was actually added
 	 */
 	public static float rechargeItem(World world, ItemStack is, BlockPos pos, EntityPlayer player, int amt) {	
-		if (is==null || is.isEmpty() || !(is.getItem() instanceof IRechargable)) return 0;		
+		if (is==null || !(is.getItem() instanceof IRechargable)) return 0;		
 		IRechargable chargeItem = (IRechargable)is.getItem();		
 		if (player!=null && AuraHelper.shouldPreserveAura(world,player,pos)) return 0;				
 		amt = (int) Math.min(amt, chargeItem.getMaxCharge(is,player) - getCharge(is));		
@@ -52,7 +52,7 @@ public class RechargeHelper {
 	 * @return how much charge was actually added
 	 */
 	public static float rechargeItemBlindly(ItemStack is, EntityPlayer player, int amt) {	
-		if (is==null || is.isEmpty() || !(is.getItem() instanceof IRechargable)) return 0;		
+		if (is==null || !(is.getItem() instanceof IRechargable)) return 0;		
 		IRechargable chargeItem = (IRechargable)is.getItem();		
 		amt = (int) Math.min(amt, chargeItem.getMaxCharge(is,player) - getCharge(is));		
 		if (amt>0) addCharge(is, player, amt);		
@@ -60,7 +60,7 @@ public class RechargeHelper {
 	}
 	
 	private static void addCharge(ItemStack is, EntityLivingBase player, int amt) {
-		if (is==null || is.isEmpty() || !(is.getItem() instanceof IRechargable)) return;
+		if (is==null || !(is.getItem() instanceof IRechargable)) return;
 		IRechargable chargeItem = (IRechargable)is.getItem();
 		int amount = Math.min(chargeItem.getMaxCharge(is,player), amt + getCharge(is));
 		is.setTagInfo(NBT_TAG, new NBTTagInt(amount));
@@ -71,7 +71,7 @@ public class RechargeHelper {
 	 * @return returns charge amount or -1 if item is not rechargable
 	 */
 	public static int getCharge(ItemStack is) {
-		if (is==null || is.isEmpty() || !(is.getItem() instanceof IRechargable)) return -1;
+		if (is==null || !(is.getItem() instanceof IRechargable)) return -1;
 		if (is.hasTagCompound()) return is.getTagCompound().getInteger(NBT_TAG);
 		return 0;
 	}
@@ -82,7 +82,7 @@ public class RechargeHelper {
 	 * @return return charge level as a float (with 1 being full)
 	 */
 	public static float getChargePercentage(ItemStack is, EntityPlayer player) {
-		if (is==null || is.isEmpty() || !(is.getItem() instanceof IRechargable)) return -1;
+		if (is==null || !(is.getItem() instanceof IRechargable)) return -1;
 		float c = getCharge(is);
 		float m =  ((IRechargable)is.getItem()).getMaxCharge(is, player);
 		return c / m;
@@ -96,7 +96,7 @@ public class RechargeHelper {
 	 * @return if the item had the charge removed
 	 */
 	public static boolean consumeCharge(ItemStack is, EntityLivingBase player, int amt) {
-		if (is==null || is.isEmpty() || !(is.getItem() instanceof IRechargable)) return false;
+		if (is==null || !(is.getItem() instanceof IRechargable)) return false;
 		if (is.hasTagCompound()) {
 			int charge = is.getTagCompound().getInteger(NBT_TAG);
 			if (charge>=amt) {

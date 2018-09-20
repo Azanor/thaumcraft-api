@@ -1,7 +1,5 @@
 package thaumcraft.api;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.blocks.BlocksTC;
@@ -25,19 +23,16 @@ public class OreDictionaryEntries {
 		OreDictionary.registerOre("oreCrystalEntropy", new ItemStack(BlocksTC.crystalEntropy,1,OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("oreCrystalTaint", new ItemStack(BlocksTC.crystalTaint,1,OreDictionary.WILDCARD_VALUE));
 		
-		OreDictionary.registerOre("logWood", new ItemStack(BlocksTC.logGreatwood));
-		OreDictionary.registerOre("logWood", new ItemStack(BlocksTC.logSilverwood));
-		OreDictionary.registerOre("plankWood", new ItemStack(BlocksTC.plankGreatwood));
-		OreDictionary.registerOre("plankWood", new ItemStack(BlocksTC.plankSilverwood));
-		OreDictionary.registerOre("slabWood", new ItemStack(BlocksTC.slabGreatwood));
-		OreDictionary.registerOre("slabWood", new ItemStack(BlocksTC.slabSilverwood));
-		OreDictionary.registerOre("treeSapling", new ItemStack(BlocksTC.saplingGreatwood));
-		OreDictionary.registerOre("treeSapling", new ItemStack(BlocksTC.saplingSilverwood));		
-		OreDictionary.registerOre("treeLeaves", new ItemStack(BlocksTC.leafGreatwood, 1, OreDictionary.WILDCARD_VALUE));
-		OreDictionary.registerOre("treeLeaves", new ItemStack(BlocksTC.leafSilverwood, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlocksTC.log,1,0));
+		OreDictionary.registerOre("logWood", new ItemStack(BlocksTC.log,1,3));
+		OreDictionary.registerOre("plankWood", new ItemStack(BlocksTC.plank,1,0));
+		OreDictionary.registerOre("plankWood", new ItemStack(BlocksTC.plank,1,1));
+		OreDictionary.registerOre("slabWood", new ItemStack(BlocksTC.slabWood,1,0));
+		OreDictionary.registerOre("slabWood", new ItemStack(BlocksTC.slabWood,1,1));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BlocksTC.sapling,1,0));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BlocksTC.sapling,1,1));
 				
-		for (Block b:BlocksTC.nitor.values())
-			OreDictionary.registerOre("nitor", new ItemStack(b));
+		OreDictionary.registerOre("nitor", new ItemStack(BlocksTC.nitor,1,OreDictionary.WILDCARD_VALUE));
 		
 		OreDictionary.registerOre("gemAmber", new ItemStack(ItemsTC.amber));
 		OreDictionary.registerOre("quicksilver", new ItemStack(ItemsTC.quicksilver));
@@ -53,24 +48,20 @@ public class OreDictionaryEntries {
 		OreDictionary.registerOre("nuggetBrass", new ItemStack(ItemsTC.nuggets,1,8));
 		OreDictionary.registerOre("nuggetQuartz", new ItemStack(ItemsTC.nuggets,1,9));		
 		
-		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,0));
-		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,1));
-		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,2));
-		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,3));
-		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,4));
-		OreDictionary.registerOre("nuggetMeat", new ItemStack(ItemsTC.chunks,1,5));
-		
 		OreDictionary.registerOre("ingotThaumium", new ItemStack(ItemsTC.ingots,1,0));
 		OreDictionary.registerOre("ingotVoid", new ItemStack(ItemsTC.ingots,1,1));
 		OreDictionary.registerOre("ingotBrass", new ItemStack(ItemsTC.ingots,1,2));
 		
-		OreDictionary.registerOre("blockThaumium", new ItemStack(BlocksTC.metalBlockThaumium,1,0));
-		OreDictionary.registerOre("blockVoid", new ItemStack(BlocksTC.metalBlockVoid,1,1));
-		OreDictionary.registerOre("blockBrass", new ItemStack(BlocksTC.metalBlockBrass,1,4));
+		OreDictionary.registerOre("blockThaumium", new ItemStack(BlocksTC.metal,1,0));
+		OreDictionary.registerOre("blockVoid", new ItemStack(BlocksTC.metal,1,1));
+		OreDictionary.registerOre("blockBrass", new ItemStack(BlocksTC.metal,1,4));
 		
 		OreDictionary.registerOre("plateIron", new ItemStack(ItemsTC.plate,1,1));
+		OreDictionary.registerOre("gearBrass", new ItemStack(ItemsTC.gear,1,0));
 		OreDictionary.registerOre("plateBrass", new ItemStack(ItemsTC.plate,1,0));
+		OreDictionary.registerOre("gearThaumium", new ItemStack(ItemsTC.gear,1,1));
 		OreDictionary.registerOre("plateThaumium", new ItemStack(ItemsTC.plate,1,2));
+		OreDictionary.registerOre("gearVoid", new ItemStack(ItemsTC.gear,1,2));
 		OreDictionary.registerOre("plateVoid", new ItemStack(ItemsTC.plate,1,3));
 				
 		OreDictionary.registerOre("clusterIron", new ItemStack(ItemsTC.clusters,1,0));
@@ -81,9 +72,6 @@ public class OreDictionaryEntries {
 		OreDictionary.registerOre("clusterLead", new ItemStack(ItemsTC.clusters,1,5));
 		OreDictionary.registerOre("clusterCinnabar", new ItemStack(ItemsTC.clusters,1,6));
 		OreDictionary.registerOre("clusterQuartz", new ItemStack(ItemsTC.clusters,1,7));
-		
-		// for mod recipe compatibility
-		OreDictionary.registerOre("trapdoorWood", new ItemStack(Blocks.TRAPDOOR));
 	
 	}
 

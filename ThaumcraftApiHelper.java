@@ -2,14 +2,13 @@ package thaumcraft.api;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -19,13 +18,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IEssentiaTransport;
-import thaumcraft.api.crafting.IngredientNBTTC;
 import thaumcraft.api.items.ItemGenericEssentiaContainer;
 import thaumcraft.api.items.ItemsTC;
 
@@ -33,37 +29,75 @@ public class ThaumcraftApiHelper {
 	
 	public static final IAttribute CHAMPION_MOD = (new RangedAttribute((IAttribute)null, "tc.mobmod", -2D, -2D, 100D)).setDescription("Champion modifier").setShouldWatch(true);
 	
-	/**
-	 * @deprecated Use {@link ThaumcraftInvHelper#areItemsEqual(ItemStack,ItemStack)} instead
-	 */
 	public static boolean areItemsEqual(ItemStack s1,ItemStack s2)
-	{
-		return ThaumcraftInvHelper.areItemsEqual(s1, s2);
-	}
+    {
+		if (s1.isItemStackDamageable() && s2.isItemStackDamageable())
+		{
+			return s1.getItem() == s2.getItem();
+		} else
+			return s1.getItem() == s2.getItem() && s1.getItemDamage() == s2.getItemDamage();
+    }
 		
-	/**
-	 * @deprecated Use {@link InventoryHelper#containsMatch(boolean,ItemStack[],List<ItemStack>)} instead
-	 */
 	public static boolean containsMatch(boolean strict, ItemStack[] inputs, List<ItemStack> targets)
-	{
-		return ThaumcraftInvHelper.containsMatch(strict, inputs, targets);
-	}
+    {
+        for (ItemStack input : inputs)
+        {
+            for (ItemStack target : targets)
+            {
+                if (OreDictionary.itemMatches(target, input, strict) && ItemStack.areItemStackTagsEqual(target, input))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 	
-	/**
-	 * @deprecated Use {@link ThaumcraftInvHelper#areItemStacksEqualForCrafting(ItemStack,Object)} instead
-	 */
 	public static boolean areItemStacksEqualForCrafting(ItemStack stack0, Object in)
-	{
-		return ThaumcraftInvHelper.areItemStacksEqualForCrafting(stack0, in);
-	}
+    {
+		if (stack0==null && in!=null) return false;
+		if (stack0!=null && in==null) return false;
+		if (stack0==null && in==null) return true;
+		
+		if (in instanceof Object[]) return true;
+		
+		if (in instanceof String) {
+			List<ItemStack> l = OreDictionary.getOres((String) in,false);
+			return containsMatch(false, new ItemStack[]{stack0}, l);
+		}
+		
+		if (in instanceof ItemStack) {
+			//nbt
+			boolean t1= !stack0.hasTagCompound() || areItemStackTagsEqualForCrafting(stack0, (ItemStack) in);		
+			if (!t1) return false;	
+	        return OreDictionary.itemMatches((ItemStack) in, stack0, false);
+		}
+		
+		return false;
+    }
 	
-	/**
-	 * @deprecated Use {@link ThaumcraftInvHelper#areItemStackTagsEqualForCrafting(ItemStack,ItemStack)} instead
-	 */
 	public static boolean areItemStackTagsEqualForCrafting(ItemStack slotItem,ItemStack recipeItem)
-	{
-		return ThaumcraftInvHelper.areItemStackTagsEqualForCrafting(slotItem, recipeItem);
-	}
+    {
+    	if (recipeItem == null || slotItem == null) return false;
+    	if (recipeItem.getTagCompound()!=null && slotItem.getTagCompound()==null ) return false;
+    	if (recipeItem.getTagCompound()==null ) return true;
+    	
+    	Iterator iterator = recipeItem.getTagCompound().getKeySet().iterator();
+        while (iterator.hasNext())
+        {
+            String s = (String)iterator.next();
+            if (slotItem.getTagCompound().hasKey(s)) {
+            	if (!slotItem.getTagCompound().getTag(s).toString().equals(
+            			recipeItem.getTagCompound().getTag(s).toString())) {
+            		return false;
+            	}
+            } else {
+        		return false;
+            }
+            
+        }
+        return true;
+    }
    
     
     public static TileEntity getConnectableTile(World world, BlockPos pos, EnumFacing face) {
@@ -85,16 +119,16 @@ public class ThaumcraftApiHelper {
 	public static RayTraceResult rayTraceIgnoringSource(World world, Vec3d v1, Vec3d v2, 
 			boolean bool1, boolean bool2, boolean bool3)
 	{
-	    if (!Double.isNaN(v1.x) && !Double.isNaN(v1.y) && !Double.isNaN(v1.z))
+	    if (!Double.isNaN(v1.xCoord) && !Double.isNaN(v1.yCoord) && !Double.isNaN(v1.zCoord))
 	    {
-	        if (!Double.isNaN(v2.x) && !Double.isNaN(v2.y) && !Double.isNaN(v2.z))
+	        if (!Double.isNaN(v2.xCoord) && !Double.isNaN(v2.yCoord) && !Double.isNaN(v2.zCoord))
 	        {
-	            int i = MathHelper.floor(v2.x);
-	            int j = MathHelper.floor(v2.y);
-	            int k = MathHelper.floor(v2.z);
-	            int l = MathHelper.floor(v1.x);
-	            int i1 = MathHelper.floor(v1.y);
-	            int j1 = MathHelper.floor(v1.z);
+	            int i = MathHelper.floor(v2.xCoord);
+	            int j = MathHelper.floor(v2.yCoord);
+	            int k = MathHelper.floor(v2.zCoord);
+	            int l = MathHelper.floor(v1.xCoord);
+	            int i1 = MathHelper.floor(v1.yCoord);
+	            int j1 = MathHelper.floor(v1.zCoord);
 	            IBlockState block = world.getBlockState(new BlockPos(l, i1, j1));
 	
 	            RayTraceResult rayTraceResult2 = null;
@@ -102,7 +136,7 @@ public class ThaumcraftApiHelper {
 	
 	            while (k1-- >= 0)
 	            {
-	                if (Double.isNaN(v1.x) || Double.isNaN(v1.y) || Double.isNaN(v1.z))
+	                if (Double.isNaN(v1.xCoord) || Double.isNaN(v1.yCoord) || Double.isNaN(v1.zCoord))
 	                {
 	                    return null;
 	                }
@@ -161,23 +195,23 @@ public class ThaumcraftApiHelper {
 	                double d3 = 999.0D;
                     double d4 = 999.0D;
                     double d5 = 999.0D;
-                    double d6 = v2.x - v1.x;
-                    double d7 = v2.y - v1.y;
-                    double d8 = v2.z - v1.z;
+                    double d6 = v2.xCoord - v1.xCoord;
+                    double d7 = v2.yCoord - v1.yCoord;
+                    double d8 = v2.zCoord - v1.zCoord;
 
                     if (flag6)
                     {
-                        d3 = (d0 - v1.x) / d6;
+                        d3 = (d0 - v1.xCoord) / d6;
                     }
 
                     if (flag3)
                     {
-                        d4 = (d1 - v1.y) / d7;
+                        d4 = (d1 - v1.yCoord) / d7;
                     }
 
                     if (flag4)
                     {
-                        d5 = (d2 - v1.z) / d8;
+                        d5 = (d2 - v1.zCoord) / d8;
                     }
 
                     if (d3 == -0.0D)
@@ -200,22 +234,22 @@ public class ThaumcraftApiHelper {
                     if (d3 < d4 && d3 < d5)
                     {
                         enumfacing = i > l ? EnumFacing.WEST : EnumFacing.EAST;
-                        v1 = new Vec3d(d0, v1.y + d7 * d3, v1.z + d8 * d3);
+                        v1 = new Vec3d(d0, v1.yCoord + d7 * d3, v1.zCoord + d8 * d3);
                     }
                     else if (d4 < d5)
                     {
                         enumfacing = j > i1 ? EnumFacing.DOWN : EnumFacing.UP;
-                        v1 = new Vec3d(v1.x + d6 * d4, d1, v1.z + d8 * d4);
+                        v1 = new Vec3d(v1.xCoord + d6 * d4, d1, v1.zCoord + d8 * d4);
                     }
                     else
                     {
                         enumfacing = k > j1 ? EnumFacing.NORTH : EnumFacing.SOUTH;
-                        v1 = new Vec3d(v1.x + d6 * d5, v1.y + d7 * d5, d2);
+                        v1 = new Vec3d(v1.xCoord + d6 * d5, v1.yCoord + d7 * d5, d2);
                     }
 
-                    l = MathHelper.floor(v1.x) - (enumfacing == EnumFacing.EAST ? 1 : 0);
-                    i1 = MathHelper.floor(v1.y) - (enumfacing == EnumFacing.UP ? 1 : 0);
-                    j1 = MathHelper.floor(v1.z) - (enumfacing == EnumFacing.SOUTH ? 1 : 0);
+                    l = MathHelper.floor(v1.xCoord) - (enumfacing == EnumFacing.EAST ? 1 : 0);
+                    i1 = MathHelper.floor(v1.yCoord) - (enumfacing == EnumFacing.UP ? 1 : 0);
+                    j1 = MathHelper.floor(v1.zCoord) - (enumfacing == EnumFacing.SOUTH ? 1 : 0);
 	
 	                IBlockState block1 = world.getBlockState(new BlockPos(l, i1, j1));
 	
@@ -343,41 +377,6 @@ public class ThaumcraftApiHelper {
 	}
 
 	
-	public static Ingredient getIngredient(Object obj)
-    {
-		if (obj instanceof Ingredient) return (Ingredient) obj;
-        if (obj!=null && obj instanceof ItemStack && ((ItemStack)obj).hasTagCompound())
-            return new IngredientNBTTC((ItemStack)obj);
-        else 
-        	return CraftingHelper.getIngredient(obj);
-    }
 
-	/**
-	 * @deprecated Use {@link ThaumcraftInvHelper#getItemHandlerAt(World,BlockPos,EnumFacing)} instead
-	 */
-	public static IItemHandler getItemHandlerAt(World world, BlockPos pos, EnumFacing side) {
-		return ThaumcraftInvHelper.getItemHandlerAt(world, pos, side);
-	}
-
-	/**
-	 * @deprecated Use {@link ThaumcraftInvHelper#wrapInventory(IInventory,EnumFacing)} instead
-	 */
-	public static IItemHandler wrapInventory(IInventory inventory, EnumFacing side) {
-		return ThaumcraftInvHelper.wrapInventory(inventory, side);
-	}
-
-	/**
-	 * @deprecated Use {@link ThaumcraftInvHelper#areItemStackTagsEqualRelaxed(ItemStack,ItemStack)} instead
-	 */	
-	public static boolean areItemStackTagsEqualRelaxed(ItemStack prime, ItemStack other) {
-		return ThaumcraftInvHelper.areItemStackTagsEqualRelaxed(prime, other);
-	}
 	
-	/**
-	 * @deprecated Use {@link ThaumcraftInvHelper#compareTagsRelaxed(NBTTagCompound,NBTTagCompound)} instead
-	 */
-	public static boolean compareTagsRelaxed(NBTTagCompound prime, NBTTagCompound other) {
-		return ThaumcraftInvHelper.compareTagsRelaxed(prime, other);
-	}
-		
 }

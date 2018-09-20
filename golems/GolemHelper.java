@@ -41,7 +41,7 @@ public class GolemHelper {
 		ThaumcraftApi.internalMethods.addGolemTask(dim, task);
 	}
 	
-	public static HashMap<Integer,ArrayList<ProvisionRequest>> provisionRequests = new HashMap<>();
+	public static HashMap<Integer,ArrayList<ProvisionRequest>> provisionRequests = new HashMap<Integer,ArrayList<ProvisionRequest>>();
 	
 	/**
 	 * 
@@ -54,26 +54,22 @@ public class GolemHelper {
 			provisionRequests.put(world.provider.getDimension(), new ArrayList<ProvisionRequest>());
 		ArrayList<ProvisionRequest> list = provisionRequests.get(world.provider.getDimension());
 		ProvisionRequest pr = new ProvisionRequest(seal,stack.copy());
-		if (!list.contains(pr)) {
-			list.add(pr);
-		}
+		if (!list.contains(pr)) list.add(pr);
 	}
 	
 	/**
 	 * 
 	 * @param world
 	 * @param pos
-	 * @param side
-	 * @param stack the stack requested. Can accept wildcard values.
+	 * @param stack
 	 */
 	public static void requestProvisioning(World world, BlockPos pos, EnumFacing side, ItemStack stack) {
 		if (!provisionRequests.containsKey(world.provider.getDimension()))
 			provisionRequests.put(world.provider.getDimension(), new ArrayList<ProvisionRequest>());
 		ArrayList<ProvisionRequest> list = provisionRequests.get(world.provider.getDimension());
-		ProvisionRequest pr = new ProvisionRequest(pos, side, stack.copy());
-		if (!list.contains(pr)) {
-			list.add(pr);
-		}
+		ProvisionRequest pr = new ProvisionRequest(pos, side,stack.copy());
+		pr.setId(pr.getId() + world.rand.nextInt());
+		if (!list.contains(pr)) list.add(pr);
 	}
 	
 	/**
@@ -86,10 +82,9 @@ public class GolemHelper {
 		if (!provisionRequests.containsKey(world.provider.getDimension()))
 			provisionRequests.put(world.provider.getDimension(), new ArrayList<ProvisionRequest>());
 		ArrayList<ProvisionRequest> list = provisionRequests.get(world.provider.getDimension());
-		ProvisionRequest pr = new ProvisionRequest(entity, stack.copy());
-		if (!list.contains(pr)) {
-			list.add(pr);
-		}
+		ProvisionRequest pr = new ProvisionRequest(entity,stack.copy());
+		pr.setId(pr.getId() + world.rand.nextInt());
+		if (!list.contains(pr)) list.add(pr);
 	}
 	
 	/**
@@ -134,11 +129,11 @@ public class GolemHelper {
 					seal.getSealPos().face.getFrontOffsetX(), 
 					seal.getSealPos().face.getFrontOffsetY(), 
 					seal.getSealPos().face.getFrontOffsetZ())
-				.expand(
+				.addCoord(
 					seal.getSealPos().face.getFrontOffsetX()!=0?(seal.getArea().getX()-1) * seal.getSealPos().face.getFrontOffsetX():0, 
 					seal.getSealPos().face.getFrontOffsetY()!=0?(seal.getArea().getY()-1) * seal.getSealPos().face.getFrontOffsetY():0, 
 					seal.getSealPos().face.getFrontOffsetZ()!=0?(seal.getArea().getZ()-1) * seal.getSealPos().face.getFrontOffsetZ():0)
-				.grow(
+				.expand(
 					seal.getSealPos().face.getFrontOffsetX()==0?seal.getArea().getX()-1:0,
 					seal.getSealPos().face.getFrontOffsetY()==0?seal.getArea().getY()-1:0,
 					seal.getSealPos().face.getFrontOffsetZ()==0?seal.getArea().getZ()-1:0 );

@@ -9,18 +9,12 @@ public class NodeSetting {
 	public String key;
 	String description;
 	INodeSettingType type;
-	String research;
 	
-	public NodeSetting(String key, String description, INodeSettingType setting, String research) {
+	public NodeSetting(String key, String description, INodeSettingType setting) {
 		this.key = key;
 		this.type = setting;
 		this.value = setting.getDefault();
 		this.description = description;
-		this.research = research;
-	}
-	
-	public NodeSetting(String key, String description, INodeSettingType setting) {
-		this(key, description, setting, null);
 	}
 	
 	public int getValue() {
@@ -36,14 +30,6 @@ public class NodeSetting {
 		}
 	}
 	
-	/**
-	 * This setting will only be visible if this research is unlocked. If not the default will be used.
-	 * @return
-	 */
-	public String getResearch() {
-		return research;
-	}
-
 	public String getValueText() {
 		return I18n.translateToLocal(type.getValueText(value));
 	}
