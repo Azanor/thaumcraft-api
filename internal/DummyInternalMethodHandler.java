@@ -1,88 +1,95 @@
 package thaumcraft.api.internal;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.capabilities.IPlayerKnowledge.EnumKnowledgeType;
-import thaumcraft.api.capabilities.IPlayerWarp.EnumWarpType;
 import thaumcraft.api.golems.seals.ISeal;
 import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.seals.SealPos;
 import thaumcraft.api.golems.tasks.Task;
-import thaumcraft.api.research.ResearchCategory;
 
 public class DummyInternalMethodHandler implements IInternalMethodHandler {
-	
+
 	@Override
-	public boolean completeResearch(EntityPlayer player, String researchkey) {
-		// TODO Auto-generated method stub
+	public boolean isResearchComplete(String username, String researchkey) {
+		return false;
+	}	
+
+	@Override
+	public AspectList getObjectAspects(ItemStack is) {
+		return null;
+	}
+
+	@Override
+	public AspectList generateTags(Item item, int meta) {
+		return null;
+	}
+
+	@Override
+	public boolean consumeVisFromWand(ItemStack wand, EntityPlayer player,
+			AspectList cost, boolean doit, boolean crafting) {
+		return false;
+	}
+
+	@Override
+	public boolean consumeVisFromInventory(EntityPlayer player, AspectList cost) {
 		return false;
 	}
 
 	@Override
 	public void addWarpToPlayer(EntityPlayer player, int amount, EnumWarpType type) {
-		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public int getPlayerWarp(EntityPlayer player, EnumWarpType type) {
+		return 0;	 	
+	}
+
+
+	@Override
+	public void markRunicDirty(Entity entity) { 		
+	}
+
+	@Override
+	public boolean completeResearch(EntityPlayer player, String researchkey) {
+		return false;
+	}
+
+	
+
+	@Override
+	public boolean drainAura(World world, BlockPos pos, Aspect aspect, int amount) {
+		return false;
+	}
+
+	@Override
+	public void addAura(World world, BlockPos pos, Aspect aspect, int amount) {
 		
 	}
 
 	@Override
-	public AspectList getObjectAspects(ItemStack is) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public void pollute(World world, BlockPos pos, int amount, boolean showEffect) {	}
 
 	@Override
-	public AspectList generateTags(ItemStack is) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public float drainVis(World world, BlockPos pos, float amount, boolean simulate) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public float drainFlux(World world, BlockPos pos, float amount, boolean simulate) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void addVis(World world, BlockPos pos, float amount) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addFlux(World world, BlockPos pos, float amount, boolean showEffect) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public float getTotalAura(World world, BlockPos pos) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public float getVis(World world, BlockPos pos) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public float getFlux(World world, BlockPos pos) {
+	public int getAura(World world, BlockPos pos, Aspect aspect) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int getAuraBase(World world, BlockPos pos) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int drainAuraAvailable(World world, BlockPos pos, Aspect aspect,
+			int amount) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -113,7 +120,7 @@ public class DummyInternalMethodHandler implements IInternalMethodHandler {
 
 	@Override
 	public boolean shouldPreserveAura(World world, EntityPlayer player,
-			BlockPos pos) {
+			BlockPos pos, Aspect aspect) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -123,32 +130,5 @@ public class DummyInternalMethodHandler implements IInternalMethodHandler {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public boolean doesPlayerHaveRequisites(EntityPlayer player, String researchkey) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addKnowledge(EntityPlayer player, EnumKnowledgeType type, ResearchCategory field, int amount) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean progressResearch(EntityPlayer player, String researchkey) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public int getActualWarp(EntityPlayer player) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	
-
 	
 }

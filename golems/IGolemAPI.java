@@ -2,7 +2,6 @@ package thaumcraft.api.golems;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 /**
@@ -44,7 +43,7 @@ public interface IGolemAPI {
 
 	public boolean isCarrying(ItemStack stack);
 	
-	public NonNullList<ItemStack> getCarrying();
+	public ItemStack[] getCarrying();
 	
 	/**
 	 * Gives the golem xp towards increasing its rank rating. Default is usually 1 for completing a task. 

@@ -1,21 +1,16 @@
 package thaumcraft.api.golems.seals;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 public interface ISealConfigFilter {
 	
-	public NonNullList<ItemStack> getInv();
+	public ItemStack[] getInv();
 	
 	public int getFilterSize();
 	
 	public ItemStack getFilterSlot(int i);
 	
-	public int getFilterSlotSize(int i);
-	
 	public void setFilterSlot(int i, ItemStack stack);
-	
-	public void setFilterSlotSize(int i, int size);
 	
 	public boolean isBlacklist();
 	

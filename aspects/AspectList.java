@@ -43,7 +43,6 @@ public class AspectList implements Serializable {
 		return aspects.size();
 	}
 	
-	
 	/**
 	 * @return the amount of total vis in this collection
 	 */
@@ -204,12 +203,6 @@ public class AspectList implements Serializable {
 	public AspectList add(AspectList in) {
 		for (Aspect a:in.getAspects()) 
 			this.add(a, in.getAmount(a));
-		return this;
-	}
-	
-	public AspectList remove(AspectList in) {
-		for (Aspect a:in.getAspects()) 
-			this.remove(a, in.getAmount(a));
 		return this;
 	}
 	

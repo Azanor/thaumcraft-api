@@ -1,7 +1,7 @@
 package thaumcraft.api.golems;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.StatCollector;
 
 public enum EnumGolemTrait {
 	SMART(new ResourceLocation("thaumcraft","textures/misc/golem/tag_smart.png")), 
@@ -43,10 +43,10 @@ public enum EnumGolemTrait {
 	}
 	
 	public String getLocalizedName() {
-		return I18n.translateToLocal("golem.trait."+this.name().toLowerCase());
+		return StatCollector.translateToLocal("golem.trait."+this.name().toLowerCase());
 	}
 	
 	public String getLocalizedDescription() {
-		return I18n.translateToLocal("golem.trait.text."+this.name().toLowerCase());
+		return StatCollector.translateToLocal("golem.trait.text."+this.name().toLowerCase());
 	}
 }

@@ -3,10 +3,9 @@ package thaumcraft.api.golems.tasks;
 import java.util.UUID;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
 import thaumcraft.api.golems.GolemHelper;
 import thaumcraft.api.golems.IGolemAPI;
-import thaumcraft.api.golems.ProvisionRequest;
 import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.seals.SealPos;
 
@@ -21,8 +20,7 @@ public class Task {
 	private boolean reserved;
 	private boolean suspended;
 	private boolean completed;
-	private int data;
-	private ProvisionRequest linkedProvision;
+	private int data; 
 	/**
 	 * Lifespan in seconds. Default 300 seconds
 	 */
@@ -46,7 +44,7 @@ public class Task {
 		this.sealPos = sealPos;
 		this.entity = entity;
 		if (sealPos==null) {
-			this.id = (System.currentTimeMillis()+"/ENPOS/"+entity.getEntityId()).hashCode();
+			this.id = (System.currentTimeMillis()+"/ENPOS/"+pos.toString()).hashCode();
 		} else
 			this.id = (System.currentTimeMillis()+"/E/"+sealPos.face.toString()+"/"+sealPos.pos.toString()+"/"+entity.getEntityId()).hashCode();
 		this.type = 1;
@@ -108,7 +106,6 @@ public class Task {
 	}
 
 	public void setSuspended(boolean suspended) {
-		this.setLinkedProvision(null);
 		this.suspended = suspended;
 	}
 
@@ -138,7 +135,7 @@ public class Task {
 	}
 
 	public boolean canGolemPerformTask(IGolemAPI golem) {
-		ISealEntity se = GolemHelper.getSealEntity(golem.getGolemWorld().provider.getDimension(), this.sealPos);
+		ISealEntity se = GolemHelper.getSealEntity(golem.getGolemWorld().provider.getDimensionId(), this.sealPos);
 		if (se!=null) {
 			if (golem.getGolemColor()>0 && se.getColor()>0 && golem.getGolemColor() != se.getColor()) return false;
 			return se.getSeal().canGolemPerformTask(golem,this);
@@ -153,16 +150,7 @@ public class Task {
 
 	public void setData(int data) {
 		this.data = data;
-	}
-
-	public ProvisionRequest getLinkedProvision() {
-		return linkedProvision;
-	}
-
-	public void setLinkedProvision(ProvisionRequest linkedProvision) {
-		this.linkedProvision = linkedProvision;
-	}
-
+	}		
 	
 	
 	
