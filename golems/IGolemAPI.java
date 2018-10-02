@@ -21,7 +21,7 @@ public interface IGolemAPI {
 	/**
 	 * Causes the golem to hold the itemstack supplied.
 	 * @param stack
-	 * @return anything left over that the golem could not hold. If the golem picked up the entire stack this will be a null.
+	 * @return anything left over that the golem could not hold. If the golem picked up the entire stack this will be an empty stack.
 	 */
 	public ItemStack holdItem(ItemStack stack);
 	
@@ -41,6 +41,13 @@ public interface IGolemAPI {
 	 * @return 
 	 */
 	public boolean canCarry(ItemStack stack, boolean partial);
+	
+	/**
+	 * Checks how much carrying capacity the golem has for the given stack
+	 * @param stack the stack the golem has room for - can be null
+	 * @return 
+	 */
+	public int canCarryAmount(ItemStack stack);
 
 	public boolean isCarrying(ItemStack stack);
 	
