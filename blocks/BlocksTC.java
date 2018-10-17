@@ -109,6 +109,8 @@ public class BlocksTC {
 	
 	public static Block bannerCrimsonCult;
 	
+	public static Block inlay;
+	
 	// Machines
 	public static Block arcaneEar;
 	public static Block arcaneEarToggle;

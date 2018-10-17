@@ -8,8 +8,8 @@ import thaumcraft.api.capabilities.IPlayerKnowledge.EnumKnowledgeType;
 public class ResearchStage {
 	String text;
 	ResourceLocation[] recipes;
-	ItemStack[] obtain;
-	ItemStack[] craft;
+	Object[] obtain;
+	Object[] craft;
 	int[] craftReference;
 	Knowledge[] know;
 	String[] research;
@@ -47,25 +47,25 @@ public class ResearchStage {
 	/**
 	 * @return the obtain
 	 */
-	public ItemStack[] getObtain() {
+	public Object[] getObtain() {
 		return obtain;
 	}
 	/**
 	 * @param obtain the obtain to set
 	 */
-	public void setObtain(ItemStack[] obtain) {
+	public void setObtain(Object[] obtain) {
 		this.obtain = obtain;
 	}
 	/**
 	 * @return the craft
 	 */
-	public ItemStack[] getCraft() {
+	public Object[] getCraft() {
 		return craft;
 	}
 	/**
 	 * @param craft the craft to set
 	 */
-	public void setCraft(ItemStack[] craft) {
+	public void setCraft(Object[] craft) {
 		this.craft = craft;
 	}	
 	/**

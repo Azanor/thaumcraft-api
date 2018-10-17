@@ -23,8 +23,8 @@
                 {
                     "text": "research.example.text.stage.1",  /* REQUIRED; description of this stage */
                     "recipes": ["A_RECIPE","ANOTHER_RECIPE"],  /* list of recipes to display on page. The name must have an entry in the thaumcraft recipe catalog */
-                    "required_item":["minecraft:planks;30;1;{display:{Lore:['Stuff you need to hand in']}}"],
-                    "required_craft":["minecraft:stick","thaumcraft:nitor"],
+                    "required_item":["minecraft:planks;30;1;{display:{Lore:['Stuff you need to hand in']}}"], /* you can also create an ore dictionary entry using oredict namespace, for example: "oredict:stick" */
+                    "required_craft":["minecraft:stick","thaumcraft:nitor"], /* you can also create an ore dictionary entry using oredict namespace, for example: "oredict:stick" */
                     "required_knowledge":["THEORY;GOLEMANCY;2","OBSERVATION;AUROMANCY;1"],
                     "required_research":["RESEARCH_YOU_NEED","RESEARCH_YOU_NEED_WITH_CUSTOM_TEXTURE;thaumcraft:textures/items/thaumonomicon.png"] /* follows similar logic to parent research. You can specify things that are not full blown research entries in their own right. In that case a ? will be shown instead of their icon and you will have to add localization in the format "research.RESEARCH_YOU_NEED.text" if you want a proper name to be shown. Some other icons are also possible. Starting the research with "m_" will show a map, "f_" a flask and "c_" a chest. You can also specify a custom texture that will be used for a research entries (see RESEARCH_YOU_NEED_WITH_CUSTOM_TEXTURE entry)
                 },

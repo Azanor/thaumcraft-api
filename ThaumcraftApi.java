@@ -552,5 +552,4 @@ public class ThaumcraftApi {
 	 */
 
 	
-	
 }
