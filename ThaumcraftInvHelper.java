@@ -94,8 +94,11 @@ public class ThaumcraftInvHelper {
 		}
 
 	public static boolean compareTagsRelaxed(NBTTagCompound prime, NBTTagCompound other) {
-		for (String key : prime.getKeySet()) {			
-			if (!other.hasKey(key) || !prime.getTag(key).equals(other.getTag(key))) {
+		if (prime == null) {
+			return true;
+		}
+		for (String key : prime.getKeySet()) {	
+			if (other == null || !other.hasKey(key) || !prime.getTag(key).equals(other.getTag(key))) {
 				return false;
 			}
 		}		
